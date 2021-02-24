@@ -8,45 +8,35 @@ public class Projectile : MonoBehaviour
     public GameObject prefab_Explosion;
 
     private Rigidbody proj_rb;
-    private Vector3 direction;
-    private float projectilePower;
     private float explosionRadius;
     private float coreDamage;
     private float corePushback;
-    private bool explosive;
-    private bool rocketPowered;
 
-    public void ExplosiveProjectile(Vector3 direction, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered)
+    /// <summary>
+    /// Fills in the projectile's values based on the W_Launcher's values
+    /// </summary>
+    /// <param name="direction"> Direction the projectile will fire at </param>
+    /// <param name="projectilePower"> Speed of the projectile </param>
+    /// <param name="explosionRadius"> Radius of the explosion if projectile has explosionRadius </param>
+    /// <param name="coreDamage"> Damage at the core of the explosion if projectile has explosionRadius </param>
+    /// <param name="corePushback"> Pushback at the core of the explosion if projectile has explosionRadius </param>
+    /// <param name="rocketPowered"> True if gravity does not affect, false if gravity affects </param>
+    public void Initialize(Vector3 direction, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered)
     {
-        this.direction = direction;
-        this.projectilePower = projectilePower;
         this.explosionRadius = explosionRadius;
         this.coreDamage = coreDamage;
         this.corePushback = corePushback;
-        this.rocketPowered = rocketPowered;
-        explosive = true;
 
         proj_rb.useGravity = !rocketPowered;
-        proj_rb.AddForce(direction * projectilePower);
-    }
-
-    public void NonExplosiveProjectile(Vector3 direction, float power, float coreDamage, float corePushback, bool rocketPowered)
-    {
-        this.direction = direction;
-        this.projectilePower = power;
-        this.coreDamage = coreDamage;
-        this.corePushback = corePushback;
-        this.rocketPowered = rocketPowered;
-        explosionRadius = 0;
-        //edgeDamage = 0;
-        //edgePushback = 0;
-        explosive = false;
+        proj_rb.AddForce(direction.normalized * projectilePower);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (explosive)
+        // Creates explosion if there is an explosion radius
+        if (explosionRadius > 0)
         {
+            // Spawn explosion prefab
             GameObject projectile = Instantiate(prefab_Explosion, transform.position, Quaternion.identity);
             projectile.transform.localScale = new Vector3(explosionRadius * 2, explosionRadius * 2, explosionRadius * 2);
             Destroy(projectile, 0.5f);
@@ -64,10 +54,27 @@ public class Projectile : MonoBehaviour
             // For each object hit
             for (int i = 0; i < exploded.Length; i++)
             {
+                /// TODO: Make players in explosion take damage
+
                 // Add explosion force to rigidbody if exists
                 Rigidbody rb = exploded[i].GetComponent<Rigidbody>();
                 if (rb != null) { rb.AddExplosionForce(corePushback, gameObject.transform.position, explosionRadius); }
             }
+
+            Destroy(gameObject);
+        }
+        // Does not create an explosion if there is no explosion radius
+        else
+        {
+            // Inflict pushback on collided object if it has a RigidBody
+            Rigidbody rb = other.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Vector3 direction = other.gameObject.transform.position - gameObject.transform.position;
+                rb.AddForce(direction.normalized * corePushback);
+            }
+
+            /// TODO: Make player take damage
 
             Destroy(gameObject);
         }

@@ -115,18 +115,25 @@ public class Arm : MonoBehaviour
                 fireRateTimeStamp = Time.time + launcher.fireRate;
                 ReduceAmmo(1);
 
+                // Creates projectile and spawns it at the correct location
                 Vector3 projectilePath = new Vector3(barrel.transform.position.x, barrel.transform.position.y);
-                GameObject projectile = Instantiate(launcher.projectilePrefab, projectilePath + (barrel.transform.up * 0.25f), Quaternion.identity);
-                projectile.GetComponent<Projectile>().ExplosiveProjectile(barrel.transform.up, launcher.projectilePower, launcher.explosionRadius,
-                    launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
+                GameObject projectile = Instantiate(launcher.projectilePrefab, projectilePath + (barrel.transform.up * 0.5f), Quaternion.identity);
+
+                // Initializes the projectile prefab with the appropriate launcher values
+                projectile.GetComponent<Projectile>().Initialize(barrel.transform.up, launcher.projectilePower, launcher.explosionRadius,
+                                        launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
 
                 // Pushes player
-                player.EnactForce(barrel.transform.up * -launcher.pushback);
+                player.EnactForce(barrel.transform.up.normalized * -launcher.pushback);
             }
         }
 
     }
 
+    /// <summary>
+    /// Reduces the ammo of the equipped weapon by a specified amount
+    /// </summary>
+    /// <param name="count"> Amount to reduce ammo by </param>
     void ReduceAmmo(int count)
     {
         if (equippedWeapon.Equals(weaponA))
@@ -142,6 +149,10 @@ public class Arm : MonoBehaviour
             ammoRemaining[weaponD] = Mathf.Max(ammoRemaining[weaponD] - count, 0);
     }
 
+    /// <summary>
+    /// Increases the ammo of the equipped weapon by a specified amount
+    /// </summary>
+    /// <param name="count"> Amount to increase ammo by </param>
     void RegainAmmo(int count)
     {
         if (equippedWeapon is W_Shootable weapon)
@@ -179,6 +190,10 @@ public class Arm : MonoBehaviour
         {
             if (semiFired) semiFired = false;
             if (launcherFired) launcherFired = false;
+
+            /// INCLUDE MORE SINGLE-PRESS WEAPONS HERE
+
+            /// TODO: Make RegainAmmo() do 1 ammo at a time when UI is implemented
             if (player.IsGrounded() && equippedWeapon is W_Shootable weapon) RegainAmmo(weapon.ammoCapacity);
         }
     }

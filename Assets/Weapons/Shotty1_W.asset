@@ -18,7 +18,7 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: 9712e2b3862aef7419e65d0d03be0a10, type: 2}
   fireRate: 0.1
   ammoCapacity: 25
+  pushback: 75
   spreadRange: 0.5
   bulletDamage: 0
-  pushback: 75
   burstCount: 5

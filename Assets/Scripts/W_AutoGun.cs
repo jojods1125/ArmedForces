@@ -5,6 +5,8 @@ public class W_AutoGun : W_Shootable
 {
     [Header("Automatic Gun Properties")]
     [Min(0)]
+    [Tooltip("Maximum radius of spread")]
     public float spreadRange;
+    [Tooltip("Damage per bullet")]
     public float bulletDamage;
 }

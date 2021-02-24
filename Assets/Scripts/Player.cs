@@ -31,6 +31,10 @@ public class Player : MonoBehaviour
         inputActions.GunGuy.MoveRight.Enable();
     }
 
+    /// <summary>
+    /// Sets variables that, on FixedUpdate, will make player movement reflect left-moving input
+    /// </summary>
+    /// <param name="pressed"> Whether the player is pressing the movement button or not </param>
     private void MoveLeft(bool pressed)
     {
         if (pressed)
@@ -45,6 +49,10 @@ public class Player : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets variables that, on FixedUpdate, will make player movement reflect right-moving input
+    /// </summary>
+    /// <param name="pressed"> Whether the player is pressing the movement button or not </param>
     private void MoveRight(bool pressed)
     {
         if (pressed)
@@ -59,6 +67,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // Called every fixed tic
     private void FixedUpdate()
     {
         if (rb.velocity.magnitude < maxSpeed)
@@ -69,12 +78,20 @@ public class Player : MonoBehaviour
                 rb.AddForce(currSpeed * 2, jumpForce, 0);
     }
 
+    /// <summary>
+    /// Determines if the player is on the ground
+    /// </summary>
+    /// <returns> True if player is on ground, false if not </returns>
     public bool IsGrounded()
     {
         float capsuleHeight = gameObject.GetComponent<CapsuleCollider>().bounds.extents.y;
         return Physics.Raycast(transform.position, -Vector3.up, capsuleHeight + 0.05f);
     }
 
+    /// <summary>
+    /// Adds the specified force to the player's RigidBody
+    /// </summary>
+    /// <param name="force"> Force to add to the player </param>
     public void EnactForce(Vector3 force)
     {
         rb.AddForce(force);
