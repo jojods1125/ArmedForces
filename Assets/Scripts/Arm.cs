@@ -10,6 +10,7 @@ public enum ArmType
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class Arm : MonoBehaviour
 {
+    // Tip of the arm, where shots emit from
     public GameObject barrel;
     public Player player;
     public PlayerControls.GunGuyActions gunActions;
@@ -131,6 +132,35 @@ public class Arm : MonoBehaviour
     }
 
     /// <summary>
+    /// Fires an Sprayer Weapon
+    /// </summary>
+    /// <param name="sprayer">Equipped W_AutoGun</param>
+    void FireSprayer(W_Sprayer sprayer)
+    {
+        // Fire rate and ammo check
+        if (Time.time > fireRateTimeStamp && ammoRemaining[sprayer] > 0)
+        {
+            // Updates fire rate and ammo
+            fireRateTimeStamp = Time.time + sprayer.fireRate;
+            ReduceAmmo(1);
+
+            // Calculates bullet path and draws ray
+            Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-sprayer.spreadRange, sprayer.spreadRange), Random.Range(-sprayer.spreadRange, sprayer.spreadRange));
+            Debug.DrawRay(barrel.transform.position, bulletPath * sprayer.sprayDistance, Color.yellow, 1);
+
+            // Raycasts bullet path
+            if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit, sprayer.sprayDistance))
+            {
+                ///Debug.Log("HIT");
+            }
+
+            // Pushes player
+            player.EnactForce(bulletPath.normalized * -sprayer.pushback);
+        }
+    }
+
+
+    /// <summary>
     /// Reduces the ammo of the equipped weapon by a specified amount
     /// </summary>
     /// <param name="count"> Amount to reduce ammo by </param>
@@ -184,6 +214,9 @@ public class Arm : MonoBehaviour
             else if (equippedWeapon is W_Launcher launcher)
                 FireLauncher(launcher);
 
+            else if (equippedWeapon is W_Sprayer sprayer)
+                FireSprayer(sprayer);
+
             /// INCLUDE MORE WEAPONS HERE
         }
         else
@@ -191,7 +224,7 @@ public class Arm : MonoBehaviour
             if (semiFired) semiFired = false;
             if (launcherFired) launcherFired = false;
 
-            /// INCLUDE MORE SINGLE-PRESS WEAPONS HERE
+            /// INCLUDE MORE SINGLE-SHOT WEAPONS HERE
 
             /// TODO: Make RegainAmmo() do 1 ammo at a time when UI is implemented
             if (player.IsGrounded() && equippedWeapon is W_Shootable weapon) RegainAmmo(weapon.ammoCapacity);
