@@ -22,6 +22,6 @@ MonoBehaviour:
   projectilePower: 500
   projectilePrefab: {fileID: 7159978887230406093, guid: ea690a9212f478b4b9c70c2c0ba17e2f, type: 3}
   rocketPowered: 0
-  explosionRadius: 0
-  coreDamage: 0
+  explosionRadius: 5
+  coreDamage: 50
   corePushback: 500
