@@ -11,4 +11,7 @@ public class W_AutoGun : W_Shootable
 
     [Tooltip("Damage per bullet")]
     public float bulletDamage;
+
+    [Tooltip("Pushback the bullets inflict on collision")]
+    public float bulletPushback;
 }

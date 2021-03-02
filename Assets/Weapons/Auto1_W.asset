@@ -21,3 +21,4 @@ MonoBehaviour:
   pushback: 25
   spreadRange: 0.2
   bulletDamage: 10
+  bulletPushback: 10

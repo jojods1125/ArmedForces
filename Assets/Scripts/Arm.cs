@@ -71,6 +71,7 @@ public class Arm : MonoBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
+                    hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * auto.bulletPushback);
                     hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage);
                 }
             }
@@ -111,6 +112,7 @@ public class Arm : MonoBehaviour
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
+                            hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * semi.bulletPushback);
                             hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(semi.bulletDamage);
                         }
                     }

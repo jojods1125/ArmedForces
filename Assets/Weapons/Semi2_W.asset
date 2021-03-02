@@ -22,3 +22,4 @@ MonoBehaviour:
   spreadRange: 0.5
   bulletDamage: 10
   burstCount: 5
+  bulletPushback: 25
