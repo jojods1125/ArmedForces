@@ -31,6 +31,7 @@ public class Projectile : MonoBehaviour
         proj_rb.AddForce(direction.normalized * projectilePower);
     }
 
+
     private void OnTriggerEnter(Collider other)
     {
         // Creates explosion if there is an explosion radius
@@ -55,6 +56,12 @@ public class Projectile : MonoBehaviour
             for (int i = 0; i < exploded.Length; i++)
             {
                 /// TODO: Make players in explosion take damage
+                if (exploded[i].gameObject.layer == LayerMask.NameToLayer("Player"))
+                {
+                    float damageMultiplier = 1 / (explosionRadius / (explosionRadius - Vector3.Distance(exploded[i].ClosestPoint(gameObject.transform.position), gameObject.transform.position)));
+                    damageMultiplier = Mathf.Min(Mathf.Max(damageMultiplier, 0), 1);
+                    exploded[i].gameObject.GetComponent<Player>().DecreaseHealth(coreDamage * damageMultiplier);
+                }
 
                 // Add explosion force to rigidbody if exists
                 Rigidbody rb = exploded[i].GetComponent<Rigidbody>();
@@ -75,10 +82,15 @@ public class Projectile : MonoBehaviour
             }
 
             /// TODO: Make player take damage
+            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                other.gameObject.GetComponent<Player>().DecreaseHealth(coreDamage);
+            }
 
             Destroy(gameObject);
         }
     }
+
 
     private void Awake()
     {
