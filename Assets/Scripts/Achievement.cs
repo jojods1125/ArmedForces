@@ -18,6 +18,8 @@ public enum AchievementType
     kills, deaths, wins, autoShotsFired, semiShotsFired, launcherShotsFired, sprayerShotsFired
 }
 
+/** Secondary Type Enum & List of Weapons with new scriptable objs */
+
 [CreateAssetMenu(fileName = "New Achievement", menuName = "Achievement")]
 /// <summary>
 /// Base Achievement variables and methods
