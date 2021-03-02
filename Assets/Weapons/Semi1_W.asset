@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6148bcc569955e848aa4436ee58d46ac, type: 3}
-  m_Name: Shotty1_W
+  m_Name: Semi1_W
   m_EditorClassIdentifier: 
-  weaponName: Shotgun
+  weaponName: Rifle
   description: DESCRIPTION
   mesh: {fileID: -5495902117074765545, guid: 5fdd08bfc3e07994bba88274d3cbac84, type: 3}
-  material: {fileID: 2100000, guid: 9712e2b3862aef7419e65d0d03be0a10, type: 2}
+  material: {fileID: 2100000, guid: 038d265cf9316054798da520d0468d0b, type: 2}
   fireRate: 0.1
-  ammoCapacity: 25
-  pushback: 75
-  spreadRange: 0.5
-  bulletDamage: 0
-  burstCount: 5
+  ammoCapacity: 5
+  pushback: 200
+  spreadRange: 0.05
+  bulletDamage: 25
+  burstCount: 1
+  bulletPushback: 25

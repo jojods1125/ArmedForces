@@ -1,36 +1,51 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Which side of the player the arm is on; determines weapon loadout
+/// </summary>
 public enum ArmType
 {
+    /// <summary> Closer to camera </summary>
     Front,
+    /// <summary> Behind player </summary>
     Back
 }
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class Arm : MonoBehaviour
 {
-    // Tip of the arm, where shots emit from
+    [Tooltip("Tip of the arm, where shots emit from")]
     public GameObject barrel;
+    [Tooltip("Player character reference")]
     public Player player;
-    public PlayerControls.GunGuyActions gunActions;
+    [Tooltip("Whether the arm uses the player's Front Arm or Back Arm weapons")]
     public ArmType armType;
 
 
-    private PlayerControls inputActions;
-
-    private bool firing = false;
+    /// <summary> Whether or not the player is pressing the fire trigger </summary>
+    protected bool firing = false;
+    /// <summary> Previous time the player fired </summary>
     private float fireRateTimeStamp = 0;
-    private bool semiFired = false;
-    private bool launcherFired = false;
+    /// <summary> Checks if a weapon that requires a trigger release has been released </summary>
+    private bool singleShotFired = false;
 
-    private Weapon equippedWeapon;
-    private Weapon weaponA;
-    private Weapon weaponB;
-    private Weapon weaponC;
-    private Weapon weaponD;
 
+    /// <summary> Currently equipped weapon </summary>
+    protected Weapon equippedWeapon;
+    /// <summary> Weapon attached to top face button, weapons[0] </summary>
+    protected Weapon weaponA;
+    /// <summary> Weapon attached to right face button, weapons[1] </summary>
+    protected Weapon weaponB;
+    /// <summary> Weapon attached to bottom face button, weapons[2] </summary>
+    protected Weapon weaponC;
+    /// <summary> Weapon attached to left face button, weapons[3] </summary>
+    protected Weapon weaponD;
+
+
+    /// <summary> Amount of ammo remaining in each weapon </summary>
     private readonly Dictionary<Weapon, int> ammoRemaining = new Dictionary<Weapon, int>();
+
 
 
     /// <summary>
@@ -53,13 +68,19 @@ public class Arm : MonoBehaviour
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
             {
-                ///Debug.Log("HIT");
+                ///Debug.Log("HIT " + hit.collider.gameObject.name);
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                {
+                    hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * auto.bulletPushback);
+                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage);
+                }
             }
 
             // Pushes player
             player.EnactForce(bulletPath.normalized * -auto.pushback);
         }
     }
+
 
     /// <summary>
     /// Fires a SemiGun Weapon
@@ -68,7 +89,7 @@ public class Arm : MonoBehaviour
     void FireSemi(W_SemiGun semi)
     {
         // Trigger and fire rate check
-        if (!semiFired && Time.time > fireRateTimeStamp)
+        if (!singleShotFired && Time.time > fireRateTimeStamp)
         {
             // Burst loop
             for (int i = 0; i < semi.burstCount; i++)
@@ -77,7 +98,7 @@ public class Arm : MonoBehaviour
                 if (ammoRemaining[semi] > 0)
                 {
                     // Updates trigger, fire rate, and ammo
-                    semiFired = true;
+                    singleShotFired = true;
                     fireRateTimeStamp = Time.time + semi.fireRate;
                     ReduceAmmo(1);
 
@@ -88,7 +109,12 @@ public class Arm : MonoBehaviour
                     // Raycasts bullet path
                     if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
                     {
-                        ///Debug.Log("HIT");
+                        ///Debug.Log("HIT " + hit.collider.gameObject.name);
+                        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                        {
+                            hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * semi.bulletPushback);
+                            hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(semi.bulletDamage);
+                        }
                     }
 
                     // Pushes player
@@ -99,6 +125,7 @@ public class Arm : MonoBehaviour
 
     }
 
+
     /// <summary>
     /// Fires a Launcher Weapon
     /// </summary>
@@ -106,13 +133,13 @@ public class Arm : MonoBehaviour
     void FireLauncher(W_Launcher launcher)
     {
         // Trigger and fire rate check
-        if (!launcherFired && Time.time > fireRateTimeStamp)
+        if (!singleShotFired && Time.time > fireRateTimeStamp)
         {
             // Ammo check
             if (ammoRemaining[launcher] > 0)
             {
                 // Updates trigger, fire rate, and ammo
-                launcherFired = true;
+                singleShotFired = true;
                 fireRateTimeStamp = Time.time + launcher.fireRate;
                 ReduceAmmo(1);
 
@@ -130,6 +157,7 @@ public class Arm : MonoBehaviour
         }
 
     }
+
 
     /// <summary>
     /// Fires an Sprayer Weapon
@@ -151,7 +179,12 @@ public class Arm : MonoBehaviour
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit, sprayer.sprayDistance))
             {
-                ///Debug.Log("HIT");
+                ///Debug.Log("HIT " + hit.collider.gameObject.name);
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                {
+                    hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * sprayer.bulletPushback);
+                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(sprayer.bulletDamage);
+                }
             }
 
             // Pushes player
@@ -160,49 +193,10 @@ public class Arm : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// Reduces the ammo of the equipped weapon by a specified amount
-    /// </summary>
-    /// <param name="count"> Amount to reduce ammo by </param>
-    void ReduceAmmo(int count)
-    {
-        if (equippedWeapon.Equals(weaponA))
-            ammoRemaining[weaponA] = Mathf.Max(ammoRemaining[weaponA] - count, 0);
-
-        else if (equippedWeapon.Equals(weaponB))
-            ammoRemaining[weaponB] = Mathf.Max(ammoRemaining[weaponB] - count, 0);
-
-        else if (equippedWeapon.Equals(weaponC))
-            ammoRemaining[weaponC] = Mathf.Max(ammoRemaining[weaponC] - count, 0);
-
-        else if (equippedWeapon.Equals(weaponD))
-            ammoRemaining[weaponD] = Mathf.Max(ammoRemaining[weaponD] - count, 0);
-    }
-
-    /// <summary>
-    /// Increases the ammo of the equipped weapon by a specified amount
-    /// </summary>
-    /// <param name="count"> Amount to increase ammo by </param>
-    void RegainAmmo(int count)
-    {
-        if (equippedWeapon is W_Shootable weapon)
-        {
-            if (equippedWeapon.Equals(weaponA))
-                ammoRemaining[weaponA] = Mathf.Min(ammoRemaining[weaponA] + count, weapon.ammoCapacity);
-
-            else if (equippedWeapon.Equals(weaponB))
-                ammoRemaining[weaponB] = Mathf.Min(ammoRemaining[weaponB] + count, weapon.ammoCapacity);
-
-            else if (equippedWeapon.Equals(weaponC))
-                ammoRemaining[weaponC] = Mathf.Min(ammoRemaining[weaponC] + count, weapon.ammoCapacity);
-
-            else if (equippedWeapon.Equals(weaponD))
-                ammoRemaining[weaponD] = Mathf.Min(ammoRemaining[weaponD] + count, weapon.ammoCapacity);
-        }
-    }
 
     void FixedUpdate()
     {
+        // If the player is using the firing input, call the appropriate weapon firing function
         if (firing)
         {
             if (equippedWeapon is W_SemiGun semi)
@@ -219,12 +213,11 @@ public class Arm : MonoBehaviour
 
             /// INCLUDE MORE WEAPONS HERE
         }
+
+        // If the player is not firing, reset the variable that requires trigger releasing
         else
         {
-            if (semiFired) semiFired = false;
-            if (launcherFired) launcherFired = false;
-
-            /// INCLUDE MORE SINGLE-SHOT WEAPONS HERE
+            if (singleShotFired) singleShotFired = false;
 
             /// TODO: Make RegainAmmo() do 1 ammo at a time when UI is implemented
             if (player.IsGrounded() && equippedWeapon is W_Shootable weapon) RegainAmmo(weapon.ammoCapacity);
@@ -234,15 +227,14 @@ public class Arm : MonoBehaviour
 
 
     // ===========================================================
-    //              IGNORE EVERYTHING PAST THIS POINT
+    //                 INITIALIZATION AND CONTROLS
     // ===========================================================
 
 
     // Start is called before the first frame update
     void Start()
     {
-        // Set up input actions
-        inputActions = new PlayerControls();
+        // Set up arm loadouts
         if (armType == ArmType.Front) FrontArmInitialize();
         else BackArmInitialize();
 
@@ -268,7 +260,7 @@ public class Arm : MonoBehaviour
 
 
     // Aims the arm based on joystick angle
-    void Aim(Vector3 aimVal)
+    protected void Aim(Vector3 aimVal)
     {
         float degrees = Vector3.Angle(Vector3.up, transform.position + (aimVal * 1000));
         Vector3 eulerRotation = transform.rotation.eulerAngles;
@@ -280,7 +272,7 @@ public class Arm : MonoBehaviour
 
 
     // Switches the arm's currently equipped weapon
-    void Switch(Weapon weapon)
+    protected void Switch(Weapon weapon)
     {
         if (weapon)
         {
@@ -291,61 +283,94 @@ public class Arm : MonoBehaviour
     }
 
 
-    // Initializes the controls of the arm based on it being the front arm
-    void FrontArmInitialize()
+    // Initializes the loadout of the arm based on it being the front arm
+    protected void FrontArmInitialize()
     {
         weaponA = player.frontArmWeapons[0];
         weaponB = player.frontArmWeapons[1];
         weaponC = player.frontArmWeapons[2];
         weaponD = player.frontArmWeapons[3];
-
-        inputActions.GunGuy.ArmAimFront.performed += ctx => Aim(ctx.ReadValue<Vector2>());
-        inputActions.GunGuy.ArmAimFront.Enable();
-
-        inputActions.GunGuy.ShootFront.performed += ctx => firing = true;
-        inputActions.GunGuy.ShootFront.canceled += ctx => firing = false;
-        inputActions.GunGuy.ShootFront.Enable();
-
-        inputActions.GunGuy.FrontArm1.performed += ctx => Switch(weaponA);
-        inputActions.GunGuy.FrontArm1.Enable();
-
-        inputActions.GunGuy.FrontArm2.performed += ctx => Switch(weaponB);
-        inputActions.GunGuy.FrontArm2.Enable();
-
-        inputActions.GunGuy.FrontArm3.performed += ctx => Switch(weaponC);
-        inputActions.GunGuy.FrontArm3.Enable();
-
-        inputActions.GunGuy.FrontArm4.performed += ctx => Switch(weaponD);
-        inputActions.GunGuy.FrontArm4.Enable();
     }
 
 
-    // Initializes the controls of the arm based on it being the back arm
-    void BackArmInitialize()
+    // Initializes the loadout of the arm based on it being the back arm
+    protected void BackArmInitialize()
     {
         weaponA = player.backArmWeapons[0];
         weaponB = player.backArmWeapons[1];
         weaponC = player.backArmWeapons[2];
         weaponD = player.backArmWeapons[3];
+    }
 
-        inputActions.GunGuy.ArmAimBack.performed += ctx => Aim(ctx.ReadValue<Vector2>());
-        inputActions.GunGuy.ArmAimBack.Enable();
 
-        inputActions.GunGuy.ShootBack.performed += ctx => firing = true;
-        inputActions.GunGuy.ShootBack.canceled += ctx => firing = false;
-        inputActions.GunGuy.ShootBack.Enable();
 
-        inputActions.GunGuy.BackArm1.performed += ctx => Switch(weaponA);
-        inputActions.GunGuy.BackArm1.Enable();
+    // ===========================================================
+    //                       ALL THINGS AMMO
+    // ===========================================================
 
-        inputActions.GunGuy.BackArm2.performed += ctx => Switch(weaponB);
-        inputActions.GunGuy.BackArm2.Enable();
 
-        inputActions.GunGuy.BackArm3.performed += ctx => Switch(weaponC);
-        inputActions.GunGuy.BackArm3.Enable();
+    /// <summary>
+    /// Reduces the ammo of the equipped weapon by a specified amount
+    /// </summary>
+    /// <param name="count"> Amount to reduce ammo by </param>
+    public void ReduceAmmo(int count)
+    {
+        // Finds the equipped weapon
+        // Sets the ammo of the weapon to either 0 or ammoRemaining - count, prevents negative ammo
 
-        inputActions.GunGuy.BackArm4.performed += ctx => Switch(weaponD);
-        inputActions.GunGuy.BackArm4.Enable();
+        if (equippedWeapon.Equals(weaponA))
+            ammoRemaining[weaponA] = Mathf.Max(ammoRemaining[weaponA] - count, 0);
+
+        else if (equippedWeapon.Equals(weaponB))
+            ammoRemaining[weaponB] = Mathf.Max(ammoRemaining[weaponB] - count, 0);
+
+        else if (equippedWeapon.Equals(weaponC))
+            ammoRemaining[weaponC] = Mathf.Max(ammoRemaining[weaponC] - count, 0);
+
+        else if (equippedWeapon.Equals(weaponD))
+            ammoRemaining[weaponD] = Mathf.Max(ammoRemaining[weaponD] - count, 0);
+    }
+
+
+    /// <summary>
+    /// Increases the ammo of the equipped weapon by a specified amount
+    /// </summary>
+    /// <param name="count"> Amount to increase ammo by </param>
+    public void RegainAmmo(int count)
+    {
+        // Checks if the equipped weapon should have ammo
+        if (equippedWeapon is W_Shootable weapon)
+        {
+            // Finds the equipped weapon
+            // Sets the ammo of the weapon to either max or ammoRemaining + count, prevents overloading ammo
+
+            if (equippedWeapon.Equals(weaponA))
+                ammoRemaining[weaponA] = Mathf.Min(ammoRemaining[weaponA] + count, weapon.ammoCapacity);
+
+            else if (equippedWeapon.Equals(weaponB))
+                ammoRemaining[weaponB] = Mathf.Min(ammoRemaining[weaponB] + count, weapon.ammoCapacity);
+
+            else if (equippedWeapon.Equals(weaponC))
+                ammoRemaining[weaponC] = Mathf.Min(ammoRemaining[weaponC] + count, weapon.ammoCapacity);
+
+            else if (equippedWeapon.Equals(weaponD))
+                ammoRemaining[weaponD] = Mathf.Min(ammoRemaining[weaponD] + count, weapon.ammoCapacity);
+        }
+    }
+
+    /// <summary>
+    /// Fully reloads all weapons if they have ammo
+    /// </summary>
+    public void FullReload()
+    {
+        if (weaponA is W_Shootable gunA)
+            ammoRemaining[weaponA] = ammoRemaining[weaponA] + gunA.ammoCapacity;
+        if (weaponB is W_Shootable gunB)
+            ammoRemaining[weaponB] = ammoRemaining[weaponB] + gunB.ammoCapacity;
+        if (weaponC is W_Shootable gunC)
+            ammoRemaining[weaponC] = ammoRemaining[weaponC] + gunC.ammoCapacity;
+        if (weaponD is W_Shootable gunD)
+            ammoRemaining[weaponD] = ammoRemaining[weaponD] + gunD.ammoCapacity;
     }
 
 

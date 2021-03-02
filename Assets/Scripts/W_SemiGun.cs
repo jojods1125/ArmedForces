@@ -15,4 +15,7 @@ public class W_SemiGun : W_Shootable
     [Min(0)]
     [Tooltip("Number of bullets shot on trigger press")]
     public int burstCount;
+
+    [Tooltip("Pushback the bullets inflict on collision")]
+    public float bulletPushback;
 }
