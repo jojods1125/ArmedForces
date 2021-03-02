@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f53213acdf81f284aabb1f6bac801502, type: 2}
+  - {fileID: 2100000, guid: 8c1162a182b9426409e6dae91b343108, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -140,7 +140,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8c1162a182b9426409e6dae91b343108, type: 2}
+  - {fileID: 2100000, guid: f53213acdf81f284aabb1f6bac801502, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -221,7 +221,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ac10b3f236d07e74c9cd8240ca082f17, type: 2}
+  - {fileID: 2100000, guid: f53213acdf81f284aabb1f6bac801502, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -302,7 +302,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ac10b3f236d07e74c9cd8240ca082f17, type: 2}
+  - {fileID: 2100000, guid: f53213acdf81f284aabb1f6bac801502, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -418,7 +418,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8c1162a182b9426409e6dae91b343108, type: 2}
+  - {fileID: 2100000, guid: f53213acdf81f284aabb1f6bac801502, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -479,13 +479,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8282234077870317105}
-  - component: {fileID: 8282234077870317110}
-  - component: {fileID: 8282234077870317111}
   - component: {fileID: 8282234077870317108}
   - component: {fileID: 8282234077870317109}
-  - component: {fileID: 8282234077870317104}
+  - component: {fileID: 3305675465212334390}
   m_Layer: 9
-  m_Name: Player
+  m_Name: Player_Sandbag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -508,55 +506,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8282234077870317110
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8282234077870317098}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &8282234077870317111
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8282234077870317098}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!136 &8282234077870317108
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -587,7 +536,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
---- !u!114 &8282234077870317104
+--- !u!114 &3305675465212334390
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -604,16 +553,15 @@ MonoBehaviour:
   maxWalkSpeed: 5
   jumpForce: 100
   backArmWeapons:
-  - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
+  - {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
   - {fileID: 11400000, guid: c0654668b0796c84eba8c7d930987956, type: 2}
   - {fileID: 11400000, guid: 84b23d62f01cc61479f769c5030d7804, type: 2}
-  - {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
+  - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
   frontArmWeapons:
-  - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
-  - {fileID: 11400000, guid: c0654668b0796c84eba8c7d930987956, type: 2}
-  - {fileID: 11400000, guid: 84b23d62f01cc61479f769c5030d7804, type: 2}
+  - {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
+  - {fileID: 11400000, guid: 23ff3fae40bdea64fba3218142df8ea6, type: 2}
   - {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
-  currHealth: 100
+  - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
 --- !u!1 &8282234078560122467
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,7 +688,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barrel: {fileID: 8282234078560122467}
-  player: {fileID: 8282234077870317104}
+  player: {fileID: 3305675465212334390}
   armType: 0
 --- !u!1 &9093051127276069410
 GameObject:
@@ -838,5 +786,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barrel: {fileID: 8282234077263579433}
-  player: {fileID: 8282234077870317104}
+  player: {fileID: 3305675465212334390}
   armType: 1

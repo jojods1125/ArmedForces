@@ -18,6 +18,6 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: 4a4d2b787eb393a469ae9860f5de4031, type: 2}
   fireRate: 0.075
   ammoCapacity: 50
-  spreadRange: 0.2
-  bulletDamage: 0
   pushback: 25
+  spreadRange: 0.2
+  bulletDamage: 10

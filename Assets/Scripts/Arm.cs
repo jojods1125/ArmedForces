@@ -23,12 +23,8 @@ public class Arm : MonoBehaviour
     public ArmType armType;
 
 
-    /// <summary> Player input controls </summary>
-    private PlayerControls inputActions;
-
-
     /// <summary> Whether or not the player is pressing the fire trigger </summary>
-    private bool firing = false;
+    protected bool firing = false;
     /// <summary> Previous time the player fired </summary>
     private float fireRateTimeStamp = 0;
     /// <summary> Checks if a weapon that requires a trigger release has been released </summary>
@@ -36,15 +32,15 @@ public class Arm : MonoBehaviour
 
 
     /// <summary> Currently equipped weapon </summary>
-    private Weapon equippedWeapon;
+    protected Weapon equippedWeapon;
     /// <summary> Weapon attached to top face button, weapons[0] </summary>
-    private Weapon weaponA;
+    protected Weapon weaponA;
     /// <summary> Weapon attached to right face button, weapons[1] </summary>
-    private Weapon weaponB;
+    protected Weapon weaponB;
     /// <summary> Weapon attached to bottom face button, weapons[2] </summary>
-    private Weapon weaponC;
+    protected Weapon weaponC;
     /// <summary> Weapon attached to left face button, weapons[3] </summary>
-    private Weapon weaponD;
+    protected Weapon weaponD;
 
 
     /// <summary> Amount of ammo remaining in each weapon </summary>
@@ -72,7 +68,7 @@ public class Arm : MonoBehaviour
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
             {
-                ///Debug.Log("HIT");
+                ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage);
@@ -112,7 +108,7 @@ public class Arm : MonoBehaviour
                     // Raycasts bullet path
                     if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
                     {
-                        ///Debug.Log("HIT");
+                        ///Debug.Log("HIT " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
                             hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(semi.bulletDamage);
@@ -181,9 +177,10 @@ public class Arm : MonoBehaviour
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit, sprayer.sprayDistance))
             {
-                ///Debug.Log("HIT");
+                ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
+                    hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * sprayer.bulletPushback);
                     hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(sprayer.bulletDamage);
                 }
             }
@@ -235,8 +232,7 @@ public class Arm : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Set up input actions
-        inputActions = new PlayerControls();
+        // Set up arm loadouts
         if (armType == ArmType.Front) FrontArmInitialize();
         else BackArmInitialize();
 
@@ -262,7 +258,7 @@ public class Arm : MonoBehaviour
 
 
     // Aims the arm based on joystick angle
-    void Aim(Vector3 aimVal)
+    protected void Aim(Vector3 aimVal)
     {
         float degrees = Vector3.Angle(Vector3.up, transform.position + (aimVal * 1000));
         Vector3 eulerRotation = transform.rotation.eulerAngles;
@@ -274,7 +270,7 @@ public class Arm : MonoBehaviour
 
 
     // Switches the arm's currently equipped weapon
-    void Switch(Weapon weapon)
+    protected void Switch(Weapon weapon)
     {
         if (weapon)
         {
@@ -285,61 +281,23 @@ public class Arm : MonoBehaviour
     }
 
 
-    // Initializes the controls of the arm based on it being the front arm
-    void FrontArmInitialize()
+    // Initializes the loadout of the arm based on it being the front arm
+    protected void FrontArmInitialize()
     {
         weaponA = player.frontArmWeapons[0];
         weaponB = player.frontArmWeapons[1];
         weaponC = player.frontArmWeapons[2];
         weaponD = player.frontArmWeapons[3];
-
-        inputActions.GunGuy.ArmAimFront.performed += ctx => Aim(ctx.ReadValue<Vector2>());
-        inputActions.GunGuy.ArmAimFront.Enable();
-
-        inputActions.GunGuy.ShootFront.performed += ctx => firing = true;
-        inputActions.GunGuy.ShootFront.canceled += ctx => firing = false;
-        inputActions.GunGuy.ShootFront.Enable();
-
-        inputActions.GunGuy.FrontArm1.performed += ctx => Switch(weaponA);
-        inputActions.GunGuy.FrontArm1.Enable();
-
-        inputActions.GunGuy.FrontArm2.performed += ctx => Switch(weaponB);
-        inputActions.GunGuy.FrontArm2.Enable();
-
-        inputActions.GunGuy.FrontArm3.performed += ctx => Switch(weaponC);
-        inputActions.GunGuy.FrontArm3.Enable();
-
-        inputActions.GunGuy.FrontArm4.performed += ctx => Switch(weaponD);
-        inputActions.GunGuy.FrontArm4.Enable();
     }
 
 
-    // Initializes the controls of the arm based on it being the back arm
-    void BackArmInitialize()
+    // Initializes the loadout of the arm based on it being the back arm
+    protected void BackArmInitialize()
     {
         weaponA = player.backArmWeapons[0];
         weaponB = player.backArmWeapons[1];
         weaponC = player.backArmWeapons[2];
         weaponD = player.backArmWeapons[3];
-
-        inputActions.GunGuy.ArmAimBack.performed += ctx => Aim(ctx.ReadValue<Vector2>());
-        inputActions.GunGuy.ArmAimBack.Enable();
-
-        inputActions.GunGuy.ShootBack.performed += ctx => firing = true;
-        inputActions.GunGuy.ShootBack.canceled += ctx => firing = false;
-        inputActions.GunGuy.ShootBack.Enable();
-
-        inputActions.GunGuy.BackArm1.performed += ctx => Switch(weaponA);
-        inputActions.GunGuy.BackArm1.Enable();
-
-        inputActions.GunGuy.BackArm2.performed += ctx => Switch(weaponB);
-        inputActions.GunGuy.BackArm2.Enable();
-
-        inputActions.GunGuy.BackArm3.performed += ctx => Switch(weaponC);
-        inputActions.GunGuy.BackArm3.Enable();
-
-        inputActions.GunGuy.BackArm4.performed += ctx => Switch(weaponD);
-        inputActions.GunGuy.BackArm4.Enable();
     }
 
 

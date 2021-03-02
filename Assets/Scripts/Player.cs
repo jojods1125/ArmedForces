@@ -14,20 +14,16 @@ public class Player : MonoBehaviour
     public float walkMomentum = 10;
     public float maxWalkSpeed = 5;
     [Min(0)]
-    public int jumpForce = 50;
+    public int jumpForce = 100;
 
     [Header("Weapon Loadouts")]
     public Weapon[] backArmWeapons = new Weapon[4];
     public Weapon[] frontArmWeapons = new Weapon[4];
 
 
-    private PlayerControls inputActions;
-    private Rigidbody rb;
+    protected Rigidbody rb;
     private Arm[] arms;
-    private float currWalkMomentum = 0;
-    private bool movingL = false;
-    private bool movingR = false;
-    private float currHealth = 100;
+    public float currHealth = 100;
     private bool dying = false;
 
 
@@ -96,76 +92,18 @@ public class Player : MonoBehaviour
     }
 
 
+
     // ===========================================================
-    //                  INPUTS AND INSTANTIATION
+    //                       OTHER FUNCTIONS
     // ===========================================================
 
-    // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
         currHealth = maxHealth;
 
-        inputActions = new PlayerControls();
         rb = gameObject.GetComponent<Rigidbody>();
         arms = gameObject.GetComponentsInChildren<Arm>();
-
-        inputActions.GunGuy.MoveLeft.performed += ctx => MoveLeft(true);
-        inputActions.GunGuy.MoveLeft.canceled += ctx => MoveLeft(false);
-        inputActions.GunGuy.MoveLeft.Enable();
-
-        inputActions.GunGuy.MoveRight.performed += ctx => MoveRight(true);
-        inputActions.GunGuy.MoveRight.canceled += ctx => MoveRight(false);
-        inputActions.GunGuy.MoveRight.Enable();
-    }
-
-
-    /// <summary>
-    /// Sets variables that, on FixedUpdate, will make player movement reflect left-moving input
-    /// </summary>
-    /// <param name="pressed"> Whether the player is pressing the movement button or not </param>
-    void MoveLeft(bool pressed)
-    {
-        if (pressed)
-        {
-            currWalkMomentum += -walkMomentum;
-            movingL = true;
-        }
-        else
-        {
-            currWalkMomentum += walkMomentum;
-            movingL = false;
-        }
-    }
-
-
-    /// <summary>
-    /// Sets variables that, on FixedUpdate, will make player movement reflect right-moving input
-    /// </summary>
-    /// <param name="pressed"> Whether the player is pressing the movement button or not </param>
-    void MoveRight(bool pressed)
-    {
-        if (pressed)
-        {
-            currWalkMomentum += walkMomentum;
-            movingR = true;
-        }
-        else
-        {
-            currWalkMomentum += -walkMomentum;
-            movingR = false;
-        }
-    }
-
-
-    // Called every fixed tic
-    void FixedUpdate()
-    {
-        if (rb.velocity.magnitude < maxWalkSpeed)
-            rb.AddForce(currWalkMomentum, 0, 0);
-
-        if (movingL && movingR)
-            if (IsGrounded())
-                rb.AddForce(currWalkMomentum * 2, jumpForce, 0);
     }
 
 

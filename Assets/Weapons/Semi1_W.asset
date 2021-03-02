@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6148bcc569955e848aa4436ee58d46ac, type: 3}
-  m_Name: Rifle1_W
+  m_Name: Semi1_W
   m_EditorClassIdentifier: 
   weaponName: Rifle
   description: DESCRIPTION
@@ -20,5 +20,5 @@ MonoBehaviour:
   ammoCapacity: 5
   pushback: 200
   spreadRange: 0.05
-  bulletDamage: 0
+  bulletDamage: 25
   burstCount: 1
