@@ -3,7 +3,17 @@ guid: 86a5da2f32711f54894c0ab636354b46
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mountain_PlaneA
+    second: {fileID: 2100000, guid: fed6df813ba317e49afe4079ecf09dfc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mountain_PlaneB
+    second: {fileID: 2100000, guid: b57e14bbadc60304d964fc52f136e9f1, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

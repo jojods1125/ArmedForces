@@ -3,7 +3,37 @@ guid: e9961953f454483489fb60288fc2772c
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Under_ground
+    second: {fileID: 2100000, guid: c8384f4cbfa45974482c3b6f593f0064, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cloud_under_A
+    second: {fileID: 2100000, guid: 973f42863f2194d4389f684f964d049c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cloud_under_B
+    second: {fileID: 2100000, guid: 0d4915c07210dd34ba5871e45a327867, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cloud_under_Z
+    second: {fileID: 2100000, guid: f7c6514df226e254fa00d0b77cae9d16, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cloud_under_ZZ
+    second: {fileID: 2100000, guid: 6211e46550cff7541a50f92e12284841, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cloud_under_ZZZ
+    second: {fileID: 2100000, guid: d540a4fef8deeb6429a1d2f8e7d6e0ef, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

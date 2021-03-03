@@ -3,7 +3,72 @@ guid: b86f59c40a248c0428385a38136008ea
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Base
+    second: {fileID: 2100000, guid: 80a6b8218cbf11244852049f4cf6d2f2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BlockA_Ba
+    second: {fileID: 2100000, guid: 32ece920577c0f241a35299df453ccb6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mizo_Base
+    second: {fileID: 2100000, guid: db02d2f798c6327479bf335a0c033baf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RengaC_Is
+    second: {fileID: 2100000, guid: 625fd85fbc0926a4287b1e2827d09b16, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RengaE_Ba
+    second: {fileID: 2100000, guid: 5131d601f4910f844acd8c0f78667692, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShaderfxShader68
+    second: {fileID: 2100000, guid: 0b6dfc1286fd8bd4a862a691c6e641a3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TowerhutiA_Ba
+    second: {fileID: 2100000, guid: cf1a0367861c99541b9b83e8b4421ef9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: base1_Renga_Block
+    second: {fileID: 2100000, guid: bac0fbb44a8de7343a17d1cc41230006, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ink_mt
+    second: {fileID: 2100000, guid: 90f54e888832c5b4a808066dec614e96, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rengaA_Ba
+    second: {fileID: 2100000, guid: 0a344174eab4bd440bc9dc9fa9991215, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sfx_RockA1_Base
+    second: {fileID: 2100000, guid: 8b7738647eeb114498e3650b3dca8f0d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sideA_Ba
+    second: {fileID: 2100000, guid: 00d28163fae8bea479d16f8f7727ed34, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sub_TowerhutiB
+    second: {fileID: 2100000, guid: 1b7a5c9d58ebec24ea6b6385d44e9313, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

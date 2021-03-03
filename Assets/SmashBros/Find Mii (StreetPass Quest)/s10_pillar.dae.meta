@@ -3,7 +3,17 @@ guid: cc31cc49faca71a4882b21a08e2bb687
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RengaE_Ba
+    second: {fileID: 2100000, guid: 2825937f558bee44ba4f6acbe19a54b5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sub_TowerhutiB
+    second: {fileID: 2100000, guid: f2216b6939bab9341928b2e5327c8002, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
