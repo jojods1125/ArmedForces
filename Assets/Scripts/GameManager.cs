@@ -5,11 +5,16 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject spawnPointContainer;
+
     [Min(0)]
     public int playerRespawnTimer = 3;
 
+    public Player mainPlayer;
+
+    public UIManager uiManager;
 
     private List<Vector3> spawnPoints = new List<Vector3>();
+
 
 
     public void Respawn(GameObject obj)
@@ -20,6 +25,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     public IEnumerator RespawnPlayer(GameObject obj)
     {
         yield return new WaitForSeconds(playerRespawnTimer);
@@ -28,13 +34,13 @@ public class GameManager : MonoBehaviour
     }
 
 
-
     private static GameManager instance;
 
     public static GameManager Instance()
     {
         return instance;
     }
+
 
     void Awake()
     {
@@ -52,4 +58,6 @@ public class GameManager : MonoBehaviour
             spawnPoints.Add(child.position);
         }
     }
+
+
 }

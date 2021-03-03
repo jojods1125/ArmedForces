@@ -128,7 +128,14 @@ public class Player : MonoBehaviour
     }
 
 
-    
+    /// <summary>
+    /// Returns references to the Arm objects of the player
+    /// </summary>
+    /// <returns> Player's Arm objects </returns>
+    public Arm[] GetArms()
+    {
+        return arms;
+    }
 
 
 }

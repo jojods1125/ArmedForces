@@ -329,6 +329,12 @@ public class Arm : MonoBehaviour
 
         else if (equippedWeapon.Equals(weaponD))
             ammoRemaining[weaponD] = Mathf.Max(ammoRemaining[weaponD] - count, 0);
+
+
+        if (this is Arm_Controlled)
+        {
+            GameManager.Instance().uiManager.UpdateUI();
+        }
     }
 
 
@@ -373,5 +379,10 @@ public class Arm : MonoBehaviour
             ammoRemaining[weaponD] = ammoRemaining[weaponD] + gunD.ammoCapacity;
     }
 
+
+    public Dictionary<Weapon, int> GetAmmoRemaining()
+    {
+        return ammoRemaining;
+    }
 
 }
