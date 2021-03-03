@@ -1,0 +1,266 @@
+fileFormatVersion: 2
+guid: ff3c594c93119d44794650c6fc5a9237
+ModelImporter:
+  serializedVersion: 20101
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShaderfxShader104
+    second: {fileID: 2100000, guid: b28cf87872c9f6a43b94ff9a197bf496, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShaderfxShader105
+    second: {fileID: 2100000, guid: be9d2e49fe413e140ba277c116afacc8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShaderfxShader106
+    second: {fileID: 2100000, guid: 09ddfdc4beb911243a805d20c07b7464, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShaderfxShader107
+    second: {fileID: 2100000, guid: 3a4bba3d4b5d3fa498803596dfda894a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShaderfxShader33
+    second: {fileID: 2100000, guid: eda5226b78c132a43876c3e15795ca88, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShaderfxShader34
+    second: {fileID: 2100000, guid: 00ee098cff95e7c4c99dde55d3a8d074, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShaderfxShader81_bg_farbg_01
+    second: {fileID: 2100000, guid: 920c43c87d7f117479b9bde5098060b7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShaderfxShader89
+    second: {fileID: 2100000, guid: 0f7dfa39993b9294c8e986b19f21be3e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: far_hokora
+    second: {fileID: 2100000, guid: fb59815a898c187459ecb6543a663647, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: far_hokora_alpha
+    second: {fileID: 2100000, guid: f367e95feeecf6f43b6978b7890535f7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: near_water
+    second: {fileID: 2100000, guid: f233e88af3ad77e4c8b8f502e45fa751, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: test0_ShaderfxShader6
+    second: {fileID: 2100000, guid: 939d8ae78f598d54d9dbb6a3c4e350f7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader102_groud_rock_soil
+    second: {fileID: 2100000, guid: 146223cf1ea6240499ec6dbcf74d1290, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader103_grass_tile
+    second: {fileID: 2100000, guid: 61b5b07b48fa9054d92639e0fcacaed6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader104
+    second: {fileID: 2100000, guid: 785332de8bbf9c34ba7bf9ef427e2730, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader105
+    second: {fileID: 2100000, guid: 7f1eb31c2076cf4429648154c258de97, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader109_soil_tile
+    second: {fileID: 2100000, guid: 67a37dd93393f834aa7974e24b99ffc8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader110
+    second: {fileID: 2100000, guid: 877a7c723d242df4493730a3f3225107, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader111_grass_tile2
+    second: {fileID: 2100000, guid: 259870daca93f0647be7620819475a2c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader38_ground_soil
+    second: {fileID: 2100000, guid: 901e6bef87aac4543b29d80736dc715b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader51
+    second: {fileID: 2100000, guid: 727e611a49063204dbe43a4eec4ec779, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader54
+    second: {fileID: 2100000, guid: 650d0a121f46e1b48a18f51dfc8a1a38, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader55
+    second: {fileID: 2100000, guid: 1f72598b245c49c43bba57c0e1a5770b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader56
+    second: {fileID: 2100000, guid: 81a9ea1b0050cae4086ccb3f3ced2bf2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader57
+    second: {fileID: 2100000, guid: 751587e5ac68df74895f57ec34e24808, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader58
+    second: {fileID: 2100000, guid: 8c10779ab08a553408c1bf8f89f9e71e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader61
+    second: {fileID: 2100000, guid: f2d62e068096b014baf96457805e2ac8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader62
+    second: {fileID: 2100000, guid: 8001c9b7ea9e59a4bb0da12ab3534630, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader65
+    second: {fileID: 2100000, guid: 7770658afc4e1e747ae8e7a8b2beac20, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader68
+    second: {fileID: 2100000, guid: 6b03a3ab04fb5ab47930ec0dace1198e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader69
+    second: {fileID: 2100000, guid: ad4c3b65f5a9c23458e644e9cc3906c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_ShaderfxShader97_ground_soil02
+    second: {fileID: 2100000, guid: 1c2a8c0c08c5cd34282ac73d09c8e31d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: uv2_test_taihi_ShaderfxShader3_ground_rock
+    second: {fileID: 2100000, guid: e96838705ad9b8544b3a7b34e44da68b, type: 2}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
