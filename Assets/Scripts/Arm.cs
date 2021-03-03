@@ -200,17 +200,25 @@ public class Arm : MonoBehaviour
         if (firing)
         {
             if (equippedWeapon is W_SemiGun semi)
+            {
                 FireSemi(semi);
-
+                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.semi);
+            }
             else if (equippedWeapon is W_AutoGun auto)
+            {
                 FireAuto(auto);
-
+                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.auto);
+            }
             else if (equippedWeapon is W_Launcher launcher)
+            {
                 FireLauncher(launcher);
-
+                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.launcher);
+            }
             else if (equippedWeapon is W_Sprayer sprayer)
+            {
                 FireSprayer(sprayer);
-
+                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.sprayer);
+            }
             /// INCLUDE MORE WEAPONS HERE
         }
 

@@ -9,13 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ce96a001e6d5a9428c4ab7b3e061760, type: 3}
-  m_Name: A_EnemiesKilled
+  m_Script: {fileID: 11500000, guid: 55be35fab68fc7d44a8ebc1972641712, type: 3}
+  m_Name: A_AutoShotsFired 1
   m_EditorClassIdentifier: 
-  achievementMessage: Mow 'em Down!
-  nextTier: 0
+  achievementMessage: Take Aim!
+  nextTier: 4
   achieved: 0
-  type: 0
-  currentValue: 0
-  activationValues: 01000000050000000a00000019000000
+  type: 3
+  currentValue: 104
+  activationValues: 010000000a0000001900000064000000f4010000e80300008813000010270000a861000050c30000
   initialValue: 0
+  weaponType: 1

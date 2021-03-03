@@ -15,12 +15,12 @@ using UnityEngine;
 /// </summary>
 public enum AchievementType
 {
-    kills, deaths, wins, autoShotsFired, semiShotsFired, launcherShotsFired, sprayerShotsFired
+    kills, deaths, wins, shotsFired
 }
 
 /** Secondary Type Enum & List of Weapons with new scriptable objs */
 
-[CreateAssetMenu(fileName = "New Achievement", menuName = "Achievement")]
+[CreateAssetMenu(fileName = "New Achievement", menuName = "Achievement/Normal")]
 /// <summary>
 /// Base Achievement variables and methods
 /// </summary>

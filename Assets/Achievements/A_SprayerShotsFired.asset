@@ -9,13 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ce96a001e6d5a9428c4ab7b3e061760, type: 3}
+  m_Script: {fileID: 11500000, guid: 55be35fab68fc7d44a8ebc1972641712, type: 3}
   m_Name: A_SprayerShotsFired
   m_EditorClassIdentifier: 
-  achievementMessage: Light 'em Up!
-  nextTier: 0
+  achievementMessage: Spray...
+  nextTier: 3
   achieved: 0
-  type: 6
-  currentValue: 0
-  activationValues: 010000000a0000003200000064000000f4010000e8030000881300001027000050c30000a0860100
+  type: 3
+  currentValue: 135
+  activationValues: 0a0000003200000064000000fa000000f4010000e8030000c40900008813000010270000a8610000
   initialValue: 0
+  weaponType: 4

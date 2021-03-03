@@ -70,6 +70,9 @@ public class Player : MonoBehaviour
 
             gameObject.SetActive(false);
         }
+        // if Player_Controlled, call achievement event
+        if (this is Player_Controlled)
+            AchievementManager.Instance().OnEvent(AchievementType.deaths);
     }
 
 
