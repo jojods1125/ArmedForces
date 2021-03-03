@@ -9,6 +9,7 @@ public class Conveyor : MonoBehaviour
     public float xForce;
     public float yForce;
     public float zForce;
+
     // Start is called before the first frame update
     void OnTriggerStay (Collider other){
         
