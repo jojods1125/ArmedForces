@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public List<GameObject> spawnPoints;
+    public GameObject spawnPointContainer;
     [Min(0)]
     public int playerRespawnTimer = 3;
+
+
+    private List<Vector3> spawnPoints = new List<Vector3>();
+
 
     public void Respawn(GameObject obj)
     {
@@ -20,7 +24,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(playerRespawnTimer);
         obj.SetActive(true);
-        obj.GetComponent<Player>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count - 1)].transform.position);
+        obj.GetComponent<Player>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count - 1)]);
     }
 
 
@@ -41,6 +45,11 @@ public class GameManager : MonoBehaviour
         else
         {
             instance = this;
+        }
+
+        foreach (Transform child in spawnPointContainer.transform)
+        {
+            spawnPoints.Add(child.position);
         }
     }
 }
