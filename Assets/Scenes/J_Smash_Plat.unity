@@ -3504,6 +3504,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlastBox
       objectReference: {fileID: 0}
+    - target: {fileID: 1475577667917634862, guid: ffee32dcd7929584dad97716cea7278a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1475577667917634863, guid: ffee32dcd7929584dad97716cea7278a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
