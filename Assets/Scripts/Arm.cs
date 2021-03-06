@@ -77,7 +77,7 @@ public class Arm : MonoBehaviour
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * auto.bulletPushback);
-                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage);
+                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage, player.playerID);
                 }
             }
 
@@ -118,7 +118,7 @@ public class Arm : MonoBehaviour
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
                             hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * semi.bulletPushback);
-                            hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(semi.bulletDamage);
+                            hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(semi.bulletDamage, player.playerID);
                         }
                     }
 
@@ -154,7 +154,7 @@ public class Arm : MonoBehaviour
 
                 // Initializes the projectile prefab with the appropriate launcher values
                 projectile.GetComponent<Projectile>().Initialize(barrel.transform.up, launcher.projectilePower, launcher.explosionRadius,
-                                        launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
+                                        launcher.coreDamage, launcher.corePushback, launcher.rocketPowered, player.playerID);
 
                 // Pushes player
                 player.EnactForce(barrel.transform.up.normalized * -launcher.pushback);
@@ -188,7 +188,7 @@ public class Arm : MonoBehaviour
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * sprayer.bulletPushback);
-                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(sprayer.bulletDamage);
+                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(sprayer.bulletDamage, player.playerID);
                 }
             }
 

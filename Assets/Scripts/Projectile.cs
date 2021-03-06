@@ -11,6 +11,8 @@ public class Projectile : MonoBehaviour
     private float explosionRadius;
     private float coreDamage;
     private float corePushback;
+    //The if of the player that shot the projectile
+    private int playerID;
 
     /// <summary>
     /// Fills in the projectile's values based on the W_Launcher's values
@@ -21,11 +23,12 @@ public class Projectile : MonoBehaviour
     /// <param name="coreDamage"> Damage at the core of the explosion if projectile has explosionRadius </param>
     /// <param name="corePushback"> Pushback at the core of the explosion if projectile has explosionRadius </param>
     /// <param name="rocketPowered"> True if gravity does not affect, false if gravity affects </param>
-    public void Initialize(Vector3 direction, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered)
+    public void Initialize(Vector3 direction, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered, int playerID)
     {
         this.explosionRadius = explosionRadius;
         this.coreDamage = coreDamage;
         this.corePushback = corePushback;
+        this.playerID = playerID;
 
         proj_rb.useGravity = !rocketPowered;
         proj_rb.AddForce(direction.normalized * projectilePower);

@@ -15,6 +15,14 @@ public class GameManager : MonoBehaviour
 
     private List<Vector3> spawnPoints = new List<Vector3>();
 
+    private int playerCount = 0;
+
+    private int gameTime = 0;
+
+    private Dictionary<int,int> kills;
+
+    private Dictionary<int,int> deaths;
+
 
 
     public void Respawn(GameObject obj)
@@ -56,6 +64,28 @@ public class GameManager : MonoBehaviour
         foreach (Transform child in spawnPointContainer.transform)
         {
             spawnPoints.Add(child.position);
+        }
+
+        InvokeRepeating("incrementTime", 0, 1);
+        kills = new Dictionary<int, int>();
+        deaths = new Dictionary<int, int>();
+    }
+
+    public int getID(){
+        GameManager.Instance().playerCount++;
+        GameManager.Instance().kills.Add(playerCount, 0);
+        GameManager.Instance().deaths.Add(playerCount, 0);
+        return playerCount;
+    }
+
+    void incrementTime(){
+        gameTime++;
+    }
+
+    public void trackDeath(int killer, int deceased){
+        deaths[deceased]++;
+        if(killer != deceased && killer != -1){
+            kills[killer]++;
         }
     }
 

@@ -26,7 +26,10 @@ public class Player : MonoBehaviour
     private float currHealth = 100;
     private bool dying = false;
 
+    //Used for differentiating each player in Game Manager
+    public int playerID;
     protected UIManager uiManager;
+
 
 
     // ===========================================================
@@ -49,20 +52,20 @@ public class Player : MonoBehaviour
     /// Decreases the player's health by health and kills if at 0
     /// </summary>
     /// <param name="health"> Amount to decrease health by </param>
-    public void DecreaseHealth(float health)
+    public void DecreaseHealth(float health, int attackerID)
     {
         currHealth = Mathf.Max(currHealth - health, 0);
         if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
 
         if (currHealth == 0)
-            Kill();
+            Kill(attackerID);
     }
 
 
     /// <summary>
     /// Instantly sets the player's health to 0 and kills them
     /// </summary>
-    public void Kill()
+    public void Kill(int killerID)
     {
         if (!dying)
         {
@@ -74,6 +77,7 @@ public class Player : MonoBehaviour
             }
 
             GameManager.Instance().Respawn(gameObject);
+            GameManager.Instance().trackDeath(killerID, playerID);
 
             gameObject.SetActive(false);
         }
@@ -104,6 +108,10 @@ public class Player : MonoBehaviour
     //                       OTHER FUNCTIONS
     // ===========================================================
 
+
+    void Start() {
+        playerID = GameManager.Instance().getID();
+    }
 
     void Awake()
     {
