@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class Player : MonoBehaviour
@@ -20,10 +21,9 @@ public class Player : MonoBehaviour
     public Weapon[] backArmWeapons = new Weapon[4];
     public Weapon[] frontArmWeapons = new Weapon[4];
 
-
     protected Rigidbody rb;
     private Arm[] arms;
-    public float currHealth = 100;
+    private float currHealth = 100;
     private bool dying = false;
 
 

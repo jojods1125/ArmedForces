@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Weapon Icon References")]
     public Image weaponA_L_image;
     public Image weaponB_L_image;
     public Image weaponC_L_image;
@@ -16,6 +18,7 @@ public class UIManager : MonoBehaviour
     public Image weaponC_R_image;
     public Image weaponD_R_image;
 
+    [Header("Weapon Ammo References")]
     public TMP_Text weaponA_L_ammo;
     public TMP_Text weaponB_L_ammo;
     public TMP_Text weaponC_L_ammo;
@@ -26,25 +29,26 @@ public class UIManager : MonoBehaviour
     public TMP_Text weaponC_R_ammo;
     public TMP_Text weaponD_R_ammo;
 
+    [Header("Weapon Selection References")]
+    public Image weaponA_L_select;
+    public Image weaponB_L_select;
+    public Image weaponC_L_select;
+    public Image weaponD_L_select;
 
-    private Vector2Int weaponA_L_ammoNum;
-    private Vector2Int weaponB_L_ammoNum;
-    private Vector2Int weaponC_L_ammoNum;
-    private Vector2Int weaponD_L_ammoNum;
-
-    private Vector2Int weaponA_R_ammoNum;
-    private Vector2Int weaponB_R_ammoNum;
-    private Vector2Int weaponC_R_ammoNum;
-    private Vector2Int weaponD_R_ammoNum;
+    public Image weaponA_R_select;
+    public Image weaponB_R_select;
+    public Image weaponC_R_select;
+    public Image weaponD_R_select;
 
 
-    private Arm[] arms;
+    private Image previous_L_select;
+    private Image previous_R_select;
+
+
 
     // Start is called before the first frame update
     void Start()
     {
-        arms = GameManager.Instance().mainPlayer.GetArms();
-
         Image[] weapons_L_images = new Image[] { weaponA_L_image, weaponB_L_image, weaponC_L_image, weaponD_L_image };
         Image[] weapons_R_images = new Image[] { weaponA_R_image, weaponB_R_image, weaponC_R_image, weaponD_R_image };
 
@@ -61,23 +65,112 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public void UpdateUI()
+    public void UpdateSelectedUI(ArmType armType, char index)
     {
-        if (arms[0].armType == ArmType.Back)
+        // If back arm, update
+        if (armType == ArmType.Back)
         {
-            Dictionary<Weapon, int> ammo_L = arms[0].GetAmmoRemaining();
-            Debug.Log(ammo_L);
-        }
-        else
-        {
-            Dictionary<Weapon, int> ammo_L = arms[1].GetAmmoRemaining();
-            for (int i = 0; i < ammo_L.Keys.Count; i++)
+            if (previous_L_select) previous_L_select.enabled = false;
+            switch (index)
             {
-                // TODO: CREATE ARRAY IN ARM THAT WILL FORMAT AMMO REMAINING AS NEEDED
+                case 'A':
+                    weaponA_L_select.enabled = true;
+                    previous_L_select = weaponA_L_select;
+                    break;
+
+                case 'B':
+                    weaponB_L_select.enabled = true;
+                    previous_L_select = weaponB_L_select;
+                    break;
+
+                case 'C':
+                    weaponC_L_select.enabled = true;
+                    previous_L_select = weaponC_L_select;
+                    break;
+
+                case 'D':
+                    weaponD_L_select.enabled = true;
+                    previous_L_select = weaponD_L_select;
+                    break;
             }
         }
 
+        // If front arm, update
+        else if (armType == ArmType.Front)
+        {
+            if (previous_R_select) previous_R_select.enabled = false;
+            switch (index)
+            {
+                case 'A':
+                    weaponA_R_select.enabled = true;
+                    previous_R_select = weaponA_R_select;
+                    break;
 
+                case 'B':
+                    weaponB_R_select.enabled = true;
+                    previous_R_select = weaponB_R_select;
+                    break;
+
+                case 'C':
+                    weaponC_R_select.enabled = true;
+                    previous_R_select = weaponC_R_select;
+                    break;
+
+                case 'D':
+                    weaponD_R_select.enabled = true;
+                    previous_R_select = weaponD_R_select;
+                    break;
+            }
+        }
     }
 
+
+    public void UpdateAmmoUI(ArmType armType, char index, int currAmmo, int maxAmmo)
+    {
+        // If back arm, update
+        if (armType == ArmType.Back)
+        {
+            switch (index)
+            {
+                case 'A':
+                    weaponA_L_ammo.text = currAmmo + "/" + maxAmmo;
+                    break;
+
+                case 'B':
+                    weaponB_L_ammo.text = currAmmo + "/" + maxAmmo;
+                    break;
+
+                case 'C':
+                    weaponC_L_ammo.text = currAmmo + "/" + maxAmmo;
+                    break;
+
+                case 'D':
+                    weaponD_L_ammo.text = currAmmo + "/" + maxAmmo;
+                    break;
+            }
+        }
+
+        // If front arm, update
+        else if (armType == ArmType.Front)
+        {
+            switch (index)
+            {
+                case 'A':
+                    weaponA_R_ammo.text = currAmmo + "/" + maxAmmo;
+                    break;
+
+                case 'B':
+                    weaponB_R_ammo.text = currAmmo + "/" + maxAmmo;
+                    break;
+
+                case 'C':
+                    weaponC_R_ammo.text = currAmmo + "/" + maxAmmo;
+                    break;
+
+                case 'D':
+                    weaponD_R_ammo.text = currAmmo + "/" + maxAmmo;
+                    break;
+            }
+        }
+    }
 }
