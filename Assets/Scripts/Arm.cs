@@ -29,6 +29,8 @@ public class Arm : MonoBehaviour
     private float fireRateTimeStamp = 0;
     /// <summary> Checks if a weapon that requires a trigger release has been released </summary>
     private bool singleShotFired = false;
+    /// <summary> Previous time the weapon reloaded </summary>
+    private float reloadRateTimeStamp = 0;
 
 
     /// <summary> Currently equipped weapon </summary>
@@ -46,6 +48,9 @@ public class Arm : MonoBehaviour
     /// <summary> Amount of ammo remaining in each weapon </summary>
     private readonly Dictionary<Weapon, int> ammoRemaining = new Dictionary<Weapon, int>();
 
+    private readonly Dictionary<Weapon, char> weaponLetters = new Dictionary<Weapon, char>();
+
+    private UIManager uiManager;
 
 
     /// <summary>
@@ -219,9 +224,17 @@ public class Arm : MonoBehaviour
         {
             if (singleShotFired) singleShotFired = false;
 
-            /// TODO: Make RegainAmmo() do 1 ammo at a time when UI is implemented
-            if (player.IsGrounded() && equippedWeapon is W_Shootable weapon) RegainAmmo(weapon.ammoCapacity);
+            // Currently equipped weapon regains ammo if player is grounded
+            if (player.IsGrounded() && equippedWeapon is W_Shootable weapon)
+            {
+                if (Time.time > reloadRateTimeStamp && ammoRemaining[equippedWeapon] != weapon.ammoCapacity)
+                {
+                    RegainAmmo(1);
+                    reloadRateTimeStamp = Time.time + weapon.reloadRate;
+                }
+            }
         }
+
     }
 
 
@@ -234,15 +247,24 @@ public class Arm : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Retrieve UIManager
+        uiManager = GameManager.Instance().uiManager;
+
         // Set up arm loadouts
         if (armType == ArmType.Front) FrontArmInitialize();
         else BackArmInitialize();
 
+        // Fills in the dictionary of weapons to letters for checking which they are
+        weaponLetters[weaponA] = 'A';
+        weaponLetters[weaponB] = 'B';
+        weaponLetters[weaponC] = 'C';
+        weaponLetters[weaponD] = 'D';
+
         // Initialize equippedWeapon
-        if (weaponA) equippedWeapon = weaponA;
-        else if (weaponB) equippedWeapon = weaponA;
-        else if (weaponC) equippedWeapon = weaponC;
-        else equippedWeapon = weaponD;
+        if (weaponA) Switch(weaponA);
+        else if (weaponB) Switch(weaponB);
+        else if (weaponC) Switch(weaponC);
+        else Switch(weaponD);
 
         // Render equippedWeapon
         if (equippedWeapon)
@@ -256,6 +278,9 @@ public class Arm : MonoBehaviour
         if (weaponB is W_Shootable gunB) ammoRemaining.Add(weaponB, gunB.ammoCapacity);
         if (weaponC is W_Shootable gunC) ammoRemaining.Add(weaponC, gunC.ammoCapacity);
         if (weaponD is W_Shootable gunD) ammoRemaining.Add(weaponD, gunD.ammoCapacity);
+        
+        // Starts the match with full ammo in each weapon
+        FullReload();
     }
 
 
@@ -276,9 +301,15 @@ public class Arm : MonoBehaviour
     {
         if (weapon)
         {
-            this.equippedWeapon = weapon;
+            // Change currently equipped weapon
+            equippedWeapon = weapon;
+
+            // Change equipped weapon visuals
             gameObject.GetComponent<MeshFilter>().mesh = weapon.mesh;
             gameObject.GetComponent<MeshRenderer>().material = weapon.material;
+
+            // Update UI
+            uiManager.UpdateSelectedUI(armType, weaponLetters[weapon]);
         }
     }
 
@@ -315,25 +346,37 @@ public class Arm : MonoBehaviour
     /// <param name="count"> Amount to reduce ammo by </param>
     public void ReduceAmmo(int count)
     {
-        // Finds the equipped weapon
-        // Sets the ammo of the weapon to either 0 or ammoRemaining - count, prevents negative ammo
-
-        if (equippedWeapon.Equals(weaponA))
-            ammoRemaining[weaponA] = Mathf.Max(ammoRemaining[weaponA] - count, 0);
-
-        else if (equippedWeapon.Equals(weaponB))
-            ammoRemaining[weaponB] = Mathf.Max(ammoRemaining[weaponB] - count, 0);
-
-        else if (equippedWeapon.Equals(weaponC))
-            ammoRemaining[weaponC] = Mathf.Max(ammoRemaining[weaponC] - count, 0);
-
-        else if (equippedWeapon.Equals(weaponD))
-            ammoRemaining[weaponD] = Mathf.Max(ammoRemaining[weaponD] - count, 0);
-
-
-        if (this is Arm_Controlled)
+        // Checks if the equipped weapon should have ammo
+        if (equippedWeapon is W_Shootable weapon)
         {
-            GameManager.Instance().uiManager.UpdateUI();
+            // Finds the equipped weapon
+                // Sets the ammo of the weapon to either 0 or ammoRemaining - count, prevents negative ammo
+                // Updates UI
+
+            if (equippedWeapon.Equals(weaponA))
+            {
+                ammoRemaining[weaponA] = Mathf.Max(ammoRemaining[weaponA] - count, 0);
+                uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], weapon.ammoCapacity);
+            }
+
+            else if (equippedWeapon.Equals(weaponB))
+            {
+                ammoRemaining[weaponB] = Mathf.Max(ammoRemaining[weaponB] - count, 0);
+                uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], weapon.ammoCapacity);
+            }
+
+            else if (equippedWeapon.Equals(weaponC))
+            {
+                ammoRemaining[weaponC] = Mathf.Max(ammoRemaining[weaponC] - count, 0);
+                uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], weapon.ammoCapacity);
+            }
+
+            else if (equippedWeapon.Equals(weaponD))
+            {
+                ammoRemaining[weaponD] = Mathf.Max(ammoRemaining[weaponD] - count, 0);
+                uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], weapon.ammoCapacity);
+            }
+
         }
     }
 
@@ -348,41 +391,70 @@ public class Arm : MonoBehaviour
         if (equippedWeapon is W_Shootable weapon)
         {
             // Finds the equipped weapon
-            // Sets the ammo of the weapon to either max or ammoRemaining + count, prevents overloading ammo
+                // Sets the ammo of the weapon to either max capacity or ammoRemaining + count, prevents overloading ammo
+                // Updates UI
 
             if (equippedWeapon.Equals(weaponA))
+            {
                 ammoRemaining[weaponA] = Mathf.Min(ammoRemaining[weaponA] + count, weapon.ammoCapacity);
+                uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], weapon.ammoCapacity);
+            }
 
             else if (equippedWeapon.Equals(weaponB))
+            {
                 ammoRemaining[weaponB] = Mathf.Min(ammoRemaining[weaponB] + count, weapon.ammoCapacity);
+                uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], weapon.ammoCapacity);
+            }
 
             else if (equippedWeapon.Equals(weaponC))
+            {
                 ammoRemaining[weaponC] = Mathf.Min(ammoRemaining[weaponC] + count, weapon.ammoCapacity);
+                uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], weapon.ammoCapacity);
+            }
 
             else if (equippedWeapon.Equals(weaponD))
+            {
                 ammoRemaining[weaponD] = Mathf.Min(ammoRemaining[weaponD] + count, weapon.ammoCapacity);
+                uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], weapon.ammoCapacity);
+            }
+
         }
     }
+
 
     /// <summary>
     /// Fully reloads all weapons if they have ammo
     /// </summary>
     public void FullReload()
     {
+        // Checks if each weapon should have ammo
+            // Fully reloads weapon
+            // Updates UI
+
         if (weaponA is W_Shootable gunA)
-            ammoRemaining[weaponA] = ammoRemaining[weaponA] + gunA.ammoCapacity;
+        {
+            ammoRemaining[weaponA] = gunA.ammoCapacity;
+            uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], gunA.ammoCapacity);
+        }
+
         if (weaponB is W_Shootable gunB)
-            ammoRemaining[weaponB] = ammoRemaining[weaponB] + gunB.ammoCapacity;
+        {
+            ammoRemaining[weaponB] = gunB.ammoCapacity;
+            uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], gunB.ammoCapacity);
+        }
+            
         if (weaponC is W_Shootable gunC)
-            ammoRemaining[weaponC] = ammoRemaining[weaponC] + gunC.ammoCapacity;
+        {
+            ammoRemaining[weaponC] = gunC.ammoCapacity;
+            uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], gunC.ammoCapacity);
+        }
+            
         if (weaponD is W_Shootable gunD)
-            ammoRemaining[weaponD] = ammoRemaining[weaponD] + gunD.ammoCapacity;
-    }
-
-
-    public Dictionary<Weapon, int> GetAmmoRemaining()
-    {
-        return ammoRemaining;
+        {
+            ammoRemaining[weaponD] = gunD.ammoCapacity;
+            uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], gunD.ammoCapacity);
+        }
+            
     }
 
 }
