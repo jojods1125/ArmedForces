@@ -17,7 +17,7 @@ public class Player_Controlled : Player
     // Start is called before the first frame update
     void Start()
     {
-        playerID = GameManager.Instance().getID();
+        //playerID = GameManager.Instance().getID();    // Shouldn't need a new playerID here because Player_Controlled is a Player
         inputActions = new PlayerControls();
 
         inputActions.GunGuy.MoveLeft.performed += ctx => MoveLeft(true);

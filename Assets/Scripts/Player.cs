@@ -28,6 +28,8 @@ public class Player : MonoBehaviour
 
     //Used for differentiating each player in Game Manager
     public int playerID;
+
+    // UI Manager
     protected UIManager uiManager;
 
 
