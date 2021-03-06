@@ -26,6 +26,8 @@ public class Player_Controlled : Player
         inputActions.GunGuy.MoveRight.performed += ctx => MoveRight(true);
         inputActions.GunGuy.MoveRight.canceled += ctx => MoveRight(false);
         inputActions.GunGuy.MoveRight.Enable();
+
+        uiManager = GameManager.Instance().uiManager;
     }
 
 

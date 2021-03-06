@@ -40,6 +40,8 @@ public class UIManager : MonoBehaviour
     public Image weaponC_R_select;
     public Image weaponD_R_select;
 
+    [Header("Health Bar References")]
+    public GameObject healthBar_bar;
 
     private Image previous_L_select;
     private Image previous_R_select;
@@ -172,5 +174,13 @@ public class UIManager : MonoBehaviour
                     break;
             }
         }
+    }
+
+
+    // Sets Health Bar Scale to Current Health
+    public void UpdateHealthBar(float myHealth)
+    {
+        healthBar_bar.transform.localScale = new Vector3(myHealth, healthBar_bar.transform.localScale.y,
+            healthBar_bar.transform.localScale.z);
     }
 }

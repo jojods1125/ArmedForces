@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     private float currHealth = 100;
     private bool dying = false;
 
+    protected UIManager uiManager;
 
 
     // ===========================================================
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour
     public void IncreaseHealth(float health)
     {
         currHealth = Mathf.Min(currHealth + health, maxHealth);
+        if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
     }
 
 
@@ -50,7 +52,8 @@ public class Player : MonoBehaviour
     public void DecreaseHealth(float health)
     {
         currHealth = Mathf.Max(currHealth - health, 0);
-        
+        if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+
         if (currHealth == 0)
             Kill();
     }
@@ -64,7 +67,11 @@ public class Player : MonoBehaviour
         if (!dying)
         {
             dying = true;
-            if (currHealth != 0) currHealth = 0;
+            if (currHealth != 0)
+            {
+                currHealth = 0;
+                if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+            }
 
             GameManager.Instance().Respawn(gameObject);
 
@@ -137,5 +144,14 @@ public class Player : MonoBehaviour
         return arms;
     }
 
+
+    /// <summary>
+    /// Retrieves the player's current health
+    /// </summary>
+    /// <returns> currHealth float </returns>
+    public float GetCurrHealth()
+    {
+        return currHealth;
+    }
 
 }
