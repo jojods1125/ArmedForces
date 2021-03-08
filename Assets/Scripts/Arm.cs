@@ -66,6 +66,7 @@ public class Arm : MonoBehaviour
             fireRateTimeStamp = Time.time;
             reloadRateTimeStamp = Time.time;
             ReduceAmmo(1);
+            AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.auto);
 
             // Calculates bullet path and draws ray
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-auto.spreadRange, auto.spreadRange), Random.Range(-auto.spreadRange, auto.spreadRange));
@@ -105,6 +106,7 @@ public class Arm : MonoBehaviour
                 fireRateTimeStamp = Time.time;
                 reloadRateTimeStamp = Time.time;
                 ReduceAmmo(1);
+                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.semi);
 
                 // Burst loop
                 for (int i = 0; i < semi.burstCount; i++)
@@ -150,6 +152,7 @@ public class Arm : MonoBehaviour
                 fireRateTimeStamp = Time.time;
                 reloadRateTimeStamp = Time.time;
                 ReduceAmmo(1);
+                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.launcher);
 
                 // Creates projectile and spawns it at the correct location
                 Vector3 projectilePath = new Vector3(barrel.transform.position.x, barrel.transform.position.y);
@@ -180,6 +183,7 @@ public class Arm : MonoBehaviour
             fireRateTimeStamp = Time.time;
             reloadRateTimeStamp = Time.time;
             ReduceAmmo(1);
+            AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.sprayer);
 
             // Calculates bullet path and draws ray
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-sprayer.spreadRange, sprayer.spreadRange), Random.Range(-sprayer.spreadRange, sprayer.spreadRange));
@@ -211,22 +215,22 @@ public class Arm : MonoBehaviour
             if (equippedWeapon is W_SemiGun semi)
             {
                 FireSemi(semi);
-                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.semi);
+                /*AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.semi);*/
             }
             else if (equippedWeapon is W_AutoGun auto)
             {
                 FireAuto(auto);
-                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.auto);
+                /*AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.auto);*/
             }
             else if (equippedWeapon is W_Launcher launcher)
             {
                 FireLauncher(launcher);
-                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.launcher);
+                /*AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.launcher);*/
             }
             else if (equippedWeapon is W_Sprayer sprayer)
             {
                 FireSprayer(sprayer);
-                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.sprayer);
+                /*AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.sprayer);*/
             }
             /// INCLUDE MORE WEAPONS HERE
         }
