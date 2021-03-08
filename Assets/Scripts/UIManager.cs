@@ -51,14 +51,17 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Gather all the image references
         Image[] weapons_L_images = new Image[] { weaponA_L_image, weaponB_L_image, weaponC_L_image, weaponD_L_image };
         Image[] weapons_R_images = new Image[] { weaponA_R_image, weaponB_R_image, weaponC_R_image, weaponD_R_image };
 
+        // Update back arm images
         for (int i = 0; i < GameManager.Instance().mainPlayer.backArmWeapons.Length; i++)
         {
             weapons_L_images[i].sprite = GameManager.Instance().mainPlayer.backArmWeapons[i].icon;
         }
 
+        // Update front arm images
         for (int i = 0; i < GameManager.Instance().mainPlayer.frontArmWeapons.Length; i++)
         {
             weapons_R_images[i].sprite = GameManager.Instance().mainPlayer.frontArmWeapons[i].icon;
@@ -67,12 +70,20 @@ public class UIManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Update the UI to show which arm is currently equipped
+    /// </summary>
+    /// <param name="armType"> Front or back arm </param>
+    /// <param name="index"> Weapon index being updated </param>
     public void UpdateSelectedUI(ArmType armType, char index)
     {
         // If back arm, update
         if (armType == ArmType.Back)
         {
+            // Deselect previous arm
             if (previous_L_select) previous_L_select.enabled = false;
+
+            // Select new arm
             switch (index)
             {
                 case 'A':
@@ -100,7 +111,10 @@ public class UIManager : MonoBehaviour
         // If front arm, update
         else if (armType == ArmType.Front)
         {
+            // Deselect previous arm
             if (previous_R_select) previous_R_select.enabled = false;
+
+            // Select new arm
             switch (index)
             {
                 case 'A':
@@ -127,6 +141,13 @@ public class UIManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Update the UI to show how much ammo a single weapon has
+    /// </summary>
+    /// <param name="armType"> Front or back arm </param>
+    /// <param name="index"> Weapon index being updated </param>
+    /// <param name="currAmmo"> Current ammo the weapon has </param>
+    /// <param name="maxAmmo"> Max ammo the weapon can have </param>
     public void UpdateAmmoUI(ArmType armType, char index, int currAmmo, int maxAmmo)
     {
         // If back arm, update
@@ -185,9 +206,16 @@ public class UIManager : MonoBehaviour
     }
 
 
-    // Sets Health Bar Scale to Current Health
+    /// <summary>
+    /// Updates the UI to show how much health the player has
+    /// </summary>
+    /// <param name="myHealth"> Ratio of current health / max health </param>
     public void UpdateHealthBar(float myHealth)
     {
+        // Sanitize input so it's between 0 and 1
+        myHealth = Mathf.Min(Mathf.Max(0, myHealth), 1);
+
+        // Scale health bar
         healthBar_bar.transform.localScale = new Vector3(myHealth, healthBar_bar.transform.localScale.y,
             healthBar_bar.transform.localScale.z);
     }
