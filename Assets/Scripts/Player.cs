@@ -54,20 +54,20 @@ public class Player : MonoBehaviour
     /// Decreases the player's health by health and kills if at 0
     /// </summary>
     /// <param name="health"> Amount to decrease health by </param>
-    public void DecreaseHealth(float health, int attackerID)
+    public void DecreaseHealth(float health, int attackerID, WeaponType weaponType)
     {
         currHealth = Mathf.Max(currHealth - health, 0);
         if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
 
         if (currHealth == 0)
-            Kill(attackerID);
+            Kill(attackerID, weaponType);
     }
 
 
     /// <summary>
     /// Instantly sets the player's health to 0 and kills them
     /// </summary>
-    public void Kill(int killerID)
+    public void Kill(int killerID, WeaponType weaponType)
     {
         if (!dying)
         {
@@ -79,7 +79,7 @@ public class Player : MonoBehaviour
             }
 
             GameManager.Instance().Respawn(gameObject);
-            GameManager.Instance().trackDeath(killerID, playerID);
+            GameManager.Instance().trackDeath(killerID, playerID, weaponType);
 
             gameObject.SetActive(false);
         }

@@ -79,7 +79,7 @@ public class Arm : MonoBehaviour
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * auto.bulletPushback);
-                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage, player.playerID);
+                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage, player.playerID, WeaponType.auto);
                 }
             }
 
@@ -122,7 +122,7 @@ public class Arm : MonoBehaviour
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
                             hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * semi.bulletPushback);
-                            hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(semi.bulletDamage, player.playerID);
+                            hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(semi.bulletDamage, player.playerID, WeaponType.semi);
                         }
                     }
 
@@ -196,7 +196,7 @@ public class Arm : MonoBehaviour
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * sprayer.bulletPushback);
-                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(sprayer.bulletDamage, player.playerID);
+                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(sprayer.bulletDamage, player.playerID, WeaponType.sprayer);
                 }
             }
 
