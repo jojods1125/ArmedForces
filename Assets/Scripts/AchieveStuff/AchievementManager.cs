@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 /// <summary>
 /// Manager for the Achievement system
@@ -91,6 +92,24 @@ public class AchievementManager : MonoBehaviour
             Debug.LogError("No Achievement found OnEvent() call\n" +
                 "Achievement Type: " + aType + "\n" +
                 "Weapon Type: " + wType + "\n");
+        }
+    }
+
+    /// <summary>
+    /// Fixed Update called every fixed tic
+    /// Used to check if Reset key is pressed
+    /// </summary>
+    private void FixedUpdate()
+    {
+        // Check for reset button (Start and Select)
+        if ( Gamepad.current[GamepadButton.Start].isPressed && Gamepad.current[GamepadButton.Select].isPressed)
+        {
+            // Go through each achievement and reset the currentValue and nextTier to 0
+            foreach ( Achievement ach in achievements )
+            {
+                ach.currentValue = 0;
+                ach.nextTier = 0;
+            }
         }
     }
 
