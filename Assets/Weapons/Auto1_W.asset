@@ -16,6 +16,8 @@ MonoBehaviour:
   description: DESCRIPTION
   mesh: {fileID: -5495902117074765545, guid: 5fdd08bfc3e07994bba88274d3cbac84, type: 3}
   material: {fileID: 2100000, guid: 4a4d2b787eb393a469ae9860f5de4031, type: 2}
+  icon: {fileID: 21300000, guid: 113bdc64338b5be409f9ba847890ffef, type: 3}
+  rarity: 0
   fireRate: 0.075
   ammoCapacity: 50
   pushback: 25

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <asset>
+    <contributor>
+      <author>Centrixe</author>
+      <authoring_tool>OpenCOLLADA for 3ds Max;  Version: 1.6;  Revision: 68</authoring_tool>
+    </contributor>
+    <created>2019-09-19T02:07:22</created>
+    <modified>2019-09-19T02:07:22</modified>
+    <unit name="inch" meter="0.0254"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_effects>
+    <effect id="ShaderfxShader100_shadow">
+      <profile_COMMON>
+        <newparam sid="zelda_tower_black_png-surface">
+          <surface type="2D">
+            <init_from>zelda_tower_black_png</init_from>
+          </surface>
+        </newparam>
+        <newparam sid="zelda_tower_black_png-sampler">
+          <sampler2D>
+            <source>zelda_tower_black_png-surface</source>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <blinn>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0.588 0.588 0.588 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="zelda_tower_black_png-sampler" texcoord="CHANNEL1"/>
+            </diffuse>
+            <specular>
+              <color>0 0 0 1</color>
+            </specular>
+            <shininess>
+              <float>10</float>
+            </shininess>
+            <reflective>
+              <color>0 0 0 1</color>
+            </reflective>
+            <transparent opaque="A_ONE">
+              <texture texture="zelda_tower_black_png-sampler" texcoord="CHANNEL1"/>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </blinn>
+        </technique>
+      </profile_COMMON>
+      <extra>
+        <technique profile="OpenCOLLADA3dsMax">
+          <extended_shader>
+            <opacity_type sid="opacity_type" type="int">0</opacity_type>
+            <falloff_type sid="falloff_type" type="int">0</falloff_type>
+            <falloff sid="falloff" type="float">0</falloff>
+            <index_of_refraction sid="index_of_refraction" type="float">1.5</index_of_refraction>
+            <wire_size sid="wire_size" type="float">1</wire_size>
+            <wire_units sid="wire_units" type="int">0</wire_units>
+            <apply_reflection_dimming sid="apply_reflection_dimming" type="bool">0</apply_reflection_dimming>
+            <dim_level sid="dim_level" type="float">0</dim_level>
+            <reflection_level sid="reflection_level" type="float">3</reflection_level>
+          </extended_shader>
+          <shader>
+            <ambient_diffuse_texture_lock sid="ambient_diffuse_texture_lock" type="bool">1</ambient_diffuse_texture_lock>
+            <ambient_diffuse_lock sid="ambient_diffuse_lock" type="bool">1</ambient_diffuse_lock>
+            <diffuse_specular_lock sid="diffuse_specular_lock" type="bool">0</diffuse_specular_lock>
+            <use_self_illum_color sid="use_self_illum_color" type="bool">0</use_self_illum_color>
+            <self_illumination sid="self_illumination" type="float">0</self_illumination>
+            <specular_level sid="specular_level" type="float">0</specular_level>
+            <soften sid="soften" type="float">0.1</soften>
+          </shader>
+        </technique>
+      </extra>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="ShaderfxShader100_shadow-material" name="ShaderfxShader100_shadow">
+      <instance_effect url="#ShaderfxShader100_shadow"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="geom-shadowmodels_floatingfloor_meshgroupShape1" name="shadowmodels_floatingfloor_meshgroupShape1">
+      <mesh>
+        <source id="geom-shadowmodels_floatingfloor_meshgroupShape1-positions">
+          <float_array id="geom-shadowmodels_floatingfloor_meshgroupShape1-positions-array" count="84">-28.0356 38.7634 -18.1937 -26.8244 38.7612 -19.4056 -27.9255 36.5768 -18.1215 -26.7151 36.5745 -19.331 26.3236 36.5745 -19.331 26.4328 38.7613 -19.4056 27.534 36.5768 -18.1215 27.6441 38.7634 -18.1937 -28.0356 38.7634 18.1937 -27.9255 36.5768 18.1215 -26.8244 38.7613 19.4056 -26.7151 36.5745 19.331 27.6441 38.7634 18.1937 26.4328 38.7613 19.4056 27.534 36.5768 18.1215 26.3236 36.5745 19.331 -28.0356 38.7634 -18.1937 -26.8244 38.7612 -19.4056 26.3236 36.5745 -19.331 27.534 36.5768 -18.1215 -26.7151 36.5745 -19.331 27.534 36.5768 18.1215 26.3236 36.5745 19.331 -27.9255 36.5768 -18.1215 -26.7151 36.5745 19.331 -27.9255 36.5768 18.1215 -26.7151 36.5745 -19.331 -26.8244 38.7612 -19.4056</float_array>
+          <technique_common>
+            <accessor source="#geom-shadowmodels_floatingfloor_meshgroupShape1-positions-array" count="28" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-shadowmodels_floatingfloor_meshgroupShape1-normals">
+          <float_array id="geom-shadowmodels_floatingfloor_meshgroupShape1-normals-array" count="84">-0.02603537 -0.9996607 -8.2982e-4 -0.02484576 0.9996909 8.10769e-4 -0.02484576 0.9996909 -8.12199e-4 -8.25211e-4 0.9993659 -0.0355957 -0.02603537 -0.9996607 8.2982e-4 -8.16074e-4 -0.999275 -0.038065 -8.25211e-4 0.9993659 0.0355957 8.25211e-4 0.9993659 -0.0355957 -8.25211e-4 0.9993659 -0.0355957 -0.02484576 0.9996909 -8.12199e-4 -8.16074e-4 -0.999275 0.038065 8.25211e-4 0.9993659 0.0355957 0.02484576 0.9996909 8.10769e-4 0.02484576 0.9996909 -8.12199e-4 8.16074e-4 -0.999275 -0.038065 -8.25211e-4 0.9993659 -0.0355957 0.02603537 -0.9996607 -8.2982e-4 0.02603537 -0.9996607 8.2982e-4 8.16074e-4 -0.999275 0.038065 -8.16074e-4 -0.999275 -0.038065 8.16074e-4 -0.999275 -0.038065 0.02603537 -0.9996607 -8.2982e-4 -8.16074e-4 -0.999275 -0.038065 0.02603537 -0.9996607 8.2982e-4 8.16074e-4 -0.999275 0.038065 -0.02603537 -0.9996607 -8.2982e-4 -0.02603537 -0.9996607 8.2982e-4 -8.16074e-4 -0.999275 0.038065</float_array>
+          <technique_common>
+            <accessor source="#geom-shadowmodels_floatingfloor_meshgroupShape1-normals-array" count="28" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-shadowmodels_floatingfloor_meshgroupShape1-map-2">
+          <float_array id="geom-shadowmodels_floatingfloor_meshgroupShape1-map-2-array" count="84">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor source="#geom-shadowmodels_floatingfloor_meshgroupShape1-map-2-array" count="28" stride="3">
+              <param name="R" type="float"/>
+              <param name="G" type="float"/>
+              <param name="B" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-shadowmodels_floatingfloor_meshgroupShape1-map0">
+          <float_array id="geom-shadowmodels_floatingfloor_meshgroupShape1-map0-array" count="84">0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608 0.5019608</float_array>
+          <technique_common>
+            <accessor source="#geom-shadowmodels_floatingfloor_meshgroupShape1-map0-array" count="28" stride="3">
+              <param name="R" type="float"/>
+              <param name="G" type="float"/>
+              <param name="B" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-shadowmodels_floatingfloor_meshgroupShape1-map1">
+          <float_array id="geom-shadowmodels_floatingfloor_meshgroupShape1-map1-array" count="84">0.4985352 1.951172 0 0.4291992 1.951172 0 0.407959 0.9378357 0 0.315918 0.9378357 0 6.601562 0.9378357 0 5.152344 1.951172 0 6.507812 0.9378357 0 5.085937 1.951172 0 1.727539 1.951172 0 2.042969 0.9378357 0 1.796875 1.951172 0 2.134766 0.9378357 0 3.855469 1.951172 0 3.787109 1.951172 0 4.871094 0.9378357 0 4.78125 0.9378357 0 0.4985352 1.951172 0 0.4291992 1.951172 0 6.601562 0.9378357 0 6.507812 0.9378357 0 9.242188 0.9378357 0 4.871094 0.9378357 0 4.78125 0.9378357 0 0.407959 0.9378357 0 2.134766 0.9378357 0 2.042969 0.9378357 0 9.242188 0.9378357 0 7.144531 1.951172 0</float_array>
+          <technique_common>
+            <accessor source="#geom-shadowmodels_floatingfloor_meshgroupShape1-map1-array" count="28" stride="3">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+              <param name="P" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="geom-shadowmodels_floatingfloor_meshgroupShape1-map2">
+          <float_array id="geom-shadowmodels_floatingfloor_meshgroupShape1-map2-array" count="84">0.08947754 0.598877 0 0.08947754 0.5957031 0 0.1051636 0.598877 0 0.1051636 0.5957031 0 0.1051636 0.8092041 0 0.08947754 0.8092041 0 0.1051636 0.8060303 0 0.08947754 0.8060303 0 0.08947754 0.6542969 0 0.1051636 0.6542969 0 0.08947754 0.6574707 0 0.1051636 0.6574707 0 0.08947754 0.7504883 0 0.08947754 0.7473145 0 0.1051636 0.7504883 0 0.1051636 0.7473145 0 0.08947754 0.598877 0 0.08947754 0.5957031 0 0.2697754 0.8275146 0 0.2722168 0.8249512 0 0.1838379 0.8275146 0 0.2722168 0.7661133 0 0.2697754 0.7635498 0 0.1813965 0.8249512 0 0.1838379 0.7635498 0 0.1813965 0.7661133 0 0.1051636 0.8212891 0 0.08947754 0.8212891 0</float_array>
+          <technique_common>
+            <accessor source="#geom-shadowmodels_floatingfloor_meshgroupShape1-map2-array" count="28" stride="3">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+              <param name="P" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="geom-shadowmodels_floatingfloor_meshgroupShape1-vertices">
+          <input semantic="POSITION" source="#geom-shadowmodels_floatingfloor_meshgroupShape1-positions"/>
+        </vertices>
+        <triangles material="ShaderfxShader100_shadow" count="28">
+          <input semantic="VERTEX" source="#geom-shadowmodels_floatingfloor_meshgroupShape1-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#geom-shadowmodels_floatingfloor_meshgroupShape1-normals" offset="1"/>
+          <input semantic="COLOR" source="#geom-shadowmodels_floatingfloor_meshgroupShape1-map0" offset="2" set="0"/>
+          <input semantic="TEXCOORD" source="#geom-shadowmodels_floatingfloor_meshgroupShape1-map1" offset="3" set="0"/>
+          <input semantic="TEXCOORD" source="#geom-shadowmodels_floatingfloor_meshgroupShape1-map2" offset="4" set="1"/>
+          <p>2 0 2 2 2 8 1 8 8 8 0 2 0 0 0 0 2 0 0 0 1 3 1 1 1 2 0 2 2 2 9 4 9 9 9 8 1 8 8 8 2 0 2 2 2 2 0 2 2 2 1 3 1 1 1 3 5 3 3 3 8 1 8 8 8 10 6 10 10 10 5 7 5 5 5 17 8 17 17 17 8 1 8 8 8 5 7 5 5 5 16 9 16 16 16 8 1 8 8 8 17 8 17 17 17 8 1 8 8 8 9 4 9 9 9 10 6 10 10 10 10 6 10 10 10 9 4 9 9 9 11 10 11 11 11 11 10 11 11 11 13 11 13 13 13 10 6 10 10 10 10 6 10 10 10 12 12 12 12 12 7 13 7 7 7 13 11 13 13 13 12 12 12 12 12 10 6 10 10 10 5 7 5 5 5 10 6 10 10 10 7 13 7 7 7 4 14 4 4 4 27 15 27 27 27 5 7 5 5 5 6 16 6 6 6 5 7 5 5 5 7 13 7 7 7 4 14 4 4 4 5 7 5 5 5 6 16 6 6 6 14 17 14 14 14 7 13 7 7 7 12 12 12 12 12 6 16 6 6 6 7 13 7 7 7 14 17 14 14 14 12 12 12 12 12 13 11 13 13 13 14 17 14 14 14 15 18 15 15 15 13 11 13 13 13 11 10 11 11 11 14 17 14 14 14 13 11 13 13 13 15 18 15 15 15 26 19 26 26 26 27 15 27 27 27 4 14 4 4 4 18 20 18 18 18 19 21 19 19 19 20 22 20 20 20 19 21 19 19 19 21 23 21 21 21 20 22 20 20 20 20 22 20 20 20 22 24 22 22 22 23 25 23 23 23 21 23 21 21 21 22 24 22 22 22 20 22 20 20 20 22 24 22 22 22 25 26 25 25 25 23 25 23 23 23 24 27 24 24 24 25 26 25 25 25 22 24 22 22 22</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_lights>
+    <light id="EnvironmentAmbientLight" name="EnvironmentAmbientLight">
+      <technique_common>
+        <ambient>
+          <color>0 0 0</color>
+        </ambient>
+      </technique_common>
+    </light>
+  </library_lights>
+  <library_images>
+    <image id="zelda_tower_black_png">
+      <init_from>./images/Ring_set/zelda_tower_black.png</init_from>
+    </image>
+  </library_images>
+  <library_visual_scenes>
+    <visual_scene id="MaxScene">
+      <node name="EnvironmentAmbientLight">
+        <instance_light url="#EnvironmentAmbientLight"/>
+      </node>
+      <node id="node-shadowmodels_floatingfloor_meshgroupShape1" name="shadowmodels_floatingfloor_meshgroupShape1">
+        <instance_geometry url="#geom-shadowmodels_floatingfloor_meshgroupShape1">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="ShaderfxShader100_shadow" target="#ShaderfxShader100_shadow-material">
+                <bind_vertex_input semantic="CHANNEL1" input_semantic="TEXCOORD" input_set="0"/>
+                <bind_vertex_input semantic="CHANNEL1" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+        <extra>
+          <technique profile="OpenCOLLADA">
+            <cast_shadows sid="cast_shadows" type="bool">1</cast_shadows>
+            <receive_shadows sid="receive_shadows" type="bool">1</receive_shadows>
+            <primary_visibility sid="primary_visibility" type="bool">1</primary_visibility>
+            <secondary_visibility sid="secondary_visibility" type="bool">1</secondary_visibility>
+          </technique>
+        </extra>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#MaxScene"/>
+  </scene>
+</COLLADA>

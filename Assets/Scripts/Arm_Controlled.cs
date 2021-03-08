@@ -17,6 +17,14 @@ public class Arm_Controlled : Arm
         else BackArmInitializeInputs();
     }
 
+    new void Start()
+    {
+        // Retrieve UIManager
+        uiManager = GameManager.Instance().uiManager;
+
+        base.Start();
+    }
+
 
     // Initializes the controls of the arm based on it being the front arm
     void FrontArmInitializeInputs()

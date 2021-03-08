@@ -16,4 +16,8 @@ public class W_Shootable : Weapon
 
     [Tooltip("Pushback force per bullet fired")]
     public float pushback;
+
+    [Min(0)]
+    [Tooltip("Time it takes to reload one bullet while grounded")]
+    public float reloadRate = 0.1f;
 }
