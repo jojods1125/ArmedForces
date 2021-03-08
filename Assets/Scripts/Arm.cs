@@ -298,7 +298,7 @@ public class Arm : MonoBehaviour
 
 
     // Aims the arm based on joystick angle
-    protected void Aim(Vector3 aimVal)
+    public void Aim(Vector3 aimVal)
     {
         float degrees = Vector3.Angle(Vector3.up, transform.position + (aimVal * 1000));
         Vector3 eulerRotation = transform.rotation.eulerAngles;
@@ -308,6 +308,9 @@ public class Arm : MonoBehaviour
             transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, degrees);
     }
 
+    public void SetFiring(bool firing){
+        this.firing = firing;
+    }
 
     // Switches the arm's currently equipped weapon
     protected void Switch(Weapon weapon)
