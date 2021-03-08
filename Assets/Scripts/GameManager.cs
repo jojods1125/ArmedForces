@@ -5,11 +5,24 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject spawnPointContainer;
+
     [Min(0)]
     public int playerRespawnTimer = 3;
 
+    public Player mainPlayer;
+
+    public UIManager uiManager;
 
     private List<Vector3> spawnPoints = new List<Vector3>();
+
+    private int playerCount = 0;
+
+    private int gameTime = 0;
+
+    private Dictionary<int,int> kills;
+
+    private Dictionary<int,int> deaths;
+
 
 
     public void Respawn(GameObject obj)
@@ -20,6 +33,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     public IEnumerator RespawnPlayer(GameObject obj)
     {
         yield return new WaitForSeconds(playerRespawnTimer);
@@ -28,13 +42,13 @@ public class GameManager : MonoBehaviour
     }
 
 
-
     private static GameManager instance;
 
     public static GameManager Instance()
     {
         return instance;
     }
+
 
     void Awake()
     {
@@ -51,5 +65,37 @@ public class GameManager : MonoBehaviour
         {
             spawnPoints.Add(child.position);
         }
+
+        InvokeRepeating("incrementTime", 0, 1);
+        kills = new Dictionary<int, int>();
+        deaths = new Dictionary<int, int>();
     }
+
+    public int getID(){
+        GameManager.Instance().playerCount++;
+        GameManager.Instance().kills.Add(playerCount, 0);
+        GameManager.Instance().deaths.Add(playerCount, 0);
+        // What is the playerCount
+        // Debug.Log(playerCount);
+        return playerCount;
+    }
+
+    void incrementTime(){
+        gameTime++;
+    }
+
+    public void trackDeath(int killer, int deceased){
+        // Who killed who
+        // Debug.Log("Killer: " + killer + ", Deceased: " + deceased);
+        deaths[deceased]++;
+        if(killer != deceased && killer != -1){
+            kills[killer]++;
+        }
+
+        // Check counts
+        /*Debug.Log("Deaths: " + deaths[killer]);
+        Debug.Log("Kills: " + kills[killer]);*/
+    }
+
+
 }

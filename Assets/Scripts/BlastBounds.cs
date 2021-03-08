@@ -9,7 +9,7 @@ public class BlastBounds : MonoBehaviour
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            other.gameObject.GetComponent<Player>().Kill();
+            other.gameObject.GetComponent<Player>().Kill(-1);
         }
 
     }

@@ -11,6 +11,8 @@ public class Projectile : MonoBehaviour
     private float explosionRadius;
     private float coreDamage;
     private float corePushback;
+    //The if of the player that shot the projectile
+    private int playerID;
 
     /// <summary>
     /// Fills in the projectile's values based on the W_Launcher's values
@@ -21,11 +23,12 @@ public class Projectile : MonoBehaviour
     /// <param name="coreDamage"> Damage at the core of the explosion if projectile has explosionRadius </param>
     /// <param name="corePushback"> Pushback at the core of the explosion if projectile has explosionRadius </param>
     /// <param name="rocketPowered"> True if gravity does not affect, false if gravity affects </param>
-    public void Initialize(Vector3 direction, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered)
+    public void Initialize(Vector3 direction, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered, int playerID)
     {
         this.explosionRadius = explosionRadius;
         this.coreDamage = coreDamage;
         this.corePushback = corePushback;
+        this.playerID = playerID;
 
         proj_rb.useGravity = !rocketPowered;
         proj_rb.AddForce(direction.normalized * projectilePower);
@@ -34,60 +37,63 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Creates explosion if there is an explosion radius
-        if (explosionRadius > 0)
+        if (other.gameObject.layer != LayerMask.NameToLayer("Bound"))
         {
-            // Spawn explosion prefab
-            GameObject projectile = Instantiate(prefab_Explosion, transform.position, Quaternion.identity);
-            projectile.transform.localScale = new Vector3(explosionRadius * 2, explosionRadius * 2, explosionRadius * 2);
-            Destroy(projectile, 0.5f);
-
-            // Bit shift the index of the layer (8) to get a bit mask for solid ground.
-            int layerMask = 1 << 8;
-
-            // This would cast rays only against colliders in layer 8.
-            // But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
-            layerMask = ~layerMask;
-
-            // Checks if explosion hits any objects not in the solid ground layer
-            Collider[] exploded = Physics.OverlapSphere(gameObject.transform.position, explosionRadius, layerMask);
-
-            // For each object hit
-            for (int i = 0; i < exploded.Length; i++)
+            // Creates explosion if there is an explosion radius
+            if (explosionRadius > 0)
             {
-                /// TODO: Make players in explosion take damage
-                if (exploded[i].gameObject.layer == LayerMask.NameToLayer("Player"))
+                // Spawn explosion prefab
+                GameObject projectile = Instantiate(prefab_Explosion, transform.position, Quaternion.identity);
+                projectile.transform.localScale = new Vector3(explosionRadius * 2, explosionRadius * 2, explosionRadius * 2);
+                Destroy(projectile, 0.5f);
+
+                // Bit shift the index of the layer (8) to get a bit mask for solid ground.
+                int layerMask = 1 << 8;
+
+                // This would cast rays only against colliders in layer 8.
+                // But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
+                layerMask = ~layerMask;
+
+                // Checks if explosion hits any objects not in the solid ground layer
+                Collider[] exploded = Physics.OverlapSphere(gameObject.transform.position, explosionRadius, layerMask);
+
+                // For each object hit
+                for (int i = 0; i < exploded.Length; i++)
                 {
-                    float damageMultiplier = 1 / (explosionRadius / (explosionRadius - Vector3.Distance(exploded[i].ClosestPoint(gameObject.transform.position), gameObject.transform.position)));
-                    damageMultiplier = Mathf.Min(Mathf.Max(damageMultiplier, 0), 1);
-                    exploded[i].gameObject.GetComponent<Player>().DecreaseHealth(coreDamage * damageMultiplier);
+                    /// TODO: Make players in explosion take damage
+                    if (exploded[i].gameObject.layer == LayerMask.NameToLayer("Player"))
+                    {
+                        float damageMultiplier = 1 / (explosionRadius / (explosionRadius - Vector3.Distance(exploded[i].ClosestPoint(gameObject.transform.position), gameObject.transform.position)));
+                        damageMultiplier = Mathf.Min(Mathf.Max(damageMultiplier, 0), 1);
+                        exploded[i].gameObject.GetComponent<Player>().DecreaseHealth(coreDamage * damageMultiplier, playerID);
+                    }
+
+                    // Add explosion force to rigidbody if exists
+                    Rigidbody rb = exploded[i].GetComponent<Rigidbody>();
+                    if (rb != null) { rb.AddExplosionForce(corePushback, gameObject.transform.position, explosionRadius); }
                 }
 
-                // Add explosion force to rigidbody if exists
-                Rigidbody rb = exploded[i].GetComponent<Rigidbody>();
-                if (rb != null) { rb.AddExplosionForce(corePushback, gameObject.transform.position, explosionRadius); }
+                Destroy(gameObject);
             }
-
-            Destroy(gameObject);
-        }
-        // Does not create an explosion if there is no explosion radius
-        else
-        {
-            // Inflict pushback on collided object if it has a RigidBody
-            Rigidbody rb = other.GetComponent<Rigidbody>();
-            if (rb != null)
+            // Does not create an explosion if there is no explosion radius
+            else
             {
-                Vector3 direction = other.gameObject.transform.position - gameObject.transform.position;
-                rb.AddForce(direction.normalized * corePushback);
-            }
+                // Inflict pushback on collided object if it has a RigidBody
+                Rigidbody rb = other.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    Vector3 direction = other.gameObject.transform.position - gameObject.transform.position;
+                    rb.AddForce(direction.normalized * corePushback);
+                }
 
-            /// TODO: Make player take damage
-            if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                other.gameObject.GetComponent<Player>().DecreaseHealth(coreDamage);
-            }
+                /// TODO: Make player take damage
+                if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+                {
+                    other.gameObject.GetComponent<Player>().DecreaseHealth(coreDamage, playerID);
+                }
 
-            Destroy(gameObject);
+                Destroy(gameObject);
+            }
         }
     }
 
