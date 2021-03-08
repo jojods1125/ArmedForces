@@ -50,7 +50,7 @@ public class Arm : MonoBehaviour
 
     private readonly Dictionary<Weapon, char> weaponLetters = new Dictionary<Weapon, char>();
 
-    private UIManager uiManager;
+    protected UIManager uiManager;
 
 
     /// <summary>
@@ -245,11 +245,8 @@ public class Arm : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
-        // Retrieve UIManager
-        uiManager = GameManager.Instance().uiManager;
-
         // Set up arm loadouts
         if (armType == ArmType.Front) FrontArmInitialize();
         else BackArmInitialize();
@@ -309,7 +306,7 @@ public class Arm : MonoBehaviour
             gameObject.GetComponent<MeshRenderer>().material = weapon.material;
 
             // Update UI
-            uiManager.UpdateSelectedUI(armType, weaponLetters[weapon]);
+            if (uiManager) uiManager.UpdateSelectedUI(armType, weaponLetters[weapon]);
         }
     }
 
@@ -356,25 +353,25 @@ public class Arm : MonoBehaviour
             if (equippedWeapon.Equals(weaponA))
             {
                 ammoRemaining[weaponA] = Mathf.Max(ammoRemaining[weaponA] - count, 0);
-                uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], weapon.ammoCapacity);
             }
 
             else if (equippedWeapon.Equals(weaponB))
             {
                 ammoRemaining[weaponB] = Mathf.Max(ammoRemaining[weaponB] - count, 0);
-                uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], weapon.ammoCapacity);
             }
 
             else if (equippedWeapon.Equals(weaponC))
             {
                 ammoRemaining[weaponC] = Mathf.Max(ammoRemaining[weaponC] - count, 0);
-                uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], weapon.ammoCapacity);
             }
 
             else if (equippedWeapon.Equals(weaponD))
             {
                 ammoRemaining[weaponD] = Mathf.Max(ammoRemaining[weaponD] - count, 0);
-                uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], weapon.ammoCapacity);
             }
 
         }
@@ -397,25 +394,25 @@ public class Arm : MonoBehaviour
             if (equippedWeapon.Equals(weaponA))
             {
                 ammoRemaining[weaponA] = Mathf.Min(ammoRemaining[weaponA] + count, weapon.ammoCapacity);
-                uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], weapon.ammoCapacity);
             }
 
             else if (equippedWeapon.Equals(weaponB))
             {
                 ammoRemaining[weaponB] = Mathf.Min(ammoRemaining[weaponB] + count, weapon.ammoCapacity);
-                uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], weapon.ammoCapacity);
             }
 
             else if (equippedWeapon.Equals(weaponC))
             {
                 ammoRemaining[weaponC] = Mathf.Min(ammoRemaining[weaponC] + count, weapon.ammoCapacity);
-                uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], weapon.ammoCapacity);
             }
 
             else if (equippedWeapon.Equals(weaponD))
             {
                 ammoRemaining[weaponD] = Mathf.Min(ammoRemaining[weaponD] + count, weapon.ammoCapacity);
-                uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], weapon.ammoCapacity);
             }
 
         }
@@ -434,25 +431,25 @@ public class Arm : MonoBehaviour
         if (weaponA is W_Shootable gunA)
         {
             ammoRemaining[weaponA] = gunA.ammoCapacity;
-            uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], gunA.ammoCapacity);
+            if (uiManager) uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], gunA.ammoCapacity);
         }
 
         if (weaponB is W_Shootable gunB)
         {
             ammoRemaining[weaponB] = gunB.ammoCapacity;
-            uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], gunB.ammoCapacity);
+            if (uiManager) uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], gunB.ammoCapacity);
         }
             
         if (weaponC is W_Shootable gunC)
         {
             ammoRemaining[weaponC] = gunC.ammoCapacity;
-            uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], gunC.ammoCapacity);
+            if (uiManager) uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], gunC.ammoCapacity);
         }
             
         if (weaponD is W_Shootable gunD)
         {
             ammoRemaining[weaponD] = gunD.ammoCapacity;
-            uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], gunD.ammoCapacity);
+            if (uiManager) uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], gunD.ammoCapacity);
         }
             
     }
