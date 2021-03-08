@@ -75,6 +75,8 @@ public class GameManager : MonoBehaviour
         GameManager.Instance().playerCount++;
         GameManager.Instance().kills.Add(playerCount, 0);
         GameManager.Instance().deaths.Add(playerCount, 0);
+        // What is the playerCount
+        // Debug.Log(playerCount);
         return playerCount;
     }
 
@@ -83,10 +85,16 @@ public class GameManager : MonoBehaviour
     }
 
     public void trackDeath(int killer, int deceased){
+        // Who killed who
+        // Debug.Log("Killer: " + killer + ", Deceased: " + deceased);
         deaths[deceased]++;
         if(killer != deceased && killer != -1){
             kills[killer]++;
         }
+
+        // Check counts
+        /*Debug.Log("Deaths: " + deaths[killer]);
+        Debug.Log("Kills: " + kills[killer]);*/
     }
 
 
