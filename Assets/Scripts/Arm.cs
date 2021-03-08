@@ -60,10 +60,11 @@ public class Arm : MonoBehaviour
     void FireAuto(W_AutoGun auto)
     {
         // Fire rate and ammo check
-        if (Time.time > fireRateTimeStamp && ammoRemaining[auto] > 0)
+        if (Time.time > fireRateTimeStamp + auto.fireRate && ammoRemaining[auto] > 0)
         {
             // Updates fire rate and ammo
-            fireRateTimeStamp = Time.time + auto.fireRate;
+            fireRateTimeStamp = Time.time;
+            reloadRateTimeStamp = Time.time;
             ReduceAmmo(1);
 
             // Calculates bullet path and draws ray
@@ -94,19 +95,20 @@ public class Arm : MonoBehaviour
     void FireSemi(W_SemiGun semi)
     {
         // Trigger and fire rate check
-        if (!singleShotFired && Time.time > fireRateTimeStamp)
+        if (!singleShotFired && Time.time > fireRateTimeStamp + semi.fireRate)
         {
-            // Burst loop
-            for (int i = 0; i < semi.burstCount; i++)
+            // Ammo check
+            if (ammoRemaining[semi] > 0)
             {
-                // Ammo check
-                if (ammoRemaining[semi] > 0)
-                {
-                    // Updates trigger, fire rate, and ammo
-                    singleShotFired = true;
-                    fireRateTimeStamp = Time.time + semi.fireRate;
-                    ReduceAmmo(1);
+                // Updates trigger, fire rate, and ammo
+                singleShotFired = true;
+                fireRateTimeStamp = Time.time;
+                reloadRateTimeStamp = Time.time;
+                ReduceAmmo(1);
 
+                // Burst loop
+                for (int i = 0; i < semi.burstCount; i++)
+                {
                     // Calculates bullet path and draws ray
                     Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-semi.spreadRange, semi.spreadRange), Random.Range(-semi.spreadRange, semi.spreadRange));
                     Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.red, 1);
@@ -138,14 +140,15 @@ public class Arm : MonoBehaviour
     void FireLauncher(W_Launcher launcher)
     {
         // Trigger and fire rate check
-        if (!singleShotFired && Time.time > fireRateTimeStamp)
+        if (!singleShotFired && Time.time > fireRateTimeStamp + launcher.fireRate)
         {
             // Ammo check
             if (ammoRemaining[launcher] > 0)
             {
                 // Updates trigger, fire rate, and ammo
                 singleShotFired = true;
-                fireRateTimeStamp = Time.time + launcher.fireRate;
+                fireRateTimeStamp = Time.time;
+                reloadRateTimeStamp = Time.time;
                 ReduceAmmo(1);
 
                 // Creates projectile and spawns it at the correct location
@@ -171,10 +174,11 @@ public class Arm : MonoBehaviour
     void FireSprayer(W_Sprayer sprayer)
     {
         // Fire rate and ammo check
-        if (Time.time > fireRateTimeStamp && ammoRemaining[sprayer] > 0)
+        if (Time.time > fireRateTimeStamp + sprayer.fireRate && ammoRemaining[sprayer] > 0)
         {
             // Updates fire rate and ammo
-            fireRateTimeStamp = Time.time + sprayer.fireRate;
+            fireRateTimeStamp = Time.time;
+            reloadRateTimeStamp = Time.time;
             ReduceAmmo(1);
 
             // Calculates bullet path and draws ray
@@ -235,10 +239,10 @@ public class Arm : MonoBehaviour
             // Currently equipped weapon regains ammo if player is grounded
             if (player.IsGrounded() && equippedWeapon is W_Shootable weapon)
             {
-                if (Time.time > reloadRateTimeStamp && ammoRemaining[equippedWeapon] != weapon.ammoCapacity)
+                if (Time.time > reloadRateTimeStamp + weapon.reloadRate && ammoRemaining[equippedWeapon] != weapon.ammoCapacity)
                 {
                     RegainAmmo(1);
-                    reloadRateTimeStamp = Time.time + weapon.reloadRate;
+                    reloadRateTimeStamp = Time.time;
                 }
             }
         }

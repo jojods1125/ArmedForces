@@ -19,7 +19,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 6e923db4de8155a4cbd26d175eed5e30, type: 3}
   rarity: 0
   fireRate: 0.1
-  ammoCapacity: 5
+  ammoCapacity: 15
   pushback: 200
   reloadRate: 0.25
   spreadRange: 0.05
