@@ -111,11 +111,15 @@ public class Player : MonoBehaviour
     // ===========================================================
 
 
-    void Start() {
+    // Will be overridden by Player_Controlled's start, so include anything in here in there
+    protected void Start()
+    {
         playerID = GameManager.Instance().getID();
+
+        if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
     }
 
-    void Awake()
+    protected void Awake()
     {
         currHealth = maxHealth;
 

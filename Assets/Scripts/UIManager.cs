@@ -135,19 +135,23 @@ public class UIManager : MonoBehaviour
             switch (index)
             {
                 case 'A':
-                    weaponA_L_ammo.text = currAmmo + "/" + maxAmmo;
+                    weaponA_L_ammo.text = currAmmo.ToString();
+                    if (currAmmo == maxAmmo) weaponA_L_ammo.color = Color.green; else if (currAmmo == 0) weaponA_L_ammo.color = Color.red; else weaponA_L_ammo.color = Color.white;
                     break;
 
                 case 'B':
-                    weaponB_L_ammo.text = currAmmo + "/" + maxAmmo;
+                    weaponB_L_ammo.text = currAmmo.ToString();
+                    if (currAmmo == maxAmmo) weaponB_L_ammo.color = Color.green; else if (currAmmo == 0) weaponB_L_ammo.color = Color.red; else weaponB_L_ammo.color = Color.white;
                     break;
 
                 case 'C':
-                    weaponC_L_ammo.text = currAmmo + "/" + maxAmmo;
+                    weaponC_L_ammo.text = currAmmo.ToString();
+                    if (currAmmo == maxAmmo) weaponC_L_ammo.color = Color.green; else if (currAmmo == 0) weaponC_L_ammo.color = Color.red; else weaponC_L_ammo.color = Color.white;
                     break;
 
                 case 'D':
-                    weaponD_L_ammo.text = currAmmo + "/" + maxAmmo;
+                    weaponD_L_ammo.text = currAmmo.ToString();
+                    if (currAmmo == maxAmmo) weaponD_L_ammo.color = Color.green; else if (currAmmo == 0) weaponD_L_ammo.color = Color.red; else weaponD_L_ammo.color = Color.white;
                     break;
             }
         }
@@ -158,19 +162,23 @@ public class UIManager : MonoBehaviour
             switch (index)
             {
                 case 'A':
-                    weaponA_R_ammo.text = currAmmo + "/" + maxAmmo;
+                    weaponA_R_ammo.text = currAmmo.ToString();
+                    if (currAmmo == maxAmmo) weaponA_R_ammo.color = Color.green; else if (currAmmo == 0) weaponA_R_ammo.color = Color.red; else weaponA_R_ammo.color = Color.white;
                     break;
 
                 case 'B':
-                    weaponB_R_ammo.text = currAmmo + "/" + maxAmmo;
+                    weaponB_R_ammo.text = currAmmo.ToString();
+                    if (currAmmo == maxAmmo) weaponB_R_ammo.color = Color.green; else if (currAmmo == 0) weaponB_R_ammo.color = Color.red; else weaponB_R_ammo.color = Color.white;
                     break;
 
                 case 'C':
-                    weaponC_R_ammo.text = currAmmo + "/" + maxAmmo;
+                    weaponC_R_ammo.text = currAmmo.ToString();
+                    if (currAmmo == maxAmmo) weaponC_R_ammo.color = Color.green; else if (currAmmo == 0) weaponC_R_ammo.color = Color.red; else weaponC_R_ammo.color = Color.white;
                     break;
 
                 case 'D':
-                    weaponD_R_ammo.text = currAmmo + "/" + maxAmmo;
+                    weaponD_R_ammo.text = currAmmo.ToString();
+                    if (currAmmo == maxAmmo) weaponD_R_ammo.color = Color.green; else if (currAmmo == 0) weaponD_R_ammo.color = Color.red; else weaponD_R_ammo.color = Color.white;
                     break;
             }
         }
