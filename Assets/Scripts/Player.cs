@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class Player : MonoBehaviour
@@ -20,11 +21,16 @@ public class Player : MonoBehaviour
     public Weapon[] backArmWeapons = new Weapon[4];
     public Weapon[] frontArmWeapons = new Weapon[4];
 
-
     protected Rigidbody rb;
     private Arm[] arms;
-    public float currHealth = 100;
+    private float currHealth = 100;
     private bool dying = false;
+
+    //Used for differentiating each player in Game Manager
+    public int playerID;
+
+    // UI Manager
+    protected UIManager uiManager;
 
 
 
@@ -40,6 +46,7 @@ public class Player : MonoBehaviour
     public void IncreaseHealth(float health)
     {
         currHealth = Mathf.Min(currHealth + health, maxHealth);
+        if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
     }
 
 
@@ -47,26 +54,32 @@ public class Player : MonoBehaviour
     /// Decreases the player's health by health and kills if at 0
     /// </summary>
     /// <param name="health"> Amount to decrease health by </param>
-    public void DecreaseHealth(float health)
+    public void DecreaseHealth(float health, int attackerID)
     {
         currHealth = Mathf.Max(currHealth - health, 0);
-        
+        if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+
         if (currHealth == 0)
-            Kill();
+            Kill(attackerID);
     }
 
 
     /// <summary>
     /// Instantly sets the player's health to 0 and kills them
     /// </summary>
-    public void Kill()
+    public void Kill(int killerID)
     {
         if (!dying)
         {
             dying = true;
-            if (currHealth != 0) currHealth = 0;
+            if (currHealth != 0)
+            {
+                currHealth = 0;
+                if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+            }
 
             GameManager.Instance().Respawn(gameObject);
+            GameManager.Instance().trackDeath(killerID, playerID);
 
             gameObject.SetActive(false);
         }
@@ -101,7 +114,15 @@ public class Player : MonoBehaviour
     // ===========================================================
 
 
-    void Awake()
+    // Will be overridden by Player_Controlled's start, so include anything in here in there
+    protected void Start()
+    {
+        playerID = GameManager.Instance().getID();
+
+        if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+    }
+
+    protected void Awake()
     {
         currHealth = maxHealth;
 
@@ -131,7 +152,23 @@ public class Player : MonoBehaviour
     }
 
 
-    
+    /// <summary>
+    /// Returns references to the Arm objects of the player
+    /// </summary>
+    /// <returns> Player's Arm objects </returns>
+    public Arm[] GetArms()
+    {
+        return arms;
+    }
 
+
+    /// <summary>
+    /// Retrieves the player's current health
+    /// </summary>
+    /// <returns> currHealth float </returns>
+    public float GetCurrHealth()
+    {
+        return currHealth;
+    }
 
 }

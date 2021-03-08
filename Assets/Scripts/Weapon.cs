@@ -15,4 +15,18 @@ public class Weapon : ScriptableObject
 
     [Tooltip("Material of the weapon as it appears in-game")]
     public Material material;
+
+    [Tooltip("Icon to represent the weapon in UI")]
+    public Sprite icon;
+
+    [Tooltip("Rarity level of the weapon")]
+    public WeaponRarity rarity;
+}
+
+public enum WeaponRarity
+{
+    Common,     // Gray bg
+    Uncommon,   // Green bg
+    Rare,       // Blue bg
+    Legendary   // Purple bg
 }

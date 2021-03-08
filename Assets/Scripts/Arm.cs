@@ -29,6 +29,8 @@ public class Arm : MonoBehaviour
     private float fireRateTimeStamp = 0;
     /// <summary> Checks if a weapon that requires a trigger release has been released </summary>
     private bool singleShotFired = false;
+    /// <summary> Previous time the weapon reloaded </summary>
+    private float reloadRateTimeStamp = 0;
 
 
     /// <summary> Currently equipped weapon </summary>
@@ -46,6 +48,9 @@ public class Arm : MonoBehaviour
     /// <summary> Amount of ammo remaining in each weapon </summary>
     private readonly Dictionary<Weapon, int> ammoRemaining = new Dictionary<Weapon, int>();
 
+    private readonly Dictionary<Weapon, char> weaponLetters = new Dictionary<Weapon, char>();
+
+    protected UIManager uiManager;
 
 
     /// <summary>
@@ -72,7 +77,7 @@ public class Arm : MonoBehaviour
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * auto.bulletPushback);
-                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage);
+                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage, player.playerID);
                 }
             }
 
@@ -113,7 +118,7 @@ public class Arm : MonoBehaviour
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
                             hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * semi.bulletPushback);
-                            hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(semi.bulletDamage);
+                            hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(semi.bulletDamage, player.playerID);
                         }
                     }
 
@@ -149,7 +154,7 @@ public class Arm : MonoBehaviour
 
                 // Initializes the projectile prefab with the appropriate launcher values
                 projectile.GetComponent<Projectile>().Initialize(barrel.transform.up, launcher.projectilePower, launcher.explosionRadius,
-                                        launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
+                                        launcher.coreDamage, launcher.corePushback, launcher.rocketPowered, player.playerID);
 
                 // Pushes player
                 player.EnactForce(barrel.transform.up.normalized * -launcher.pushback);
@@ -183,7 +188,7 @@ public class Arm : MonoBehaviour
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * sprayer.bulletPushback);
-                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(sprayer.bulletDamage);
+                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(sprayer.bulletDamage, player.playerID);
                 }
             }
 
@@ -227,9 +232,17 @@ public class Arm : MonoBehaviour
         {
             if (singleShotFired) singleShotFired = false;
 
-            /// TODO: Make RegainAmmo() do 1 ammo at a time when UI is implemented
-            if (player.IsGrounded() && equippedWeapon is W_Shootable weapon) RegainAmmo(weapon.ammoCapacity);
+            // Currently equipped weapon regains ammo if player is grounded
+            if (player.IsGrounded() && equippedWeapon is W_Shootable weapon)
+            {
+                if (Time.time > reloadRateTimeStamp && ammoRemaining[equippedWeapon] != weapon.ammoCapacity)
+                {
+                    RegainAmmo(1);
+                    reloadRateTimeStamp = Time.time + weapon.reloadRate;
+                }
+            }
         }
+
     }
 
 
@@ -240,17 +253,23 @@ public class Arm : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
         // Set up arm loadouts
         if (armType == ArmType.Front) FrontArmInitialize();
         else BackArmInitialize();
 
+        // Fills in the dictionary of weapons to letters for checking which they are
+        weaponLetters[weaponA] = 'A';
+        weaponLetters[weaponB] = 'B';
+        weaponLetters[weaponC] = 'C';
+        weaponLetters[weaponD] = 'D';
+
         // Initialize equippedWeapon
-        if (weaponA) equippedWeapon = weaponA;
-        else if (weaponB) equippedWeapon = weaponA;
-        else if (weaponC) equippedWeapon = weaponC;
-        else equippedWeapon = weaponD;
+        if (weaponA) Switch(weaponA);
+        else if (weaponB) Switch(weaponB);
+        else if (weaponC) Switch(weaponC);
+        else Switch(weaponD);
 
         // Render equippedWeapon
         if (equippedWeapon)
@@ -264,6 +283,9 @@ public class Arm : MonoBehaviour
         if (weaponB is W_Shootable gunB) ammoRemaining.Add(weaponB, gunB.ammoCapacity);
         if (weaponC is W_Shootable gunC) ammoRemaining.Add(weaponC, gunC.ammoCapacity);
         if (weaponD is W_Shootable gunD) ammoRemaining.Add(weaponD, gunD.ammoCapacity);
+        
+        // Starts the match with full ammo in each weapon
+        FullReload();
     }
 
 
@@ -284,9 +306,15 @@ public class Arm : MonoBehaviour
     {
         if (weapon)
         {
-            this.equippedWeapon = weapon;
+            // Change currently equipped weapon
+            equippedWeapon = weapon;
+
+            // Change equipped weapon visuals
             gameObject.GetComponent<MeshFilter>().mesh = weapon.mesh;
             gameObject.GetComponent<MeshRenderer>().material = weapon.material;
+
+            // Update UI
+            if (uiManager) uiManager.UpdateSelectedUI(armType, weaponLetters[weapon]);
         }
     }
 
@@ -323,20 +351,38 @@ public class Arm : MonoBehaviour
     /// <param name="count"> Amount to reduce ammo by </param>
     public void ReduceAmmo(int count)
     {
-        // Finds the equipped weapon
-        // Sets the ammo of the weapon to either 0 or ammoRemaining - count, prevents negative ammo
+        // Checks if the equipped weapon should have ammo
+        if (equippedWeapon is W_Shootable weapon)
+        {
+            // Finds the equipped weapon
+                // Sets the ammo of the weapon to either 0 or ammoRemaining - count, prevents negative ammo
+                // Updates UI
 
-        if (equippedWeapon.Equals(weaponA))
-            ammoRemaining[weaponA] = Mathf.Max(ammoRemaining[weaponA] - count, 0);
+            if (equippedWeapon.Equals(weaponA))
+            {
+                ammoRemaining[weaponA] = Mathf.Max(ammoRemaining[weaponA] - count, 0);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], weapon.ammoCapacity);
+            }
 
-        else if (equippedWeapon.Equals(weaponB))
-            ammoRemaining[weaponB] = Mathf.Max(ammoRemaining[weaponB] - count, 0);
+            else if (equippedWeapon.Equals(weaponB))
+            {
+                ammoRemaining[weaponB] = Mathf.Max(ammoRemaining[weaponB] - count, 0);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], weapon.ammoCapacity);
+            }
 
-        else if (equippedWeapon.Equals(weaponC))
-            ammoRemaining[weaponC] = Mathf.Max(ammoRemaining[weaponC] - count, 0);
+            else if (equippedWeapon.Equals(weaponC))
+            {
+                ammoRemaining[weaponC] = Mathf.Max(ammoRemaining[weaponC] - count, 0);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], weapon.ammoCapacity);
+            }
 
-        else if (equippedWeapon.Equals(weaponD))
-            ammoRemaining[weaponD] = Mathf.Max(ammoRemaining[weaponD] - count, 0);
+            else if (equippedWeapon.Equals(weaponD))
+            {
+                ammoRemaining[weaponD] = Mathf.Max(ammoRemaining[weaponD] - count, 0);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], weapon.ammoCapacity);
+            }
+
+        }
     }
 
 
@@ -350,36 +396,70 @@ public class Arm : MonoBehaviour
         if (equippedWeapon is W_Shootable weapon)
         {
             // Finds the equipped weapon
-            // Sets the ammo of the weapon to either max or ammoRemaining + count, prevents overloading ammo
+                // Sets the ammo of the weapon to either max capacity or ammoRemaining + count, prevents overloading ammo
+                // Updates UI
 
             if (equippedWeapon.Equals(weaponA))
+            {
                 ammoRemaining[weaponA] = Mathf.Min(ammoRemaining[weaponA] + count, weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], weapon.ammoCapacity);
+            }
 
             else if (equippedWeapon.Equals(weaponB))
+            {
                 ammoRemaining[weaponB] = Mathf.Min(ammoRemaining[weaponB] + count, weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], weapon.ammoCapacity);
+            }
 
             else if (equippedWeapon.Equals(weaponC))
+            {
                 ammoRemaining[weaponC] = Mathf.Min(ammoRemaining[weaponC] + count, weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], weapon.ammoCapacity);
+            }
 
             else if (equippedWeapon.Equals(weaponD))
+            {
                 ammoRemaining[weaponD] = Mathf.Min(ammoRemaining[weaponD] + count, weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], weapon.ammoCapacity);
+            }
+
         }
     }
+
 
     /// <summary>
     /// Fully reloads all weapons if they have ammo
     /// </summary>
     public void FullReload()
     {
-        if (weaponA is W_Shootable gunA)
-            ammoRemaining[weaponA] = ammoRemaining[weaponA] + gunA.ammoCapacity;
-        if (weaponB is W_Shootable gunB)
-            ammoRemaining[weaponB] = ammoRemaining[weaponB] + gunB.ammoCapacity;
-        if (weaponC is W_Shootable gunC)
-            ammoRemaining[weaponC] = ammoRemaining[weaponC] + gunC.ammoCapacity;
-        if (weaponD is W_Shootable gunD)
-            ammoRemaining[weaponD] = ammoRemaining[weaponD] + gunD.ammoCapacity;
-    }
+        // Checks if each weapon should have ammo
+            // Fully reloads weapon
+            // Updates UI
 
+        if (weaponA is W_Shootable gunA)
+        {
+            ammoRemaining[weaponA] = gunA.ammoCapacity;
+            if (uiManager) uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], gunA.ammoCapacity);
+        }
+
+        if (weaponB is W_Shootable gunB)
+        {
+            ammoRemaining[weaponB] = gunB.ammoCapacity;
+            if (uiManager) uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], gunB.ammoCapacity);
+        }
+            
+        if (weaponC is W_Shootable gunC)
+        {
+            ammoRemaining[weaponC] = gunC.ammoCapacity;
+            if (uiManager) uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], gunC.ammoCapacity);
+        }
+            
+        if (weaponD is W_Shootable gunD)
+        {
+            ammoRemaining[weaponD] = gunD.ammoCapacity;
+            if (uiManager) uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], gunD.ammoCapacity);
+        }
+            
+    }
 
 }
