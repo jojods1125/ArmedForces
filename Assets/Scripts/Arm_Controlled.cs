@@ -10,17 +10,22 @@ public class Arm_Controlled : Arm
 
     private void Awake()
     {
-        inputActions = new PlayerControls();
-
-        // Set up arm input controls
-        if (armType == ArmType.Front) FrontArmInitializeInputs();
-        else BackArmInitializeInputs();
+        
     }
 
     new void Start()
     {
-        // Retrieve UIManager
-        uiManager = GameManager.Instance().uiManager;
+        if (isLocalPlayer)
+        {
+            inputActions = new PlayerControls();
+
+            // Set up arm input controls
+            if (armType == ArmType.Front) FrontArmInitializeInputs();
+            else BackArmInitializeInputs();
+
+            // Retrieve UIManager
+            uiManager = GameManager.Instance().uiManager;
+        }
 
         base.Start();
     }

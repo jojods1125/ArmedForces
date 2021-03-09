@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using Mirror;
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     // ===========================================================
     //                          VARIABLES
@@ -83,6 +84,7 @@ public class Player : MonoBehaviour
 
             gameObject.SetActive(false);
         }
+
         // if Player_Controlled, call achievement event
         if (this is Player_Controlled)
             AchievementManager.Instance().OnEvent(AchievementType.deaths);
@@ -119,7 +121,16 @@ public class Player : MonoBehaviour
     {
         playerID = GameManager.Instance().getID();
 
-        if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+        if (!isLocalPlayer)
+        {
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
+
+        if (uiManager)
+        {
+            GameManager.Instance().mainPlayer = this;
+            uiManager.UpdateHealthBar(currHealth / maxHealth);
+        }
     }
 
     protected void Awake()
