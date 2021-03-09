@@ -56,15 +56,18 @@ public class UIManager : MonoBehaviour
         Image[] weapons_R_images = new Image[] { weaponA_R_image, weaponB_R_image, weaponC_R_image, weaponD_R_image };
 
         // Update back arm images
-        for (int i = 0; i < GameManager.Instance().mainPlayer.backArmWeapons.Length; i++)
+        if (GameManager.Instance().mainPlayer)
         {
-            weapons_L_images[i].sprite = GameManager.Instance().mainPlayer.backArmWeapons[i].icon;
-        }
+            for (int i = 0; i < GameManager.Instance().mainPlayer.backArmWeapons.Length; i++)
+            {
+                weapons_L_images[i].sprite = GameManager.Instance().mainPlayer.backArmWeapons[i].icon;
+            }
 
-        // Update front arm images
-        for (int i = 0; i < GameManager.Instance().mainPlayer.frontArmWeapons.Length; i++)
-        {
-            weapons_R_images[i].sprite = GameManager.Instance().mainPlayer.frontArmWeapons[i].icon;
+            // Update front arm images
+            for (int i = 0; i < GameManager.Instance().mainPlayer.frontArmWeapons.Length; i++)
+            {
+                weapons_R_images[i].sprite = GameManager.Instance().mainPlayer.frontArmWeapons[i].icon;
+            }
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 /// <summary>
 /// Which side of the player the arm is on; determines weapon loadout
@@ -12,9 +13,10 @@ public enum ArmType
     Back
 }
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class Arm : MonoBehaviour
+public class Arm : NetworkBehaviour
 {
+    [Tooltip("The arm GameObject")]
+    public GameObject arm;
     [Tooltip("Tip of the arm, where shots emit from")]
     public GameObject barrel;
     [Tooltip("Player character reference")]
@@ -212,6 +214,9 @@ public class Arm : MonoBehaviour
         // If the player is using the firing input, call the appropriate weapon firing function
         if (firing)
         {
+            if (!Application.isFocused)
+                return;
+
             if (equippedWeapon is W_SemiGun semi)
             {
                 FireSemi(semi);
@@ -282,8 +287,8 @@ public class Arm : MonoBehaviour
         // Render equippedWeapon
         if (equippedWeapon)
         {
-            gameObject.GetComponent<MeshFilter>().mesh = equippedWeapon.mesh;
-            gameObject.GetComponent<MeshRenderer>().material = equippedWeapon.material;
+            arm.GetComponent<MeshFilter>().mesh = equippedWeapon.mesh;
+            arm.GetComponent<MeshRenderer>().material = equippedWeapon.material;
         }
 
         // Initializes ammoRemaining dictionary for each weapon
@@ -300,26 +305,32 @@ public class Arm : MonoBehaviour
     // Aims the arm based on joystick angle
     protected void Aim(Vector3 aimVal)
     {
-        float degrees = Vector3.Angle(Vector3.up, transform.position + (aimVal * 1000));
-        Vector3 eulerRotation = transform.rotation.eulerAngles;
+        if (!Application.isFocused)
+            return;
+
+        float degrees = Vector3.Angle(Vector3.up, arm.transform.position + (aimVal * 1000));
+        Vector3 eulerRotation = arm.transform.rotation.eulerAngles;
         if (aimVal.x > 0)
             degrees = -degrees;
         if (aimVal.sqrMagnitude > 0.5)
-            transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, degrees);
+            arm.transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, degrees);
     }
 
 
     // Switches the arm's currently equipped weapon
     protected void Switch(Weapon weapon)
     {
+        if (!Application.isFocused)
+            return;
+
         if (weapon)
         {
             // Change currently equipped weapon
             equippedWeapon = weapon;
 
             // Change equipped weapon visuals
-            gameObject.GetComponent<MeshFilter>().mesh = weapon.mesh;
-            gameObject.GetComponent<MeshRenderer>().material = weapon.material;
+            arm.GetComponent<MeshFilter>().mesh = weapon.mesh;
+            arm.GetComponent<MeshRenderer>().material = weapon.material;
 
             // Update UI
             if (uiManager) uiManager.UpdateSelectedUI(armType, weaponLetters[weapon]);
