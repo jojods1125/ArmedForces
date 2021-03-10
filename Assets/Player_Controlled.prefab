@@ -555,7 +555,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0.05
   maxHealth: 100
   walkMomentum: 10
   maxWalkSpeed: 5

@@ -548,6 +548,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e087b23b62cf29846a9d9a301bb4330f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   maxHealth: 100
   walkMomentum: 10
   maxWalkSpeed: 5
@@ -562,6 +564,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 23ff3fae40bdea64fba3218142df8ea6, type: 2}
   - {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
   - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
+  playerID: 0
 --- !u!1 &8282234078560122467
 GameObject:
   m_ObjectHideFlags: 0
@@ -687,6 +690,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a77193d37f2f54cbd7bd984cd116e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  arm: {fileID: 9093051126470135228}
   barrel: {fileID: 8282234078560122467}
   player: {fileID: 3305675465212334390}
   armType: 0
@@ -785,6 +791,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a77193d37f2f54cbd7bd984cd116e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  arm: {fileID: 9093051127276069410}
   barrel: {fileID: 8282234077263579433}
   player: {fileID: 3305675465212334390}
   armType: 1

@@ -8,11 +8,6 @@ public class Arm_Controlled : Arm
     private PlayerControls inputActions;
 
 
-    private void Awake()
-    {
-        
-    }
-
     new void Start()
     {
         if (isLocalPlayer)

@@ -24,6 +24,7 @@ public class Player : NetworkBehaviour
 
     protected Rigidbody rb;
     private Arm[] arms;
+    [SyncVar]
     private float currHealth = 100;
     private bool dying = false;
 
@@ -57,19 +58,23 @@ public class Player : NetworkBehaviour
     /// <param name="health"> Amount to decrease health by </param>
     public void DecreaseHealth(float health, int attackerID)
     {
+        if (!isServer)
+            return;
+
         currHealth = Mathf.Max(currHealth - health, 0);
-        if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
 
         if (currHealth == 0)
-            Kill(attackerID);
+            RpcKill(attackerID);
     }
 
 
     /// <summary>
     /// Instantly sets the player's health to 0 and kills them
     /// </summary>
-    public void Kill(int killerID)
+    [ClientRpc]
+    public void RpcKill(int killerID)
     {
+
         if (!dying)
         {
             dying = true;
@@ -141,6 +146,11 @@ public class Player : NetworkBehaviour
         arms = gameObject.GetComponentsInChildren<Arm>();
     }
 
+    void Update()
+    {
+        if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+    }
+
 
     /// <summary>
     /// Determines if the player is on the ground
@@ -157,11 +167,24 @@ public class Player : NetworkBehaviour
     /// Adds the specified force to the player's RigidBody
     /// </summary>
     /// <param name="force"> Force to add to the player </param>
+    //[ClientRpc]
     public void EnactForce(Vector3 force)
     {
+        //if (!isLocalPlayer)
+        //    return;
+
         rb.AddForce(force);
     }
 
+
+    [ClientRpc]
+    public void RpcEnactForce(Vector3 force)
+    {
+        if (!isLocalPlayer)
+            return;
+
+        rb.AddForce(force);
+    }
 
     /// <summary>
     /// Returns references to the Arm objects of the player

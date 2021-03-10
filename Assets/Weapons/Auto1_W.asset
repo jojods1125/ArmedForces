@@ -24,4 +24,4 @@ MonoBehaviour:
   reloadRate: 0.05
   spreadRange: 0.2
   bulletDamage: 10
-  bulletPushback: 10
+  bulletPushback: 5

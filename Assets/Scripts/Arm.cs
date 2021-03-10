@@ -2,6 +2,7 @@
 using UnityEngine;
 using Mirror;
 
+
 /// <summary>
 /// Which side of the player the arm is on; determines weapon loadout
 /// </summary>
@@ -12,6 +13,7 @@ public enum ArmType
     /// <summary> Behind player </summary>
     Back
 }
+
 
 public class Arm : NetworkBehaviour
 {
@@ -55,6 +57,17 @@ public class Arm : NetworkBehaviour
     protected UIManager uiManager;
 
 
+    [Command]
+    public void CmdAttack(Player recipient, float health, int attackerID, Vector3 pushback)
+    {
+        if (!isServer)
+            return;
+
+        recipient.DecreaseHealth(health, attackerID);
+        recipient.RpcEnactForce(pushback);
+    }
+
+
     /// <summary>
     /// Fires an AutoGun Weapon
     /// </summary>
@@ -80,8 +93,7 @@ public class Arm : NetworkBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * auto.bulletPushback);
-                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage, player.playerID);
+                    CmdAttack(hit.collider.gameObject.GetComponent<Player>(), auto.bulletDamage, player.playerID, bulletPath.normalized * auto.bulletPushback);
                 }
             }
 
@@ -123,8 +135,7 @@ public class Arm : NetworkBehaviour
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
-                            hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * semi.bulletPushback);
-                            hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(semi.bulletDamage, player.playerID);
+                            CmdAttack(hit.collider.gameObject.GetComponent<Player>(), semi.bulletDamage, player.playerID, bulletPath.normalized * semi.bulletPushback);
                         }
                     }
 
@@ -197,8 +208,7 @@ public class Arm : NetworkBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * sprayer.bulletPushback);
-                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(sprayer.bulletDamage, player.playerID);
+                    CmdAttack(hit.collider.gameObject.GetComponent<Player>(), sprayer.bulletDamage, player.playerID, bulletPath.normalized * sprayer.bulletPushback);
                 }
             }
 
@@ -368,6 +378,7 @@ public class Arm : NetworkBehaviour
     /// Reduces the ammo of the equipped weapon by a specified amount
     /// </summary>
     /// <param name="count"> Amount to reduce ammo by </param>
+    //[ClientRpc]
     public void ReduceAmmo(int count)
     {
         // Checks if the equipped weapon should have ammo
