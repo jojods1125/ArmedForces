@@ -25,7 +25,8 @@ public class Arm : NetworkBehaviour
     public Player player;
     [Tooltip("Whether the arm uses the player's Front Arm or Back Arm weapons")]
     public ArmType armType;
-
+    [Tooltip("Bullet prefab reference")]
+    public LineRenderer bullet;
 
     /// <summary> Whether or not the player is pressing the fire trigger </summary>
     protected bool firing = false;
@@ -68,6 +69,15 @@ public class Arm : NetworkBehaviour
     }
 
 
+    public void DrawBullet(Vector3 start, Vector3 end)
+    {
+        LineRenderer path = Instantiate(bullet);
+        Destroy(path, 0.2f);
+        path.SetPosition(0, start);
+        path.SetPosition(1, end);
+    }
+
+
     /// <summary>
     /// Fires an AutoGun Weapon
     /// </summary>
@@ -85,11 +95,13 @@ public class Arm : NetworkBehaviour
 
             // Calculates bullet path and draws ray
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-auto.spreadRange, auto.spreadRange), Random.Range(-auto.spreadRange, auto.spreadRange));
-            Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.green, 1);
+            ///Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.green, 1);
 
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
             {
+                DrawBullet(barrel.transform.position, hit.point);
+
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
@@ -127,11 +139,13 @@ public class Arm : NetworkBehaviour
                 {
                     // Calculates bullet path and draws ray
                     Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-semi.spreadRange, semi.spreadRange), Random.Range(-semi.spreadRange, semi.spreadRange));
-                    Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.red, 1);
+                    ///Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.red, 1);
 
                     // Raycasts bullet path
                     if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
                     {
+                        DrawBullet(barrel.transform.position, hit.point);
+
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
@@ -200,7 +214,8 @@ public class Arm : NetworkBehaviour
 
             // Calculates bullet path and draws ray
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-sprayer.spreadRange, sprayer.spreadRange), Random.Range(-sprayer.spreadRange, sprayer.spreadRange));
-            Debug.DrawRay(barrel.transform.position, bulletPath * sprayer.sprayDistance, Color.yellow, 1);
+            ///Debug.DrawRay(barrel.transform.position, bulletPath * sprayer.sprayDistance, Color.yellow, 1);
+            DrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
 
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit, sprayer.sprayDistance))

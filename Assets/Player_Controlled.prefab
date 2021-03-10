@@ -589,6 +589,7 @@ MonoBehaviour:
   barrel: {fileID: 8282234078560122467}
   player: {fileID: -141906719412523213}
   armType: 0
+  bullet: {fileID: 1382963012375385782, guid: 18134884a647d4b47a1d47a0cbc28987, type: 3}
 --- !u!114 &5305198536408925516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -607,6 +608,7 @@ MonoBehaviour:
   barrel: {fileID: 8282234077263579433}
   player: {fileID: -141906719412523213}
   armType: 1
+  bullet: {fileID: 1382963012375385782, guid: 18134884a647d4b47a1d47a0cbc28987, type: 3}
 --- !u!114 &3838712902332583463
 MonoBehaviour:
   m_ObjectHideFlags: 0
