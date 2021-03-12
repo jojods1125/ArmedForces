@@ -9,8 +9,8 @@ public class W_Launcher : W_Shootable
     [Tooltip("Speed at which the projectile travels")]
     public float projectilePower;
 
-    [Tooltip("Prefab for the projectile")]
-    public GameObject projectilePrefab;
+    [Tooltip("Prefab name for the projectile")]
+    public string projectilePrefabName = "P_Default";
 
     [Tooltip("Determines if gravity affects projectile; set to true for no gravity")]
     public bool rocketPowered;

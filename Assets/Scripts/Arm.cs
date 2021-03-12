@@ -183,17 +183,32 @@ public class Arm : NetworkBehaviour
 
                 // Creates projectile and spawns it at the correct location
                 Vector3 projectilePath = new Vector3(barrel.transform.position.x, barrel.transform.position.y);
-                GameObject projectile = Instantiate(launcher.projectilePrefab, projectilePath + (barrel.transform.up * 0.5f), Quaternion.identity);
 
-                // Initializes the projectile prefab with the appropriate launcher values
-                projectile.GetComponent<Projectile>().Initialize(barrel.transform.up, launcher.projectilePower, launcher.explosionRadius,
-                                        launcher.coreDamage, launcher.corePushback, launcher.rocketPowered, player.playerID);
+                // Spawns the projectile in the server
+                CmdSpawnProjectile(launcher.projectilePrefabName, projectilePath, launcher.projectilePower, launcher.explosionRadius, launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
 
                 // Pushes player
                 player.EnactForce(barrel.transform.up.normalized * -launcher.pushback);
             }
         }
 
+    }
+
+    [Command]
+    void CmdSpawnProjectile(string projectilePrefabName, Vector3 projectilePath, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered)
+    {
+        if (!isServer)
+            return;
+
+        // Instantiates a projectile prefab from the Resources/Projectiles folder
+        GameObject projectile = (GameObject)Instantiate(Resources.Load("Projectiles/" + projectilePrefabName), projectilePath + (barrel.transform.up* 0.5f), Quaternion.identity);
+
+        // Spawns projectile across all clients
+        NetworkServer.Spawn(projectile);
+
+        // Initializes the projectile with the appropriate launcher values across all clients
+        projectile.GetComponent<Projectile>().RpcInitialize(barrel.transform.up, projectilePower, explosionRadius,
+                                coreDamage, corePushback, rocketPowered, player.playerID);
     }
 
 
