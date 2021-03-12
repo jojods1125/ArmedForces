@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   achievementMessage: Spray...
   nextTier: 0
-  achieved: 0
+  achieved: 1
   type: 3
   currentValue: 0
   activationValues: 0a0000003200000064000000fa000000f4010000e8030000c40900008813000010270000a8610000
