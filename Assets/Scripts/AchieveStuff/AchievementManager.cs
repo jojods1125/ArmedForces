@@ -76,14 +76,15 @@ public class AchievementManager : MonoBehaviour
         // Check if milestone completed?
         if (updated && curr != null)
         {
-            if (curr.CheckNext())
+            /*if (curr.CheckNext())
             {
                 // print out?
                 // tie to UI?
                 // log "message! Achieved: 'milestone'
                 //      Total: 'currentValue'"
                 Debug.Log(curr.achievementMessage + " Achieved: " + curr.activationValues[curr.nextTier - 1] + "\n Total: " + curr.currentValue);
-            }
+            }*/
+            curr.CheckNext(); // print out now done in CheckNext method
             updated = false;
         }
         else

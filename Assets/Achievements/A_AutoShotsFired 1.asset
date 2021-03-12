@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: A_AutoShotsFired 1
   m_EditorClassIdentifier: 
   achievementMessage: Take Aim!
-  nextTier: 4
+  nextTier: 0
   achieved: 0
   type: 3
-  currentValue: 104
+  currentValue: 0
   activationValues: 010000000a0000001900000064000000f4010000e80300008813000010270000a861000050c30000
   initialValue: 0
   weaponType: 1
