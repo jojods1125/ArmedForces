@@ -308,12 +308,10 @@ public class Arm : MonoBehaviour
             transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, degrees);
     }
 
-    public void SetFiring(bool firing){
-        this.firing = firing;
-    }
+    
 
     // Switches the arm's currently equipped weapon
-    protected void Switch(Weapon weapon)
+    public void Switch(Weapon weapon)
     {
         if (weapon)
         {
@@ -349,7 +347,24 @@ public class Arm : MonoBehaviour
         weaponD = player.backArmWeapons[3];
     }
 
-
+    public Weapon getWeaponA(){
+        return weaponA;
+    }
+    public Weapon getWeaponB(){
+        return weaponB;
+    }
+    public Weapon getWeaponC(){
+        return weaponC;
+    }
+    public Weapon getWeaponD(){
+        return weaponD;
+    }
+    public void SetFiring(bool firing){
+        this.firing = firing;
+    }
+    public void releaseTrigger(){
+        singleShotFired = false;
+    }
 
     // ===========================================================
     //                       ALL THINGS AMMO
