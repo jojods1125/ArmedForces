@@ -364,6 +364,7 @@ public class Arm : MonoBehaviour
     }
     public void releaseTrigger(){
         singleShotFired = false;
+        
     }
 
     // ===========================================================

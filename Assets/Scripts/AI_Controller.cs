@@ -8,6 +8,8 @@ public class AI_Controller : MonoBehaviour
 
     private bool follow;
     private Vector3 targetPos;
+    private Vector3 previousPos;
+    private float previousTime;
 
     public Player self;
     public Player enemy;
@@ -16,17 +18,20 @@ public class AI_Controller : MonoBehaviour
 
     public float followDist;
     public float stoppingDist;
+    public float stuckDist;
 
     public float mapWidth;
     public float mapHeight;
-
     public float safeSpeed;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         follow = true;
         targetPos = self.transform.position;
+        previousPos = self.transform.position;
+        previousTime = Time.time;
     }
 
     // Update is called once per frame
@@ -52,11 +57,41 @@ public class AI_Controller : MonoBehaviour
             posAdjust(new Vector3(0,-1,0));
             return;
         }
+
+
+//Check if you are stuck
+            if(follow && Time.time > previousTime + 1){       
+                if(Vector3.Magnitude(self.transform.position - previousPos) < stuckDist){
+                    Vector3 stuckAngle = Vector3.Normalize(targetPos - self.transform.position);
+                    if(Mathf.Abs(stuckAngle.x) > Mathf.Abs(stuckAngle.y)){
+                        if(self.transform.position.y < 0){
+                            posAdjust(new Vector3(0,-1,0));
+                        }else{
+                            posAdjust(new Vector3(0,1,0));
+                        }        
+                    }else{
+                        if(self.transform.position.x < 0){
+                            posAdjust(new Vector3(-1,0,0));
+                        }else{
+                            posAdjust(new Vector3(1,0,0));
+                        }
+                    }
+                    return;
+                }
+                previousTime = Time.time;
+                previousPos = self.transform.position;
+            }
+
+
+
+        //Check if you need to chase
         if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > stoppingDist + followDist){
             follow = true;
-        }
-        
+        }       
+
+
         if(follow){
+            
             backArm.Switch(backArm.getWeaponA());
             frontArm.Switch(frontArm.getWeaponA());
             if(enemy.transform.position.x < self.transform.position.x){
@@ -82,11 +117,12 @@ public class AI_Controller : MonoBehaviour
     }
 
     private void posAdjust(Vector3 direction){
+        print("1");
             backArm.Switch(backArm.getWeaponB());
             backArm.Aim(direction);
             backArm.SetFiring(true);
             backArm.releaseTrigger();
-            
+
             frontArm.Switch(frontArm.getWeaponB());
             frontArm.Aim(direction);
             frontArm.SetFiring(true);
