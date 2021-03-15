@@ -193,7 +193,7 @@ public class Arm : NetworkBehaviour
                 Vector3 projectilePath = new Vector3(barrel.transform.position.x, barrel.transform.position.y);
 
                 // Spawns the projectile in the server
-                CmdSpawnProjectile(launcher.projectilePrefabName, projectilePath, launcher.projectilePower, launcher.explosionRadius, launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
+                CmdSpawnProjectile(launcher.projectilePrefab.name, projectilePath, launcher.projectilePower, launcher.explosionRadius, launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
 
                 // Pushes player
                 player.EnactForce(barrel.transform.up.normalized * -launcher.pushback);
