@@ -51,6 +51,14 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+    }
+
+    /// <summary>
+    /// Update the UI to show which weapons are in the loadout
+    /// </summary>
+    public void UpdateWeaponIcons()
+    {
         // Gather all the image references
         Image[] weapons_L_images = new Image[] { weaponA_L_image, weaponB_L_image, weaponC_L_image, weaponD_L_image };
         Image[] weapons_R_images = new Image[] { weaponA_R_image, weaponB_R_image, weaponC_R_image, weaponD_R_image };
@@ -69,7 +77,6 @@ public class UIManager : MonoBehaviour
                 weapons_R_images[i].sprite = GameManager.Instance().mainPlayer.frontArmWeapons[i].icon;
             }
         }
-
     }
 
 

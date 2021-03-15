@@ -74,7 +74,6 @@ public class Player : NetworkBehaviour
     [ClientRpc]
     public void RpcKill(int killerID)
     {
-
         if (!dying)
         {
             dying = true;
@@ -121,7 +120,6 @@ public class Player : NetworkBehaviour
     // ===========================================================
 
 
-    // Will be overridden by Player_Controlled's start, so include anything in here in there
     protected void Start()
     {
         playerID = GameManager.Instance().getID();
@@ -135,6 +133,7 @@ public class Player : NetworkBehaviour
         {
             GameManager.Instance().mainPlayer = this;
             uiManager.UpdateHealthBar(currHealth / maxHealth);
+            uiManager.UpdateWeaponIcons();
         }
     }
 
@@ -167,12 +166,8 @@ public class Player : NetworkBehaviour
     /// Adds the specified force to the player's RigidBody
     /// </summary>
     /// <param name="force"> Force to add to the player </param>
-    //[ClientRpc]
     public void EnactForce(Vector3 force)
     {
-        //if (!isLocalPlayer)
-        //    return;
-
         rb.AddForce(force);
     }
 
