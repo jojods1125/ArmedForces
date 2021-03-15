@@ -84,12 +84,18 @@ public class GameManager : MonoBehaviour
         gameTime++;
     }
 
-    public void trackDeath(int killer, int deceased){
+    public void trackDeath(int killer, int deceased, WeaponType weaponType){
         // Who killed who
         // Debug.Log("Killer: " + killer + ", Deceased: " + deceased);
         deaths[deceased]++;
-        if(killer != deceased && killer != -1){
+        if(killer != deceased && killer != -1) 
+        {
             kills[killer]++;
+            // if the killer is the mainPlayer
+            if (killer == mainPlayer.playerID)
+            {
+                AchievementManager.Instance().OnEvent(AchievementType.kills, 1, weaponType);
+            }
         }
 
         // Check counts

@@ -63,7 +63,7 @@ public class Achievement : ScriptableObject
     /// <returns>True if passed, False if not</returns>
     public bool CheckValue(int i)
     {
-        if (currentValue >= activationValues[i])
+        if ( ( i < activationValues.Length ) && (currentValue >= activationValues[i]) )
             return true;
         return false;
     }
@@ -75,10 +75,19 @@ public class Achievement : ScriptableObject
     /// <returns> True if milestone met, False otherwise </returns>
     public bool CheckNext ()
     {
-        if ( CheckValue(nextTier) )
+        if ( nextTier < activationValues.Length && CheckValue(nextTier) )
         {
             nextTier++;
-            return true;
+            Debug.Log(achievementMessage + " Achieved: " + activationValues[nextTier - 1] + "\n Total: " + currentValue);
+            return CheckNext() || true;
+        }
+        else if ( nextTier >= activationValues.Length )
+        {
+            // should be complete if at this point
+            if ( !achieved )
+            {
+                IsComplete();
+            }
         }
         return false;
     }
