@@ -69,7 +69,15 @@ public class Arm : NetworkBehaviour
     }
 
 
-    public void DrawBullet(Vector3 start, Vector3 end)
+    [Command]
+    public void CmdDrawBullet(Vector3 start, Vector3 end)
+    {
+        RpcDrawBullet(start, end);
+    }
+
+
+    [ClientRpc]
+    public void RpcDrawBullet(Vector3 start, Vector3 end)
     {
         LineRenderer path = Instantiate(bullet);
         Destroy(path, 0.2f);
@@ -100,7 +108,7 @@ public class Arm : NetworkBehaviour
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
             {
-                DrawBullet(barrel.transform.position, hit.point);
+                CmdDrawBullet(barrel.transform.position, hit.point);
 
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -144,7 +152,7 @@ public class Arm : NetworkBehaviour
                     // Raycasts bullet path
                     if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
                     {
-                        DrawBullet(barrel.transform.position, hit.point);
+                        CmdDrawBullet(barrel.transform.position, hit.point);
 
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
@@ -230,7 +238,7 @@ public class Arm : NetworkBehaviour
             // Calculates bullet path and draws ray
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-sprayer.spreadRange, sprayer.spreadRange), Random.Range(-sprayer.spreadRange, sprayer.spreadRange));
             ///Debug.DrawRay(barrel.transform.position, bulletPath * sprayer.sprayDistance, Color.yellow, 1);
-            DrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
+            CmdDrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
 
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit, sprayer.sprayDistance))
@@ -369,12 +377,26 @@ public class Arm : NetworkBehaviour
             equippedWeapon = weapon;
 
             // Change equipped weapon visuals
-            arm.GetComponent<MeshFilter>().mesh = weapon.mesh;
-            arm.GetComponent<MeshRenderer>().material = weapon.material;
+            CmdSwitchAppearance(weapon.mesh.name, weapon.material.name);
 
             // Update UI
             if (uiManager) uiManager.UpdateSelectedUI(armType, weaponLetters[weapon]);
         }
+    }
+
+
+    [Command]
+    public void CmdSwitchAppearance(string meshName, string materialName)
+    {
+        RpcSwitchAppearance(meshName, materialName);
+    }
+
+
+    [ClientRpc]
+    public void RpcSwitchAppearance(string meshName, string materialName)
+    {
+        arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);
+        arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
     }
 
 
