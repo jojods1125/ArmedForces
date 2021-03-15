@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Menus/L_LoadoutMenu.unity
-    guid: 309e7a2ce0fbaf343b4019e0bcc41605
-  - enabled: 1
     path: Assets/Scenes/Menus/L_MapSelectionMenu.unity
     guid: e15e16ad375f9a341a44124aadfa118a
   - enabled: 1
     path: Assets/Scenes/Menus/L_MainMenu.unity
     guid: f7b86518fcd4a1b489295dcd07a6ac44
+  - enabled: 1
+    path: Assets/Scenes/Menus/L_LoadoutMenu.unity
+    guid: 309e7a2ce0fbaf343b4019e0bcc41605
   m_configObjects: {}
