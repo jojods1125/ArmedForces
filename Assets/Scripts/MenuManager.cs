@@ -23,16 +23,27 @@ public class MenuManager : MonoBehaviour
     [Tooltip("First Selected Button on Main Menu")]
     public GameObject mainFirstButton;
     [Tooltip("First Selected Button on Achievements Menu")]
-    public GameObject AchievementsFirstButton;
+    public GameObject achievementsFirstButton;
     [Tooltip("First Selected Button on Loadout Menu")]
-    public GameObject LoadoutFirstButton;
+    public GameObject loadoutFirstButton;
     [Tooltip("First Selected Button on Offline Menu")]
     public GameObject offlineFirstButton;
+
+    [Header("Return to last Menu Button for each Menu")]
+    [Tooltip("Return to Main Button on Achievements Menu")]
+    public GameObject achievementsReturnButton;
+    [Tooltip("Return to Main Button on Loadout Menu")]
+    public GameObject loadoutReturnButton;
+    [Tooltip("Return to Main Button on Offline Menu")]
+    public GameObject offlineReturnButton;
 
     // Current Menu on
     private GameObject currentMenu;
     // Last visited Menu
     private GameObject lastVisitedMenu;
+
+    // Is the user in a menu or playing
+    private bool playing = false;
 
     // Start is called before the first frame update
     void Start()
@@ -49,16 +60,32 @@ public class MenuManager : MonoBehaviour
             // PauseUnpause();
         }
 
-/*        // Return to last seen Menu
-        if ( Gamepad.current[GamepadButton.B].isPressed )
+        // Select "Return to Main" button based on screen
+        if ( !playing && Gamepad.current[GamepadButton.B].isPressed && currentMenu != MainMenu )
         {
-            lastVisitedMenu.SetActive( true );
-            GameObject temp = lastVisitedMenu;
-            lastVisitedMenu = currentMenu;
-            currentMenu = temp;
+            if ( currentMenu == AchievementsMenu )
+            {
+                // Clear selected object
+                EventSystem.current.SetSelectedGameObject(null);
+                // Set button to OfflineFirst
+                EventSystem.current.SetSelectedGameObject(achievementsReturnButton);
+            }
+            else if (currentMenu == LoadoutMenu)
+            {
+                // Clear selected object
+                EventSystem.current.SetSelectedGameObject(null);
+                // Set button to OfflineFirst
+                EventSystem.current.SetSelectedGameObject(loadoutReturnButton);
+            }
+            else if(currentMenu == OfflineMenu)
+            {
+                // Clear selected object
+                EventSystem.current.SetSelectedGameObject(null);
+                // Set button to OfflineFirst
+                EventSystem.current.SetSelectedGameObject(offlineReturnButton);
+            }
 
-
-        }*/
+        }
 
     }
 
@@ -87,7 +114,7 @@ public class MenuManager : MonoBehaviour
         // Clear selected object
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to AchievementFirst
-        EventSystem.current.SetSelectedGameObject(AchievementsFirstButton);
+        EventSystem.current.SetSelectedGameObject(achievementsFirstButton);
 
     }
 
@@ -111,7 +138,7 @@ public class MenuManager : MonoBehaviour
         // Clear selected object
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to LoadoutFirst
-        EventSystem.current.SetSelectedGameObject(LoadoutFirstButton);
+        EventSystem.current.SetSelectedGameObject(loadoutFirstButton);
     }
 
     /// <summary>
