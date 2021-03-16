@@ -12,12 +12,13 @@ public class MenuManager : MonoBehaviour
     [Header("Menus to link to")]
     [Tooltip("Main Menu link")]
     public GameObject MainMenu;
+    [Tooltip("Offline Menu link")]
+    public GameObject OfflineMenu;
     [Tooltip("Achievements Menu link")]
     public GameObject AchievementsMenu;
     [Tooltip("Loadout Menu link")]
     public GameObject LoadoutMenu;
-    [Tooltip("Offline Menu link")]
-    public GameObject OfflineMenu;
+    
 
     [Header("First Selected Button for each Menu")]
     [Tooltip("First Selected Button on Main Menu")]
@@ -49,6 +50,12 @@ public class MenuManager : MonoBehaviour
     void Start()
     {
         lastVisitedMenu = MainMenu;
+
+        // Clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        // Set button to MainFirst
+        EventSystem.current.SetSelectedGameObject(achievementsReturnButton);
+
     }
 
     private void FixedUpdate()
@@ -91,6 +98,7 @@ public class MenuManager : MonoBehaviour
 
     /// <summary>
     /// Turns the OfflineMenu active 
+	/// Clears and sets 1st button to active
     /// </summary>
     public void OfflineMode()
     {
@@ -104,7 +112,8 @@ public class MenuManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Turns the OfflineMenu active 
+    /// Turns the AchievementsMenu active 
+	/// Clears and sets 1st button to active
     /// </summary>
     public void Achievements()
     {
@@ -119,15 +128,16 @@ public class MenuManager : MonoBehaviour
     }
 
     /// <summary>
-	/// Change to the Map Selection scene
+	/// Change to the Lobby scene (new menu layout)
 	/// </summary>
-    public void MapSelection()
+    public void LoadLobby()
 	{
-        SceneManager.LoadScene( "L_MapSelectionMenu" );
+        SceneManager.LoadScene( "L_LobbyMenu" );
 	}
 
     /// <summary>
 	/// Change to the Weapon Loadout scene
+	/// Clears and sets 1st button to active
 	/// </summary>
     public void Loadout()
 	{
@@ -149,6 +159,10 @@ public class MenuManager : MonoBehaviour
         Application.Quit();
 	}
 
+    /// <summary>
+	/// Returns to the Main Menu
+	/// Deactivates other menus and activates Main with its 1st button
+	/// </summary>
     public void ReturnToMain()
 	{
         // SceneManager.LoadScene( "L_MainMenu" );
