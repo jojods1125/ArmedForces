@@ -298,7 +298,7 @@ public class Arm : MonoBehaviour
 
 
     // Aims the arm based on joystick angle
-    protected void Aim(Vector3 aimVal)
+    public void Aim(Vector3 aimVal)
     {
         float degrees = Vector3.Angle(Vector3.up, transform.position + (aimVal * 1000));
         Vector3 eulerRotation = transform.rotation.eulerAngles;
@@ -308,9 +308,10 @@ public class Arm : MonoBehaviour
             transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, degrees);
     }
 
+    
 
     // Switches the arm's currently equipped weapon
-    protected void Switch(Weapon weapon)
+    public void Switch(Weapon weapon)
     {
         if (weapon)
         {
@@ -346,7 +347,25 @@ public class Arm : MonoBehaviour
         weaponD = player.backArmWeapons[3];
     }
 
-
+    public Weapon getWeaponA(){
+        return weaponA;
+    }
+    public Weapon getWeaponB(){
+        return weaponB;
+    }
+    public Weapon getWeaponC(){
+        return weaponC;
+    }
+    public Weapon getWeaponD(){
+        return weaponD;
+    }
+    public void SetFiring(bool firing){
+        this.firing = firing;
+    }
+    public void releaseTrigger(){
+        singleShotFired = false;
+        
+    }
 
     // ===========================================================
     //                       ALL THINGS AMMO
