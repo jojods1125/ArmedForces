@@ -54,7 +54,7 @@ public class MenuManager : MonoBehaviour
         // Clear selected object
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to MainFirst
-        EventSystem.current.SetSelectedGameObject(achievementsReturnButton);
+        EventSystem.current.SetSelectedGameObject(mainFirstButton);
 
     }
 
@@ -185,5 +185,17 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to MainFirst
         EventSystem.current.SetSelectedGameObject(mainFirstButton);
+    }
+
+    /// <summary>
+    /// Load the Scene for {{Stage 1}}
+    /// </summary>
+    /// <param name="namw"> Name of the Scene to load </param>
+    public void LoadScene( string name )
+    {
+        // load scene
+        SceneManager.LoadScene( name );
+        // clear selected
+        EventSystem.current.SetSelectedGameObject( null );
     }
 }

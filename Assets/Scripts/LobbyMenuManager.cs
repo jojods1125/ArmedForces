@@ -29,14 +29,16 @@ public class LobbyMenuManager : MonoBehaviour
     [Header("Input Field")]
     [Tooltip("Server Code")]
     public GameObject serverInput;
-
     // Code to join the server
     private string serverCode = "";
+
+    // Current Menu on
+    private GameObject currentMenu;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        currentMenu = LobbyMenu;
     }
 
     // Update is called once per frame
@@ -51,7 +53,16 @@ public class LobbyMenuManager : MonoBehaviour
     public void HostServer()
 	{
         // Joseph's networking stuff
-	}
+
+
+        HostMenu.SetActive(true);
+        currentMenu = HostMenu;
+
+        // Clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        // Set button to OfflineFirst
+        EventSystem.current.SetSelectedGameObject(hostFirstButton);
+    }
 
     /// <summary>
     /// Assigns the server code based on the inputField

@@ -799,7 +799,7 @@ MonoBehaviour:
   JoinMenu: {fileID: 0}
   PreGameMenu: {fileID: 0}
   lobbyFirstButton: {fileID: 1399914311}
-  hostFirstButton: {fileID: 0}
+  hostFirstButton: {fileID: 2135263393}
   joinFirstButton: {fileID: 0}
   pregameFirstButton: {fileID: 0}
   serverInput: {fileID: 2117154865}
@@ -2318,7 +2318,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1957910304
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2588,12 +2588,12 @@ GameObject:
   - component: {fileID: 2009601542}
   - component: {fileID: 2009601541}
   m_Layer: 5
-  m_Name: Map Selection Menu
+  m_Name: Host Menu (Select Map)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2009601540
 RectTransform:
   m_ObjectHideFlags: 0
