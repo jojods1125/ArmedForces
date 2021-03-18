@@ -18,7 +18,15 @@ public class MenuManager : MonoBehaviour
     public GameObject AchievementsMenu;
     [Tooltip("Loadout Menu link")]
     public GameObject LoadoutMenu;
-    
+    [Tooltip("Pregame Menu Link")]
+    public GameObject PregameMenu;
+
+    [Header("Menus")]
+    [Tooltip("Group of all Menus")]
+    public GameObject menuGroup;
+
+    // internal list of menus
+    private List<GameObject> menuList = new List<GameObject>();
 
     [Header("First Selected Button for each Menu")]
     [Tooltip("First Selected Button on Main Menu")]
@@ -29,6 +37,8 @@ public class MenuManager : MonoBehaviour
     public GameObject loadoutFirstButton;
     [Tooltip("First Selected Button on Offline Menu")]
     public GameObject offlineFirstButton;
+    [Tooltip("First Selected Button on Pregame Menu")]
+    public GameObject pregameFirstButton;
 
     [Header("Return to last Menu Button for each Menu")]
     [Tooltip("Return to Main Button on Achievements Menu")]
@@ -37,6 +47,8 @@ public class MenuManager : MonoBehaviour
     public GameObject loadoutReturnButton;
     [Tooltip("Return to Main Button on Offline Menu")]
     public GameObject offlineReturnButton;
+    [Tooltip("Return to Map Selection Button on Pregame Menu")]
+    public GameObject pregameReturnButton;
 
     // Current Menu on
     private GameObject currentMenu;
@@ -46,10 +58,18 @@ public class MenuManager : MonoBehaviour
     // Is the user in a menu or playing
     private bool playing = false;
 
+    // Map selected
+    private string mapName;
+
     // Start is called before the first frame update
     void Start()
     {
         lastVisitedMenu = MainMenu;
+
+        foreach (Transform child in menuGroup.transform)
+		{
+            menuList.Add( child.gameObject );
+		}
 
         // Clear selected object
         EventSystem.current.SetSelectedGameObject(null);
@@ -102,7 +122,14 @@ public class MenuManager : MonoBehaviour
     /// </summary>
     public void OfflineMode()
     {
+        // set inactive if active
+        if (PregameMenu.activeSelf)
+		{
+            PregameMenu.SetActive( false );
+		}
+
         OfflineMenu.SetActive( true );
+        //setActiveMenu( OfflineMenu );
         currentMenu = OfflineMenu;
 
         // Clear selected object
@@ -118,6 +145,7 @@ public class MenuManager : MonoBehaviour
     public void Achievements()
     {
         AchievementsMenu.SetActive(true);
+        //setActiveMenu( AchievementsMenu );
         currentMenu = AchievementsMenu;
 
         // Clear selected object
@@ -141,14 +169,33 @@ public class MenuManager : MonoBehaviour
 	/// </summary>
     public void Loadout()
 	{
-        // SceneManager.LoadScene( "L_LoadoutMenu" );
         LoadoutMenu.SetActive( true );
+        //setActiveMenu( LoadoutMenu );
         currentMenu = LoadoutMenu;
 
         // Clear selected object
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to LoadoutFirst
         EventSystem.current.SetSelectedGameObject(loadoutFirstButton);
+    }
+
+    /// <summary>
+    /// Changes the active menu to the Pregame menu
+    /// Sets the mapName to the given Map name
+    /// </summary>
+    /// <param name="mapName"> Name of the Map choosen </param>
+    public void Pregame( string mapName )
+	{
+        PregameMenu.SetActive( true );
+        //setActiveMenu( PregameMenu );
+        currentMenu = PregameMenu;
+
+        this.mapName = mapName;
+
+        // Clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        // Set button to LoadoutFirst
+        EventSystem.current.SetSelectedGameObject(pregameFirstButton);
     }
 
     /// <summary>
@@ -165,19 +212,7 @@ public class MenuManager : MonoBehaviour
 	/// </summary>
     public void ReturnToMain()
 	{
-        // SceneManager.LoadScene( "L_MainMenu" );
-        if ( LoadoutMenu.activeSelf )
-        {
-            LoadoutMenu.SetActive( false );
-        }
-        if ( AchievementsMenu.activeSelf )
-        {
-            AchievementsMenu.SetActive( false );
-        }
-        if ( OfflineMenu.activeSelf )
-        {
-            OfflineMenu.SetActive( false );
-        }
+        setActiveMenu( MainMenu );
 
         currentMenu = MainMenu;
 
@@ -188,14 +223,41 @@ public class MenuManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Loads the map that was selected
+    /// </summary>
+    public void LoadMap()
+	{
+        LoadScene( mapName );
+	}
+
+    /// <summary>
     /// Load the Scene for {{Stage 1}}
     /// </summary>
-    /// <param name="namw"> Name of the Scene to load </param>
+    /// <param name="name"> Name of the Scene to load </param>
     public void LoadScene( string name )
     {
         // load scene
         SceneManager.LoadScene( name );
         // clear selected
         EventSystem.current.SetSelectedGameObject( null );
+    }
+
+    /// <summary>
+    /// Helper method to deactivate any menu that is not supposed to be displayed
+    /// </summary>
+    /// <param name="menu"> Menu to display </param>
+    private void setActiveMenu( GameObject menu )
+	{
+        foreach (GameObject curr in menuList)
+		{
+            if (curr.Equals( menu ))
+			{
+                curr.SetActive( true );
+			}
+            else if (menu.activeSelf)
+			{
+                curr.SetActive( false );
+			}
+		}
     }
 }
