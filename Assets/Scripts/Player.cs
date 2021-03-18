@@ -131,6 +131,7 @@ public class Player : NetworkBehaviour
 
         if (uiManager)
         {
+            Debug.LogError("ID is " + playerID);
             GameManager.Instance().mainPlayer = this;
             uiManager.UpdateHealthBar(currHealth / maxHealth);
             uiManager.UpdateWeaponIcons();

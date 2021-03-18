@@ -16,13 +16,15 @@ public class GameManager : NetworkBehaviour
 
     private List<Vector3> spawnPoints = new List<Vector3>();
 
+
     private int playerCount = 0;
 
+    [SyncVar]
     private int gameTime = 0;
 
-    private Dictionary<int,int> kills;
+    private Dictionary<int,int> kills = new Dictionary<int, int>();
 
-    private Dictionary<int,int> deaths;
+    private Dictionary<int,int> deaths = new Dictionary<int, int>();
 
 
 
@@ -66,10 +68,14 @@ public class GameManager : NetworkBehaviour
         {
             spawnPoints.Add(child.position);
         }
+    }
+
+    private void Start()
+    {
+        if (!isServer)
+            return;
 
         InvokeRepeating("incrementTime", 0, 1);
-        kills = new Dictionary<int, int>();
-        deaths = new Dictionary<int, int>();
     }
 
     public int getID(){
@@ -83,7 +89,9 @@ public class GameManager : NetworkBehaviour
 
     void incrementTime(){
         gameTime++;
+        ServerMessage("Game Time is " + gameTime);
     }
+
 
     public void trackDeath(int killer, int deceased){
         // Who killed who
@@ -93,10 +101,24 @@ public class GameManager : NetworkBehaviour
             kills[killer]++;
         }
 
+        ServerMessage("Player " + killer + " killed Player " + deceased + ". Player " + killer + "'s score is " + kills[killer]);
         // Check counts
         /*Debug.Log("Deaths: " + deaths[killer]);
         Debug.Log("Kills: " + kills[killer]);*/
     }
 
 
+    public void ServerMessage(string msg) //this will be serverside
+    {
+        if (!isServer)
+            return;
+
+        RpcServerMessage(msg);
+    }
+
+    [ClientRpc]
+    private void RpcServerMessage(string msg)//this will be clientside
+    {
+        Debug.LogError("SERVER MSG: " + msg);
+    }
 }

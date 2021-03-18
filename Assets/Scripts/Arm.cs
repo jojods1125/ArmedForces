@@ -332,12 +332,12 @@ public class Arm : NetworkBehaviour
         else if (weaponC) Switch(weaponC);
         else Switch(weaponD);
 
-        // Render equippedWeapon
-        if (equippedWeapon)
-        {
-            arm.GetComponent<MeshFilter>().mesh = equippedWeapon.mesh;
-            arm.GetComponent<MeshRenderer>().material = equippedWeapon.material;
-        }
+        //// Render equippedWeapon
+        //if (equippedWeapon)
+        //{
+        //    arm.GetComponent<MeshFilter>().mesh = equippedWeapon.mesh;
+        //    arm.GetComponent<MeshRenderer>().material = equippedWeapon.material;
+        //}
 
         // Initializes ammoRemaining dictionary for each weapon
         if (weaponA is W_Shootable gunA) ammoRemaining.Add(weaponA, gunA.ammoCapacity);

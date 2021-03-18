@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4243853697860719246}
   - component: {fileID: 4243853697860719241}
   - component: {fileID: 4243853697860719247}
+  - component: {fileID: 8708037613350168955}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -44,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e1b4acbf6c29443886a786ad10d15c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   spawnPointContainer: {fileID: 0}
   playerRespawnTimer: 3
   mainPlayer: {fileID: 0}
@@ -71,3 +74,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a6ae683c5b747374cb299fbc611b1309, type: 2}
   - {fileID: 11400000, guid: 68fa5093112a1b6459a61f3fd08947a8, type: 2}
   - {fileID: 11400000, guid: 67afc18811722d042828e8d59da92641, type: 2}
+--- !u!114 &8708037613350168955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4243853697860719240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0

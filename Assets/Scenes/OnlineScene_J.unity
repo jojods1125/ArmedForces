@@ -1820,6 +1820,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8708037613350168955, guid: 00d4a3deb04f5a8489f9f4f242154999, type: 3}
+      propertyPath: sceneId
+      value: 38591737
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00d4a3deb04f5a8489f9f4f242154999, type: 3}
 --- !u!1001 &4426586938970721828
@@ -1886,6 +1890,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5807852348749559613, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 5807852348766420316, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
       propertyPath: m_Name
       value: UI
@@ -1933,6 +1941,14 @@ PrefabInstance:
     - target: {fileID: 5807852348766420319, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807852350387620998, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8627234919913665972, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
