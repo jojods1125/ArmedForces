@@ -549,7 +549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0.05
   maxHealth: 100
   walkMomentum: 10
   maxWalkSpeed: 5
@@ -696,6 +696,7 @@ MonoBehaviour:
   barrel: {fileID: 8282234078560122467}
   player: {fileID: 3305675465212334390}
   armType: 0
+  bullet: {fileID: 0}
 --- !u!1 &9093051127276069410
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,3 +798,4 @@ MonoBehaviour:
   barrel: {fileID: 8282234077263579433}
   player: {fileID: 3305675465212334390}
   armType: 1
+  bullet: {fileID: 0}

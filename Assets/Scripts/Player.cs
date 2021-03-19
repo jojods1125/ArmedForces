@@ -31,6 +31,8 @@ public class Player : NetworkBehaviour
     //Used for differentiating each player in Game Manager
     public int playerID;
 
+    private int lastAttackedID;
+
     // UI Manager
     protected UIManager uiManager;
 
@@ -62,6 +64,7 @@ public class Player : NetworkBehaviour
             return;
 
         currHealth = Mathf.Max(currHealth - health, 0);
+        lastAttackedID = attackerID;
 
         if (currHealth == 0)
             RpcKill(attackerID);
@@ -84,7 +87,11 @@ public class Player : NetworkBehaviour
             }
 
             GameManager.Instance().Respawn(gameObject);
-            GameManager.Instance().trackDeath(killerID, playerID);
+
+            if (killerID == -1)
+                GameManager.Instance().TrackDeath(lastAttackedID, playerID);
+            else
+                GameManager.Instance().TrackDeath(killerID, playerID);
 
             gameObject.SetActive(false);
         }
@@ -92,6 +99,13 @@ public class Player : NetworkBehaviour
         // if Player_Controlled, call achievement event
         if (this is Player_Controlled)
             AchievementManager.Instance().OnEvent(AchievementType.deaths);
+    }
+
+
+    [Command]
+    public void CmdKill(int killerID)
+    {
+        RpcKill(killerID);
     }
 
 
@@ -181,6 +195,14 @@ public class Player : NetworkBehaviour
 
         rb.AddForce(force);
     }
+
+
+    public void UpdateAppearance()
+    {
+        arms[0].RpcSwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
+        arms[1].RpcSwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+    }
+
 
     /// <summary>
     /// Returns references to the Arm objects of the player

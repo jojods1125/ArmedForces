@@ -399,6 +399,10 @@ public class Arm : NetworkBehaviour
         arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
     }
 
+    public Weapon GetEquippedWeapon()
+    {
+        return equippedWeapon;
+    }
 
     // Initializes the loadout of the arm based on it being the front arm
     protected void FrontArmInitialize()

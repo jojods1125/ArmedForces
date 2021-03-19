@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4243853697860719246}
   - component: {fileID: 4243853697860719241}
-  - component: {fileID: 4243853697860719247}
   - component: {fileID: 8708037613350168955}
   m_Layer: 0
-  m_Name: Managers
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,34 +45,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0.05
   spawnPointContainer: {fileID: 0}
   playerRespawnTimer: 3
+  startingGameTime: 15
+  serverTimeStep: 0.25
   mainPlayer: {fileID: 0}
   uiManager: {fileID: 0}
---- !u!114 &4243853697860719247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4243853697860719240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2435e176e8f04634b82f44f7fd14c498, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  achievements:
-  - {fileID: 11400000, guid: 42b5b7609a5b519469deca61386f07d5, type: 2}
-  - {fileID: 11400000, guid: 815067fb76094394b83bdf8de62ddd30, type: 2}
-  - {fileID: 11400000, guid: b902b85e473381347ad17ea0a446de15, type: 2}
-  - {fileID: 11400000, guid: ab084b3ca5c07094e93a72dd84b8b70e, type: 2}
-  - {fileID: 11400000, guid: 6febab79b14c99a45b92a62e8ed6c2fd, type: 2}
-  - {fileID: 11400000, guid: 172dcd9828bf66548be68787e9ac175a, type: 2}
-  - {fileID: 11400000, guid: 9606d10a544bc0a42a25da2a090033c9, type: 2}
-  - {fileID: 11400000, guid: a6ae683c5b747374cb299fbc611b1309, type: 2}
-  - {fileID: 11400000, guid: 68fa5093112a1b6459a61f3fd08947a8, type: 2}
-  - {fileID: 11400000, guid: 67afc18811722d042828e8d59da92641, type: 2}
 --- !u!114 &8708037613350168955
 MonoBehaviour:
   m_ObjectHideFlags: 0

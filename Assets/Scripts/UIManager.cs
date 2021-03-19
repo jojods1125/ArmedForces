@@ -43,6 +43,15 @@ public class UIManager : MonoBehaviour
     [Header("Health Bar References")]
     public GameObject healthBar_bar;
 
+    [Header("Match Info References")]
+    public GameObject matchClock;
+
+    [Header("DEBUG: Player Stat References")]
+    public GameObject p1_KDR;
+    public GameObject p2_KDR;
+    public GameObject p3_KDR;
+    public GameObject p4_KDR;
+
     private Image previous_L_select;
     private Image previous_R_select;
 
