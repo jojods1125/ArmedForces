@@ -14,7 +14,10 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/L_OFFLINE.unity
-    guid: 10e2afda6552e934e957a47bc7a7aefb
+    path: Assets/Scenes/L_OfflineTest.unity
+    guid: bd2d6e5dd28ecba43bbc985a1916abfa
   m_configObjects: {}
