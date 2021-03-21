@@ -1472,9 +1472,13 @@ MonoBehaviour:
   followDist: 4
   stoppingDist: 2
   stuckDist: 1
-  mapWidth: 17
+  mapWidth: 18
   mapHeight: 8
   safeSpeed: 4
+  lowSprayerAmmo: 800
+  lowShotgunAmmo: 2
+  maxSprayerAmmo: 1000
+  maxShotgunAmmo: 10
 --- !u!114 &1586800012 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
@@ -1556,6 +1560,10 @@ PrefabInstance:
     - target: {fileID: 8282234077870317105, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282234077870317109, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}

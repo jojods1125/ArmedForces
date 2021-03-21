@@ -41,6 +41,19 @@ public class GameManager : MonoBehaviour
         obj.GetComponent<Player>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count - 1)]);
     }
 
+    //Returns the closest spawn point to a position
+    public Vector3 getCloseRespawnPoint(Vector3 pos)
+    {
+        Vector3 closestPoint = spawnPoints[0];
+        float closestDist = int.MaxValue;
+        foreach (Vector3 spawnPoint in spawnPoints){
+            if(Vector3.Distance(pos, spawnPoint) < closestDist){
+                closestDist = Vector3.Distance(pos, spawnPoint);
+                closestPoint = spawnPoint;
+            }
+        }
+        return closestPoint;
+    }
 
     private static GameManager instance;
 

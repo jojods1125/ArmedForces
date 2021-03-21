@@ -359,6 +359,9 @@ public class Arm : MonoBehaviour
     public Weapon getWeaponD(){
         return weaponD;
     }
+    public int getAmmo(Weapon weapon){
+        return ammoRemaining[weapon];
+    }
     public void SetFiring(bool firing){
         this.firing = firing;
     }

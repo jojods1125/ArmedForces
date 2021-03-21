@@ -6,7 +6,7 @@ public class AI_Controller : MonoBehaviour
 {
 
 
-    private bool follow;
+
     private Vector3 targetPos;
     private Vector3 previousPos;
     private float previousTime;
@@ -23,12 +23,23 @@ public class AI_Controller : MonoBehaviour
     public float mapWidth;
     public float mapHeight;
     public float safeSpeed;
+    public int lowSprayerAmmo;
+    public int lowShotgunAmmo;
+    public int maxSprayerAmmo;
+    public int maxShotgunAmmo;
     
+    
+    enum State{
+        follow,
+        reload,
+        attack
+    }
 
+    private State state;
     // Start is called before the first frame update
     void Start()
     {
-        follow = true;
+        state = State.follow;
         targetPos = self.transform.position;
         previousPos = self.transform.position;
         previousTime = Time.time;
@@ -59,65 +70,80 @@ public class AI_Controller : MonoBehaviour
         }
 
 
-//Check if you are stuck
-            if(follow && Time.time > previousTime + 1){       
-                if(Vector3.Magnitude(self.transform.position - previousPos) < stuckDist){
-                    Vector3 stuckAngle = Vector3.Normalize(targetPos - self.transform.position);
-                    if(Mathf.Abs(stuckAngle.x) > Mathf.Abs(stuckAngle.y)){
-                        if(self.transform.position.y < 0){
-                            posAdjust(new Vector3(0,-1,0));
-                        }else{
-                            posAdjust(new Vector3(0,1,0));
-                        }        
+        //Check if you are stuck
+        if(!self.IsGrounded() && Time.time > previousTime + 1){       
+            if(Vector3.Magnitude(self.transform.position - previousPos) < stuckDist){
+                Vector3 stuckAngle = Vector3.Normalize(targetPos - self.transform.position);
+                if(Mathf.Abs(stuckAngle.x) > Mathf.Abs(stuckAngle.y)){
+                    if(self.transform.position.y < 0){
+                        posAdjust(new Vector3(0,-1,0));
                     }else{
-                        if(self.transform.position.x < 0){
-                            posAdjust(new Vector3(-1,0,0));
-                        }else{
-                            posAdjust(new Vector3(1,0,0));
-                        }
+                        posAdjust(new Vector3(0,1,0));
+                    }        
+                }else{
+                    if(self.transform.position.x < 0){
+                        posAdjust(new Vector3(-1,0,0));
+                    }else{
+                        posAdjust(new Vector3(1,0,0));
                     }
-                    return;
                 }
-                previousTime = Time.time;
-                previousPos = self.transform.position;
+                return;
             }
+            previousTime = Time.time;
+            previousPos = self.transform.position;
+        }
 
-
-
-        //Check if you need to chase
-        if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > stoppingDist + followDist){
-            follow = true;
-        }       
-
-
-        if(follow){
-            
-            backArm.Switch(backArm.getWeaponA());
-            frontArm.Switch(frontArm.getWeaponA());
-            if(enemy.transform.position.x < self.transform.position.x){
-                targetPos.x = enemy.transform.position.x + followDist;
+        //Check if done reloading
+        if(state == State.reload){
+            if(Vector3.Magnitude(targetPos - self.transform.position) > stoppingDist){
+                followTarget();
             } else{
-                targetPos.x = enemy.transform.position.x - followDist;
-            }
-            targetPos.y = enemy.transform.position.y + 1;
-            Vector3 targetAngle = Vector3.Normalize(targetPos - self.transform.position);
-            targetAngle += new Vector3(0,.1f,0);
-            Vector3.Normalize(targetAngle);
-
-            frontArm.Aim(-targetAngle);
-            backArm.Aim(-targetAngle);
-            frontArm.SetFiring(true);
-            backArm.SetFiring(true);
-            if( Vector3.Magnitude(targetPos - self.transform.position) < stoppingDist){
-                follow = false;
                 frontArm.SetFiring(false);
                 backArm.SetFiring(false);
             }
-        } 
+            if(backArm.getAmmo(backArm.getWeaponA()) == maxSprayerAmmo){
+                backArm.Switch(backArm.getWeaponB());
+                frontArm.Switch(frontArm.getWeaponB());
+                if(backArm.getAmmo(backArm.getWeaponB()) == maxShotgunAmmo){
+                    state = State.follow;
+                }
+                
+            }   
+        } else if(state == State.follow){
+            followTarget();
+            //Check if you need to reload
+            if(backArm.getAmmo(backArm.getWeaponA()) < lowSprayerAmmo || backArm.getAmmo(backArm.getWeaponB()) < lowShotgunAmmo){
+                targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
+                state = State.reload;
+            }
+            //Check if other player is dead
+            else if(!enemy.isActiveAndEnabled){
+                targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
+            }
+            //Check if you need to follow
+            else if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > stoppingDist + followDist){
+                if(enemy.transform.position.x < self.transform.position.x){
+                    targetPos.x = enemy.transform.position.x + followDist;
+                } else{
+                    targetPos.x = enemy.transform.position.x - followDist;
+                }
+                targetPos.y = enemy.transform.position.y + 1;
+            }
+            //Check if you need to attack
+            else if( Vector3.Magnitude(targetPos - self.transform.position) < stoppingDist){
+                state = State.attack;     
+            }
+        }
+        else if(state == State.attack){
+            frontArm.SetFiring(false);
+            backArm.SetFiring(false);
+            if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > stoppingDist + followDist){
+                state = State.follow;
+            }
+        }              
     }
 
     private void posAdjust(Vector3 direction){
-        print("1");
             backArm.Switch(backArm.getWeaponB());
             backArm.Aim(direction);
             backArm.SetFiring(true);
@@ -128,6 +154,20 @@ public class AI_Controller : MonoBehaviour
             frontArm.SetFiring(true);
             frontArm.releaseTrigger();
 
+    }
+
+    private void followTarget(){
+            backArm.Switch(backArm.getWeaponA());
+            frontArm.Switch(frontArm.getWeaponA());
+            
+            Vector3 targetAngle = Vector3.Normalize(targetPos - self.transform.position);
+            targetAngle += new Vector3(0,.1f,0);
+            Vector3.Normalize(targetAngle);
+
+            frontArm.Aim(-targetAngle);
+            backArm.Aim(-targetAngle);
+            frontArm.SetFiring(true);
+            backArm.SetFiring(true);
     }
 }
 
