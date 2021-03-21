@@ -347,24 +347,29 @@ public class Arm : MonoBehaviour
         weaponD = player.backArmWeapons[3];
     }
 
+    //Get weaponA
     public Weapon getWeaponA(){
         return weaponA;
     }
+    //Get weaponB
     public Weapon getWeaponB(){
         return weaponB;
     }
+    //Get weaponC
     public Weapon getWeaponC(){
         return weaponC;
     }
+    //Get weaponD
     public Weapon getWeaponD(){
         return weaponD;
     }
+    //Set firing
     public void SetFiring(bool firing){
         this.firing = firing;
     }
+    //A way for the AI to "release trigger" and reset shooting
     public void releaseTrigger(){
-        singleShotFired = false;
-        
+        singleShotFired = false;  
     }
 
     // ===========================================================

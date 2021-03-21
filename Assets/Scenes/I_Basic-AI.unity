@@ -843,7 +843,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: fbaf160863214a247b251b4a76e45415, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: fbaf160863214a247b251b4a76e45415, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1469,11 +1469,11 @@ MonoBehaviour:
   enemy: {fileID: 871795642}
   frontArm: {fileID: 1184613263}
   backArm: {fileID: 221891331}
-  followDist: 4
+  followDist: 3
   stoppingDist: 2
   stuckDist: 1
   mapWidth: 17
-  mapHeight: 8
+  mapHeight: 9
   safeSpeed: 4
 --- !u!114 &1586800012 stripped
 MonoBehaviour:
