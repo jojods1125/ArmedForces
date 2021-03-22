@@ -74,8 +74,8 @@ public class Player : NetworkBehaviour
         // Decreases health and prevents invalid values
         currHealth = Mathf.Min(Mathf.Max(currHealth - health, 0), maxHealth);
 
-        // Sets last attacked ID to the attacker
-        if (lastAttackedID != playerID || lastAttackedID != -1)
+        // Sets last attacked ID to the attacker as long as it's not the player or an external object
+        if (attackerID != playerID && attackerID != -1)
             lastAttackedID = attackerID;
 
         // If the Player runs out of health, kill them
@@ -126,13 +126,14 @@ public class Player : NetworkBehaviour
             if (currHealth != 0)
             {
                 currHealth = 0;
+                if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
             }
 
             // Activate the GameManager's respawn process
             GameManager.Instance().Respawn(gameObject);
 
             // Updates KDR based on who killed; if a self-kill, gives kill to last attacker
-            if (killerID == -1)
+            if (killerID == -1 || killerID == playerID)
                 CmdTrackDeath(lastAttackedID, playerID);
             else
                 CmdTrackDeath(killerID, playerID);
