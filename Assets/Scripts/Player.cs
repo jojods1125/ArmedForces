@@ -33,6 +33,7 @@ public class Player : NetworkBehaviour
     public int playerID;
 
     // Last player ID to have attacked, reset on death
+    [SyncVar]
     private int lastAttackedID;
 
     // UI Manager
@@ -63,6 +64,7 @@ public class Player : NetworkBehaviour
     /// Decreases the player's health by health and kills if at 0 (must call from server)
     /// </summary>
     /// <param name="health"> Amount to decrease health by </param>
+    /// <param name="attackerID"> ID of the attacker </param>
     public void DecreaseHealth(float health, int attackerID)
     {
         // Only calculate damage on the server
@@ -71,9 +73,9 @@ public class Player : NetworkBehaviour
 
         // Decreases health and prevents invalid values
         currHealth = Mathf.Min(Mathf.Max(currHealth - health, 0), maxHealth);
-        
+
         // Sets last attacked ID to the attacker
-        if (lastAttackedID != playerID)
+        if (lastAttackedID != playerID || lastAttackedID != -1)
             lastAttackedID = attackerID;
 
         // If the Player runs out of health, kill them
@@ -120,11 +122,10 @@ public class Player : NetworkBehaviour
         {
             dying = true;
 
-            // If health still exists, snuff it out
+            // If life still exists, snuff it out
             if (currHealth != 0)
             {
                 currHealth = 0;
-                //if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
             }
 
             // Activate the GameManager's respawn process
@@ -135,9 +136,6 @@ public class Player : NetworkBehaviour
                 CmdTrackDeath(lastAttackedID, playerID);
             else
                 CmdTrackDeath(killerID, playerID);
-
-            // Resets the last attacker to self
-            lastAttackedID = playerID;
 
             // Deactivates the GameObject
             gameObject.SetActive(false);
@@ -158,6 +156,9 @@ public class Player : NetworkBehaviour
     void CmdTrackDeath(int killerID, int playerID)
     {
         GameManager.Instance().TrackDeath(killerID, playerID);
+
+        // Resets the last attacker to self
+        lastAttackedID = playerID;
     }
 
 

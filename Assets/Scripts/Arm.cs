@@ -16,16 +16,23 @@ public enum ArmType
 
 public class Arm : NetworkBehaviour
 {
+    [Header("Local References")]
+
     [Tooltip("The arm GameObject")]
     public GameObject arm;
     [Tooltip("Tip of the arm, where shots emit from")]
     public GameObject barrel;
     [Tooltip("Player character reference")]
     public Player player;
+
+
+    [Header("Arm Data")]
+
     [Tooltip("Whether the arm uses the player's Front Arm or Back Arm weapons")]
     public ArmType armType;
     [Tooltip("Bullet prefab reference")]
     public LineRenderer bullet;
+
 
     /// <summary> Whether or not the player is pressing the fire trigger </summary>
     protected bool firing = false;
@@ -59,7 +66,7 @@ public class Arm : NetworkBehaviour
 
 
     // ===========================================================
-    //                      ATTACKS AND DAMAGE                    
+    //                      ATTACKS AND DAMAGE
     // ===========================================================
 
     /// <summary>
@@ -343,7 +350,7 @@ public class Arm : NetworkBehaviour
 
 
     // ===========================================================
-    //                  ARM CONTROLS  AND VISUALS                 
+    //                  ARM CONTROLS  AND VISUALS
     // ===========================================================
 
     // Start is called before the first frame update

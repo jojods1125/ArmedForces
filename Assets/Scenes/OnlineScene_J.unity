@@ -1956,26 +1956,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3156680298146525829, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3156680298146525829, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3156680298146525829, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3156680298146525829, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3156680298146525829, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
-      propertyPath: m_Pivot.x
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5807852348749559613, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
