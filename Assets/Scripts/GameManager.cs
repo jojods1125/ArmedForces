@@ -211,6 +211,11 @@ public class GameManager : NetworkBehaviour
         if (killer != deceased && killer != -1)
         {
             kills[killer]++;
+            // if the killer is the mainPlayer
+            if (killer == mainPlayer.playerID)
+            {
+                AchievementManager.Instance().OnEvent(AchievementType.kills, 1, weaponType);
+            }
         }
 
         /// TODO: MAKE THIS WHEN THE UI GETS UPDATED (?)  ==> ALSO UPDATE ON CONNECTION IF DOING THIS <==

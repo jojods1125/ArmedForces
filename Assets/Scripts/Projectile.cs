@@ -70,7 +70,7 @@ public class Projectile : NetworkBehaviour
                     {
                         float damageMultiplier = 1 / (explosionRadius / (explosionRadius - Vector3.Distance(exploded[i].ClosestPoint(gameObject.transform.position), gameObject.transform.position)));
                         damageMultiplier = Mathf.Min(Mathf.Max(damageMultiplier, 0), 1);
-                        exploded[i].gameObject.GetComponent<Player>().DecreaseHealth(coreDamage * damageMultiplier, playerID);
+                        exploded[i].gameObject.GetComponent<Player>().DecreaseHealth(coreDamage * damageMultiplier, playerID, WeaponType.launcher);
                     }
 
                     // Add explosion force to rigidbody if exists
@@ -98,7 +98,7 @@ public class Projectile : NetworkBehaviour
                 // Player take damage
                 if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    other.gameObject.GetComponent<Player>().DecreaseHealth(coreDamage, playerID);
+                    other.gameObject.GetComponent<Player>().DecreaseHealth(coreDamage, playerID, WeaponType.launcher);
                 }
 
                 // Give clients 0.5 seconds to catch up to server, then destroy

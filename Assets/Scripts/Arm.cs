@@ -384,7 +384,7 @@ public class Arm : NetworkBehaviour
 
 
     // Aims the arm based on joystick angle
-    protected void Aim(Vector3 aimVal)
+    public void Aim(Vector3 aimVal)
     {
         if (!Application.isFocused)
             return;
@@ -397,9 +397,10 @@ public class Arm : NetworkBehaviour
             arm.transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, degrees);
     }
 
+    
 
     // Switches the arm's currently equipped weapon
-    protected void Switch(Weapon weapon)
+    public void Switch(Weapon weapon)
     {
         if (!Application.isFocused)
             return;
@@ -475,7 +476,30 @@ public class Arm : NetworkBehaviour
         weaponD = player.backArmWeapons[3];
     }
 
-
+    //Get weaponA
+    public Weapon getWeaponA(){
+        return weaponA;
+    }
+    //Get weaponB
+    public Weapon getWeaponB(){
+        return weaponB;
+    }
+    //Get weaponC
+    public Weapon getWeaponC(){
+        return weaponC;
+    }
+    //Get weaponD
+    public Weapon getWeaponD(){
+        return weaponD;
+    }
+    //Set firing
+    public void SetFiring(bool firing){
+        this.firing = firing;
+    }
+    //A way for the AI to "release trigger" and reset shooting
+    public void releaseTrigger(){
+        singleShotFired = false;  
+    }
 
     // ===========================================================
     //                       ALL THINGS AMMO
