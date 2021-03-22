@@ -26,16 +26,6 @@ public class AchievementUIManager : MonoBehaviour
         // Go through all register Achievements
         foreach (Achievement a in AchievementManager.Instance().achievements)
         {
-            /*// add correct toString
-            if (a is TypedAchievement)
-            {
-                achievementDesc.Add(((TypedAchievement)a).ToString());
-            }
-            else
-            {
-                achievementDesc.Add(a.ToString());
-            }*/
-
             // Create a GameObject based on achDisplay prefab
             GameObject curr = Instantiate(achievementPrefab, content.transform);
 

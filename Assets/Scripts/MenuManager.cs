@@ -13,7 +13,7 @@ public class MenuManager : MonoBehaviour
     [Tooltip("Main Menu link")]
     public GameObject MainMenu;
     [Tooltip("Offline Menu link")]
-    public GameObject OfflineMenu;
+    public GameObject TrainingMenu;
     [Tooltip("Achievements Menu link")]
     public GameObject AchievementsMenu;
     [Tooltip("Loadout Menu link")]
@@ -36,7 +36,7 @@ public class MenuManager : MonoBehaviour
     [Tooltip("First Selected Button on Loadout Menu")]
     public GameObject loadoutFirstButton;
     [Tooltip("First Selected Button on Offline Menu")]
-    public GameObject offlineFirstButton;
+    public GameObject trainingFirstButton;
     [Tooltip("First Selected Button on Pregame Menu")]
     public GameObject pregameFirstButton;
 
@@ -46,7 +46,7 @@ public class MenuManager : MonoBehaviour
     [Tooltip("Return to Main Button on Loadout Menu")]
     public GameObject loadoutReturnButton;
     [Tooltip("Return to Main Button on Offline Menu")]
-    public GameObject offlineReturnButton;
+    public GameObject trainingReturnButton;
     [Tooltip("Return to Map Selection Button on Pregame Menu")]
     public GameObject pregameReturnButton;
 
@@ -104,12 +104,12 @@ public class MenuManager : MonoBehaviour
                 // Set button to OfflineFirst
                 EventSystem.current.SetSelectedGameObject(loadoutReturnButton);
             }
-            else if(currentMenu == OfflineMenu)
+            else if(currentMenu == TrainingMenu)
             {
                 // Clear selected object
                 EventSystem.current.SetSelectedGameObject(null);
                 // Set button to OfflineFirst
-                EventSystem.current.SetSelectedGameObject(offlineReturnButton);
+                EventSystem.current.SetSelectedGameObject(trainingReturnButton);
             }
 
         }
@@ -120,7 +120,7 @@ public class MenuManager : MonoBehaviour
     /// Turns the OfflineMenu active 
 	/// Clears and sets 1st button to active
     /// </summary>
-    public void OfflineMode()
+    public void TrainingMode()
     {
         // set inactive if active
         if (PregameMenu.activeSelf)
@@ -128,14 +128,14 @@ public class MenuManager : MonoBehaviour
             PregameMenu.SetActive( false );
 		}
 
-        OfflineMenu.SetActive( true );
+        TrainingMenu.SetActive( true );
         //setActiveMenu( OfflineMenu );
-        currentMenu = OfflineMenu;
+        currentMenu = TrainingMenu;
 
         // Clear selected object
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to OfflineFirst
-        EventSystem.current.SetSelectedGameObject(offlineFirstButton);
+        EventSystem.current.SetSelectedGameObject(trainingFirstButton);
     }
 
     /// <summary>
