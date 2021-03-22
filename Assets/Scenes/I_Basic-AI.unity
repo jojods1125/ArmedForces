@@ -841,13 +841,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_Controlled
       objectReference: {fileID: 0}
+    - target: {fileID: 8282234077870317098, guid: fbaf160863214a247b251b4a76e45415, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: fbaf160863214a247b251b4a76e45415, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: fbaf160863214a247b251b4a76e45415, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: fbaf160863214a247b251b4a76e45415, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1469,16 +1473,18 @@ MonoBehaviour:
   enemy: {fileID: 871795642}
   frontArm: {fileID: 1184613263}
   backArm: {fileID: 221891331}
-  followDist: 4
-  stoppingDist: 2
+  followDist: 6
+  stoppingDist: 4
   stuckDist: 1
   mapWidth: 18
   mapHeight: 8
   safeSpeed: 4
-  lowSprayerAmmo: 800
+  lowSprayerAmmo: 200
   lowShotgunAmmo: 2
-  maxSprayerAmmo: 1000
+  lowAutoAmmo: 0
+  maxSprayerAmmo: 800
   maxShotgunAmmo: 10
+  maxAutoAmmo: 40
 --- !u!114 &1586800012 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
@@ -1513,6 +1519,14 @@ PrefabInstance:
       propertyPath: backArmWeapons.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
+    - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: backArmWeapons.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
+    - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: frontArmWeapons.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
     - target: {fileID: 8282234077870317098, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_Name
       value: Player_Sandbag
@@ -1523,7 +1537,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalPosition.z

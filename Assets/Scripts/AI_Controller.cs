@@ -25,8 +25,10 @@ public class AI_Controller : MonoBehaviour
     public float safeSpeed;
     public int lowSprayerAmmo;
     public int lowShotgunAmmo;
+    public int lowAutoAmmo;
     public int maxSprayerAmmo;
     public int maxShotgunAmmo;
+    public int maxAutoAmmo;
     
     
     enum State{
@@ -97,24 +99,36 @@ public class AI_Controller : MonoBehaviour
         if(state == State.reload){
             if(Vector3.Magnitude(targetPos - self.transform.position) > stoppingDist){
                 followTarget();
+                return;
             } else{
                 frontArm.SetFiring(false);
                 backArm.SetFiring(false);
             }
-            if(backArm.getAmmo(backArm.getWeaponA()) == maxSprayerAmmo){
+            if(backArm.getAmmo(backArm.getWeaponA()) >= maxSprayerAmmo){
                 backArm.Switch(backArm.getWeaponB());
                 frontArm.Switch(frontArm.getWeaponB());
-                if(backArm.getAmmo(backArm.getWeaponB()) == maxShotgunAmmo){
-                    state = State.follow;
+                backArm.releaseTrigger();
+                frontArm.releaseTrigger();
+                if(backArm.getAmmo(backArm.getWeaponB()) >= maxShotgunAmmo){
+                    backArm.Switch(backArm.getWeaponC());
+                    frontArm.Switch(frontArm.getWeaponC());
+                    backArm.releaseTrigger();
+                    frontArm.releaseTrigger();
+                    if(backArm.getAmmo(backArm.getWeaponC()) >= maxAutoAmmo){
+                        state = State.follow;
+                        return;
+                    }
+                    
                 }
                 
             }   
         } else if(state == State.follow){
             followTarget();
             //Check if you need to reload
-            if(backArm.getAmmo(backArm.getWeaponA()) < lowSprayerAmmo || backArm.getAmmo(backArm.getWeaponB()) < lowShotgunAmmo){
+            if(backArm.getAmmo(backArm.getWeaponA()) <= lowSprayerAmmo || backArm.getAmmo(backArm.getWeaponB()) <= lowShotgunAmmo || backArm.getAmmo(backArm.getWeaponC()) <= lowAutoAmmo){
                 targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
                 state = State.reload;
+                return;
             }
             //Check if other player is dead
             else if(!enemy.isActiveAndEnabled){
@@ -131,14 +145,29 @@ public class AI_Controller : MonoBehaviour
             }
             //Check if you need to attack
             else if( Vector3.Magnitude(targetPos - self.transform.position) < stoppingDist){
-                state = State.attack;     
+                state = State.attack;
+                return;     
             }
         }
         else if(state == State.attack){
-            frontArm.SetFiring(false);
-            backArm.SetFiring(false);
+            //Check if you need to reload
+            if(backArm.getAmmo(backArm.getWeaponA()) <= lowSprayerAmmo || backArm.getAmmo(backArm.getWeaponB()) <= lowShotgunAmmo || backArm.getAmmo(backArm.getWeaponC()) <= lowAutoAmmo){
+                targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
+                state = State.reload;
+                return;
+            }
+            frontArm.SetFiring(true);
+            backArm.SetFiring(true);
+            frontArm.Switch(frontArm.getWeaponC());
+            backArm.Switch(backArm.getWeaponC());
+            Vector3 targetAngle = Vector3.Normalize(enemy.transform.position - self.transform.position);
+            targetAngle += new Vector3(0,0,0);
+            Vector3.Normalize(targetAngle);
+            frontArm.Aim(targetAngle);
+            backArm.Aim(targetAngle);
             if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > stoppingDist + followDist){
                 state = State.follow;
+                return;
             }
         }              
     }
