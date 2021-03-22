@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: A_Wins
   m_EditorClassIdentifier: 
   achievementMessage: Victory Chicken Royale Dinner!!!
-  nextTier: 0
+  nextTier: 3
   achieved: 0
   type: 2
-  currentValue: 0
+  currentValue: 20
   activationValues: 01000000050000000a00000019000000
   initialValue: 0

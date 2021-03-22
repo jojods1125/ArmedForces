@@ -70,7 +70,7 @@ public class AchievementUIManager : MonoBehaviour
             }
             // Set Progress Bar
             Transform progressBar = curr.transform.Find("Progress");
-            int maxValue = a.activationValues[a.activationValues.Length - 1];
+            float maxValue = a.activationValues[a.activationValues.Length - 1];
             progressBar.localScale = new Vector3( a.currentValue / maxValue, progressBar.localScale.y, progressBar.localScale.z );
         }
     }
@@ -78,9 +78,17 @@ public class AchievementUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        for (int i = 0; i < AchievementManager.Instance().achievements.Count; i++)
+        {
+            // Get Achievement
+            Achievement a = AchievementManager.Instance().achievements[i];
+            // Get Achievement Display
+            Transform curr = content.transform.GetChild( i );
+
+            // Set Progress Bar
+            Transform progressBar = curr.Find("Progress");
+            float maxValue = a.activationValues[a.activationValues.Length - 1];
+            progressBar.localScale = new Vector3(a.currentValue / maxValue, progressBar.localScale.y, progressBar.localScale.z);
+        }
     }
-
-
-
 }
