@@ -35,6 +35,9 @@ public class Player : NetworkBehaviour
     // Last player ID to have attacked, reset on death
     [SyncVar]
     private int lastAttackedID;
+    // Last weapon to have attacked, reset to none on death
+    [SyncVar]
+    private WeaponType lastAttackedType;
 
     // UI Manager
     protected UIManager uiManager;
@@ -56,7 +59,7 @@ public class Player : NetworkBehaviour
 
         // If you die by healing for some ungodly reason, you played yourself
         if (currHealth == 0)
-            RpcKill(playerID);
+            RpcKill(playerID, WeaponType.none);
     }
 
 
@@ -65,7 +68,8 @@ public class Player : NetworkBehaviour
     /// </summary>
     /// <param name="health"> Amount to decrease health by </param>
     /// <param name="attackerID"> ID of the attacker </param>
-    public void DecreaseHealth(float health, int attackerID)
+    /// <param name="weaponType"> Type of weapon that attacked </param>
+    public void DecreaseHealth(float health, int attackerID, WeaponType weaponType)
     {
         // Only calculate damage on the server
         if (!isServer)
@@ -76,11 +80,15 @@ public class Player : NetworkBehaviour
 
         // Sets last attacked ID to the attacker as long as it's not the player or an external object
         if (attackerID != playerID && attackerID != -1)
+        {
             lastAttackedID = attackerID;
+            lastAttackedType = weaponType;
+        }
+            
 
         // If the Player runs out of health, kill them
         if (currHealth == 0)
-            RpcKill(attackerID);
+            RpcKill(attackerID, weaponType);
     }
 
 
@@ -103,10 +111,11 @@ public class Player : NetworkBehaviour
     /// Tells the server to kill this Player
     /// </summary>
     /// <param name="killerID"> ID of the Player that killed them </param>
+    /// <param name="weaponType"> Type of weapon that killed them </param>
     [Command]
-    public void CmdKill(int killerID)
+    public void CmdKill(int killerID, WeaponType weaponType)
     {
-        RpcKill(killerID);
+        RpcKill(killerID, weaponType);
     }
 
 
@@ -114,8 +123,9 @@ public class Player : NetworkBehaviour
     /// Kills this instance of Player on every client
     /// </summary>
     /// <param name="killerID"> ID of the Player that killed them </param>
+    /// /// <param name="weaponType"> Type of weapon that killed them </param>
     [ClientRpc]
-    public void RpcKill(int killerID)
+    public void RpcKill(int killerID, WeaponType weaponType)
     {
         // Prevent double kill
         if (!dying)
@@ -134,16 +144,16 @@ public class Player : NetworkBehaviour
 
             // Updates KDR based on who killed; if a self-kill, gives kill to last attacker
             if (killerID == -1 || killerID == playerID)
-                CmdTrackDeath(lastAttackedID, playerID);
+                CmdTrackDeath(lastAttackedID, playerID, lastAttackedType);
             else
-                CmdTrackDeath(killerID, playerID);
+                CmdTrackDeath(killerID, playerID, weaponType);
 
             // Deactivates the GameObject
             gameObject.SetActive(false);
         }
 
-        // if Player_Controlled, call achievement event
-        if (this is Player_Controlled)
+        // if local player, call achievement event
+        if (isLocalPlayer)
             AchievementManager.Instance().OnEvent(AchievementType.deaths);
     }
 
@@ -153,13 +163,15 @@ public class Player : NetworkBehaviour
     /// </summary>
     /// <param name="killerID"> ID of the killer </param>
     /// <param name="playerID"> ID of the killed </param>
+    /// /// <param name="weaponType"> Type of weapon that killed them </param>
     [Command]
-    void CmdTrackDeath(int killerID, int playerID)
+    void CmdTrackDeath(int killerID, int playerID, WeaponType weaponType)
     {
-        GameManager.Instance().TrackDeath(killerID, playerID);
+        GameManager.Instance().TrackDeath(killerID, playerID, weaponType);
 
-        // Resets the last attacker to self
+        // Resets the last attacker and type
         lastAttackedID = playerID;
+        lastAttackedType = WeaponType.none;
     }
 
 

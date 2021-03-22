@@ -96,7 +96,7 @@ public class Arm : NetworkBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    CmdAttack(hit.collider.gameObject.GetComponent<Player>(), auto.bulletDamage, player.playerID, bulletPath.normalized * auto.bulletPushback);
+                    CmdAttack(hit.collider.gameObject.GetComponent<Player>(), auto.bulletDamage, player.playerID, bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
                 }
             }
 
@@ -140,7 +140,7 @@ public class Arm : NetworkBehaviour
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
-                            CmdAttack(hit.collider.gameObject.GetComponent<Player>(), semi.bulletDamage, player.playerID, bulletPath.normalized * semi.bulletPushback);
+                            CmdAttack(hit.collider.gameObject.GetComponent<Player>(), semi.bulletDamage, player.playerID, bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
                         }
                     }
 
@@ -239,7 +239,7 @@ public class Arm : NetworkBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    CmdAttack(hit.collider.gameObject.GetComponent<Player>(), sprayer.bulletDamage, player.playerID, bulletPath.normalized * sprayer.bulletPushback);
+                    CmdAttack(hit.collider.gameObject.GetComponent<Player>(), sprayer.bulletDamage, player.playerID, bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
                 }
             }
 
@@ -256,13 +256,14 @@ public class Arm : NetworkBehaviour
     /// <param name="damage"> Amount of damage dealt </param>
     /// <param name="attackerID"> Player ID dealing the damage </param>
     /// <param name="pushback"> Pushback force </param>
+    /// <param name="weaponType"> Type of weapon </param>
     [Command]
-    void CmdAttack(Player recipient, float damage, int attackerID, Vector3 pushback)
+    void CmdAttack(Player recipient, float damage, int attackerID, Vector3 pushback, WeaponType weaponType)
     {
         if (!isServer)
             return;
 
-        recipient.DecreaseHealth(damage, attackerID);
+        recipient.DecreaseHealth(damage, attackerID, weaponType);
         recipient.RpcEnactForce(pushback);
     }
 

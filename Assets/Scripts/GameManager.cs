@@ -198,9 +198,10 @@ public class GameManager : NetworkBehaviour
     /// <summary>
     /// Updates the server's kills and deaths dictionaries
     /// </summary>
-    /// <param name="killer">  </param>
-    /// <param name="deceased"></param>
-    public void TrackDeath(int killer, int deceased)
+    /// <param name="killer"> ID of the player that killed </param>
+    /// <param name="deceased"> ID of the player that died </param>
+    /// /// <param name="weaponType"> Type of weapon that killed </param>
+    public void TrackDeath(int killer, int deceased, WeaponType weaponType)
     {
         // THIS RUNS ON SERVER
         if (!isServer)
@@ -212,7 +213,7 @@ public class GameManager : NetworkBehaviour
         {
             kills[killer]++;
             // if the killer is the mainPlayer
-            if (killer == mainPlayer.playerID)
+            if (killer == localPlayer.playerID)
             {
                 AchievementManager.Instance().OnEvent(AchievementType.kills, 1, weaponType);
             }
