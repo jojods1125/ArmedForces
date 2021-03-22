@@ -28,6 +28,8 @@ public class AI_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //enemy = GameManager.Instance().localPlayer;
+
         follow = true;
         targetPos = self.transform.position;
         previousPos = self.transform.position;
@@ -37,8 +39,13 @@ public class AI_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        enemy = GameManager.Instance().localPlayer;
+
+        if (enemy == null)
+            return;
+
         //Don't fly off the Right
-        if(self.transform.position.x > mapWidth && self.GetComponent<Rigidbody>().velocity.x > safeSpeed){
+        if (self.transform.position.x > mapWidth && self.GetComponent<Rigidbody>().velocity.x > safeSpeed){
             posAdjust(new Vector3(1,0,0));
             return;
         }

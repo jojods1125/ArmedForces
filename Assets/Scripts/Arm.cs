@@ -374,10 +374,14 @@ public class Arm : NetworkBehaviour
         else Switch(weaponD);
 
         // Initializes ammoRemaining dictionary for each weapon
-        if (weaponA is W_Shootable gunA) ammoRemaining.Add(weaponA, gunA.ammoCapacity);
-        if (weaponB is W_Shootable gunB) ammoRemaining.Add(weaponB, gunB.ammoCapacity);
-        if (weaponC is W_Shootable gunC) ammoRemaining.Add(weaponC, gunC.ammoCapacity);
-        if (weaponD is W_Shootable gunD) ammoRemaining.Add(weaponD, gunD.ammoCapacity);
+        if (!ammoRemaining.ContainsKey(weaponA))
+            if (weaponA is W_Shootable gunA) ammoRemaining.Add(weaponA, gunA.ammoCapacity);
+        if (!ammoRemaining.ContainsKey(weaponB))
+            if (weaponB is W_Shootable gunB) ammoRemaining.Add(weaponB, gunB.ammoCapacity);
+        if (!ammoRemaining.ContainsKey(weaponC))
+            if (weaponC is W_Shootable gunC) ammoRemaining.Add(weaponC, gunC.ammoCapacity);
+        if (!ammoRemaining.ContainsKey(weaponD))
+            if (weaponD is W_Shootable gunD) ammoRemaining.Add(weaponD, gunD.ammoCapacity);
         
         // Starts the match with full ammo in each weapon
         FullReload();

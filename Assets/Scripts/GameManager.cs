@@ -5,10 +5,18 @@ using Mirror;
 using TMPro;
 
 
+public enum MatchType
+{
+    Training,
+    Online
+}
+
 public class GameManager : NetworkBehaviour
 {
     [Header("Match Information")]
 
+    [Tooltip("Type of match, affects instantiation")]
+    public MatchType matchType;
     [Tooltip("Number of seconds before respawn after player dies")] [Min(0)] 
     public int playerRespawnTime = 3;
     [Tooltip("Number of seconds the match will last for")] [Min(0)]
@@ -73,6 +81,11 @@ public class GameManager : NetworkBehaviour
         {
             spawnPoints.Add(child.position);
         }
+
+        if (matchType == MatchType.Training)
+        {
+            SpawnEnemy();
+        }
     }
 
 
@@ -83,6 +96,18 @@ public class GameManager : NetworkBehaviour
     }
 
 
+    void SpawnEnemy()
+    {
+        if (!isServer)
+            return;
+
+        // Instantiates a projectile prefab from the Resources/Projectiles folder
+        GameObject enemy = (GameObject)Resources.Load("AI/" + "Player_Sandbag");
+
+        // Spawns projectile across all clients
+        enemy.GetComponent<NetworkIdentity>().AssignClientAuthority(localPlayer.gameObject.GetComponent<NetworkIdentity>().connectionToClient);
+        NetworkServer.Spawn(enemy, localPlayer.gameObject);
+    }
 
     // ===========================================================
     //                      CLIENT CONNECTIONS

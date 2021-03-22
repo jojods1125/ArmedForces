@@ -29,12 +29,13 @@ public class Player : NetworkBehaviour
     private bool dying = false;
 
     //Used for differentiating each player in GameManager
-    [SyncVar]
+    [SyncVar]// [HideInInspector]
     public int playerID;
 
     // Last player ID to have attacked, reset on death
     [SyncVar]
     private int lastAttackedID;
+
     // Last weapon to have attacked, reset to none on death
     [SyncVar]
     private WeaponType lastAttackedType;
