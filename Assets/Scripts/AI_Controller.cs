@@ -34,8 +34,10 @@ public class AI_Controller : MonoBehaviour
     enum State{
         follow,
         reload,
-        attack
+        attack,
+        test
     }
+
 
     private State state;
     // Start is called before the first frame update
@@ -50,6 +52,9 @@ public class AI_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    //**
+    //Use the shotgun to avoid flying off edges
+    //**
         //Don't fly of the Right
         if(self.transform.position.x > mapWidth && self.GetComponent<Rigidbody>().velocity.x > safeSpeed){
             posAdjust(new Vector3(1,0,0));
@@ -72,8 +77,11 @@ public class AI_Controller : MonoBehaviour
         }
 
 
-        //Check if you are stuck
-        if(!self.IsGrounded() && Time.time > previousTime + 1){       
+    //**
+    //Check if you are trying to move and have not
+    //Adjust with shotgun and try again
+    //**
+        if(frontArm.getFiring() && Time.time > previousTime + 1){       
             if(Vector3.Magnitude(self.transform.position - previousPos) < stuckDist){
                 Vector3 stuckAngle = Vector3.Normalize(targetPos - self.transform.position);
                 if(Mathf.Abs(stuckAngle.x) > Mathf.Abs(stuckAngle.y)){
@@ -95,7 +103,24 @@ public class AI_Controller : MonoBehaviour
             previousPos = self.transform.position;
         }
 
-        //Check if done reloading
+    //**
+    //Check if the other player is dead
+    //If so, find safe ground and wait
+    //**
+            else if(!enemy.isActiveAndEnabled){
+                state = State.follow;
+                targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
+                targetPos.y -= 1;
+                if(Vector3.Magnitude(targetPos - self.transform.position) < stoppingDist){
+                    frontArm.SetFiring(false);
+                    backArm.SetFiring(false);
+                    return;
+                }
+            }
+
+    //**
+    //Reload State
+    //**
         if(state == State.reload){
             if(Vector3.Magnitude(targetPos - self.transform.position) > stoppingDist){
                 followTarget();
@@ -104,6 +129,8 @@ public class AI_Controller : MonoBehaviour
                 frontArm.SetFiring(false);
                 backArm.SetFiring(false);
             }
+            backArm.Switch(backArm.getWeaponA());
+            frontArm.Switch(frontArm.getWeaponA());
             if(backArm.getAmmo(backArm.getWeaponA()) >= maxSprayerAmmo){
                 backArm.Switch(backArm.getWeaponB());
                 frontArm.Switch(frontArm.getWeaponB());
@@ -121,19 +148,20 @@ public class AI_Controller : MonoBehaviour
                     
                 }
                 
-            }   
+            }
+    //**
+    //Follow State
+    //**  
         } else if(state == State.follow){
             followTarget();
             //Check if you need to reload
             if(backArm.getAmmo(backArm.getWeaponA()) <= lowSprayerAmmo || backArm.getAmmo(backArm.getWeaponB()) <= lowShotgunAmmo || backArm.getAmmo(backArm.getWeaponC()) <= lowAutoAmmo){
                 targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
+                targetPos.y -= 1;
                 state = State.reload;
                 return;
             }
-            //Check if other player is dead
-            else if(!enemy.isActiveAndEnabled){
-                targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
-            }
+            
             //Check if you need to follow
             else if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > stoppingDist + followDist){
                 if(enemy.transform.position.x < self.transform.position.x){
@@ -149,10 +177,14 @@ public class AI_Controller : MonoBehaviour
                 return;     
             }
         }
-        else if(state == State.attack){
+    //**
+    //Attack State
+    //** 
+        else if(state == State.attack){ 
             //Check if you need to reload
             if(backArm.getAmmo(backArm.getWeaponA()) <= lowSprayerAmmo || backArm.getAmmo(backArm.getWeaponB()) <= lowShotgunAmmo || backArm.getAmmo(backArm.getWeaponC()) <= lowAutoAmmo){
                 targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
+                targetPos.y -= 1;
                 state = State.reload;
                 return;
             }

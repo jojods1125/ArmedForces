@@ -73,15 +73,12 @@ public class Arm : MonoBehaviour
             Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.green, 1);
 
 
-            print("1");
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
             {
-                print(hit.collider.gameObject.layer);
-                ///Debug.Log("HIT " + hit.collider.gameObject.name);
+                //Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                   print("3");
                     hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * auto.bulletPushback);
                     hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage, player.playerID, WeaponType.auto);
                 }
@@ -368,6 +365,9 @@ public class Arm : MonoBehaviour
     }
     public void SetFiring(bool firing){
         this.firing = firing;
+    }
+    public bool getFiring(){
+        return firing;
     }
     public void releaseTrigger(){
         singleShotFired = false;

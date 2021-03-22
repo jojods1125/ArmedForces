@@ -847,11 +847,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: fbaf160863214a247b251b4a76e45415, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: fbaf160863214a247b251b4a76e45415, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: fbaf160863214a247b251b4a76e45415, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1522,22 +1522,26 @@ PrefabInstance:
     - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: backArmWeapons.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
+      objectReference: {fileID: 11400000, guid: 308df20a53b6de4478172dcc79b2e2e8, type: 2}
     - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: frontArmWeapons.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
+      objectReference: {fileID: 11400000, guid: 308df20a53b6de4478172dcc79b2e2e8, type: 2}
+    - target: {fileID: 8282234077263579432, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317098, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_Name
       value: Player_Sandbag
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6
+      value: -16
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1578,6 +1582,10 @@ PrefabInstance:
     - target: {fileID: 8282234077870317109, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_UseGravity
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282234078560122466, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
