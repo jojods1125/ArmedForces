@@ -18,7 +18,7 @@ public class GameManager : NetworkBehaviour
     [Range(0, 1)]
     public float serverGameTimeStep = 0.25f;
 
-    public Player mainPlayer;
+    public Player localPlayer;
 
     public UIManager uiManager;
 
@@ -30,9 +30,10 @@ public class GameManager : NetworkBehaviour
     [SyncVar]
     private float currentGameTime = 0;
 
-    private Dictionary<int,int> kills = new Dictionary<int, int>();
 
-    private Dictionary<int,int> deaths = new Dictionary<int, int>();
+    private SyncDictionary<int,int> kills = new SyncDictionary<int, int>();
+
+    private SyncDictionary<int,int> deaths = new SyncDictionary<int, int>();
 
 
     public void Respawn(GameObject obj)
@@ -80,30 +81,46 @@ public class GameManager : NetworkBehaviour
 
     private void Start()
     {
-        InvokeRepeating("IncrementTime", 0, serverGameTimeStep);
-
-        if (!isServer)
-            return;
+        InvokeRepeating(nameof(IncrementTime), 0, serverGameTimeStep);
     }
 
-    [Command]
-    public void CmdClientConnected()
+
+    public int ClientConnected()
     {
-        //mainPlayer.
-        //RpcDisplayTime(gameTime);
+        // THIS RUNS ON SERVER
+
+        int newID = getID();
+
+        RpcClientConnected(newID);
+
+        kills.Add(newID, 0);
+        deaths.Add(newID, 0);
+
+        return newID;
     }
 
-    public int getID(){
-        GameManager.Instance().playerCount++;
-        GameManager.Instance().kills.Add(playerCount, 0);
-        GameManager.Instance().deaths.Add(playerCount, 0);
+    [ClientRpc]
+    public void RpcClientConnected(int newID)
+    {
+        Debug.LogError("RPC: Client Connected");
+
+        localPlayer.UpdateAppearance();
+    }
+
+    public int getID()
+    {
+        // THIS RUNS ON SERVER
+
+        playerCount++;
+
         // What is the playerCount
         // Debug.Log(playerCount);
         return playerCount;
     }
 
 
-    void IncrementTime(){
+    void IncrementTime()
+    {
         
         if (isServer)
         {
@@ -115,7 +132,6 @@ public class GameManager : NetworkBehaviour
 
         uiManager.matchClock.GetComponent<TMP_Text>().text = mins.ToString("D2") + ":" + secs.ToString("D2");
 
-
         if (isServer && currentGameTime >= startingGameTime)
         {
             ServerMessage("ROUND ENDED");
@@ -123,96 +139,36 @@ public class GameManager : NetworkBehaviour
     }
 
 
+    private void Update()
+    {
+        if (kills.ContainsKey(1) && deaths.ContainsKey(1))
+            uiManager.p1_KDR.GetComponent<TMP_Text>().text = "1 - K: " + kills[1] + " D: " + deaths[1];
 
+        if (kills.ContainsKey(2) && deaths.ContainsKey(2))
+            uiManager.p2_KDR.GetComponent<TMP_Text>().text = "2 - K: " + kills[2] + " D: " + deaths[2];
 
+        if (kills.ContainsKey(3) && deaths.ContainsKey(3))
+            uiManager.p3_KDR.GetComponent<TMP_Text>().text = "3 - K: " + kills[3] + " D: " + deaths[3];
 
-
-
-
+        if (kills.ContainsKey(4) && deaths.ContainsKey(4))
+            uiManager.p4_KDR.GetComponent<TMP_Text>().text = "4 - K: " + kills[4] + " D: " + deaths[4];
+    }
 
 
     public void TrackDeath(int killer, int deceased)
     {
-        CmdTrackDeath(killer, deceased);
+        if (!isServer)
+            return;
 
-        ServerMessage("Player " + killer + " killed Player " + deceased + ". Player " + killer + "'s score is " + kills[killer]);
-    }
-
-    //[Command]
-    public void CmdTrackDeath(int killer, int deceased)
-    {
-        Debug.LogError("I TRIED TO TRACK THE DEATH AS A COMMAND");
-
-        // Who killed who
-        // Debug.Log("Killer: " + killer + ", Deceased: " + deceased);
         deaths[deceased]++;
-        if(killer != deceased && killer != -1){
+        if (killer != deceased && killer != -1)
+        {
             kills[killer]++;
         }
 
-        RpcUpdateKDR(killer, kills[killer], deceased, deaths[deceased]);
-
-        // Check counts
-        /*Debug.Log("Deaths: " + deaths[killer]);
-        Debug.Log("Kills: " + kills[killer]);*/
-    }
 
 
-    [ClientRpc]
-    public void RpcUpdateKDR(int killer, int numKills, int deceased, int numDeaths)
-    {
-        kills[killer] = numKills;
-        deaths[deceased] = numDeaths;
-
-        if (killer == 1 || deceased == 1)
-        {
-            uiManager.p1_KDR.GetComponent<TMP_Text>().text = "1 - K: " + kills[1] + " D: " + deaths[1];
-        }
-
-        if (killer == 2 || deceased == 2)
-        {
-            uiManager.p2_KDR.GetComponent<TMP_Text>().text = "2 - K: " + kills[2] + " D: " + deaths[2];
-        }
-
-        if (killer == 3 || deceased == 3)
-        {
-            uiManager.p3_KDR.GetComponent<TMP_Text>().text = "3 - K: " + kills[3] + " D: " + deaths[3];
-        }
-
-        if (killer == 4 || deceased == 4)
-        {
-            uiManager.p4_KDR.GetComponent<TMP_Text>().text = "4 - K: " + kills[4] + " D: " + deaths[4];
-        }
-    }
-
-
-    [Command]
-    public void CmdUpdateAllKDR()
-    {
-        int[] killsArray = new int[playerCount];
-        int[] deathsArray = new int[playerCount];
-
-        for (int id = 1; id <= playerCount; id++)
-        {
-            killsArray[id - 1] = kills[id];
-            deathsArray[id - 1] = deaths[id];
-        }
-
-        RpcUpdateAllKDR(killsArray, deathsArray);
-    }
-
-    [ClientRpc]
-    public void RpcUpdateAllKDR(int[] killsArray, int[] deathsArray)
-    {
-        for (int i = 0; i < killsArray.Length; i++)
-        {
-            kills[i + 1] = killsArray[i];
-        }
-
-        for (int i = 0; i < deathsArray.Length; i++)
-        {
-            deaths[i + 1] = deathsArray[i];
-        }
+        ServerMessage("Player " + killer + " killed Player " + deceased + ". Player " + killer + "'s score is " + kills[killer]);
     }
 
 

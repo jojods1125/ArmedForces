@@ -1830,10 +1830,6 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 126081587}
-    - target: {fileID: 4243853697860719241, guid: 00d4a3deb04f5a8489f9f4f242154999, type: 3}
-      propertyPath: startingGameTime
-      value: 180
-      objectReference: {fileID: 0}
     - target: {fileID: 4243853697860719246, guid: 00d4a3deb04f5a8489f9f4f242154999, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

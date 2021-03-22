@@ -48,8 +48,8 @@ MonoBehaviour:
   syncInterval: 0.05
   spawnPointContainer: {fileID: 0}
   playerRespawnTimer: 3
-  startingGameTime: 15
-  serverTimeStep: 0.25
+  startingGameTime: 600
+  serverGameTimeStep: 0.25
   mainPlayer: {fileID: 0}
   uiManager: {fileID: 0}
 --- !u!114 &8708037613350168955

@@ -2,7 +2,6 @@
 using UnityEngine;
 using Mirror;
 
-
 /// <summary>
 /// Which side of the player the arm is on; determines weapon loadout
 /// </summary>
@@ -52,39 +51,16 @@ public class Arm : NetworkBehaviour
 
     /// <summary> Amount of ammo remaining in each weapon </summary>
     private readonly Dictionary<Weapon, int> ammoRemaining = new Dictionary<Weapon, int>();
-
+    /// <summary> Dictionary used for knowing which weapons are in which slots </summary>
     private readonly Dictionary<Weapon, char> weaponLetters = new Dictionary<Weapon, char>();
-
+    /// <summary> UIManager, as retrieved from GameManager </summary>
     protected UIManager uiManager;
 
 
-    [Command]
-    public void CmdAttack(Player recipient, float health, int attackerID, Vector3 pushback)
-    {
-        if (!isServer)
-            return;
 
-        recipient.DecreaseHealth(health, attackerID);
-        recipient.RpcEnactForce(pushback);
-    }
-
-
-    [Command]
-    public void CmdDrawBullet(Vector3 start, Vector3 end)
-    {
-        RpcDrawBullet(start, end);
-    }
-
-
-    [ClientRpc]
-    public void RpcDrawBullet(Vector3 start, Vector3 end)
-    {
-        LineRenderer path = Instantiate(bullet);
-        Destroy(path, 0.2f);
-        path.SetPosition(0, start);
-        path.SetPosition(1, end);
-    }
-
+    // ===========================================================
+    //                      ATTACKS AND DAMAGE                    
+    // ===========================================================
 
     /// <summary>
     /// Fires an AutoGun Weapon
@@ -202,6 +178,16 @@ public class Arm : NetworkBehaviour
 
     }
 
+    /// <summary>
+    /// Instantiates a projectile prefab on the server and tells the clients to spawn it
+    /// </summary>
+    /// <param name="projectilePrefabName"> String of the prefab's name, which gets loaded from Resources/Projectiles </param>
+    /// <param name="projectilePath"> Location of barrel </param>
+    /// <param name="projectilePower"> Power of the projectile </param>
+    /// <param name="explosionRadius"> Radius of the explosion </param>
+    /// <param name="coreDamage"> Damage at the impact point </param>
+    /// <param name="corePushback"> Pushback at the impact point </param>
+    /// <param name="rocketPowered"> Whether to use gravity or not </param>
     [Command]
     void CmdSpawnProjectile(string projectilePrefabName, Vector3 projectilePath, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered)
     {
@@ -209,7 +195,7 @@ public class Arm : NetworkBehaviour
             return;
 
         // Instantiates a projectile prefab from the Resources/Projectiles folder
-        GameObject projectile = (GameObject)Instantiate(Resources.Load("Projectiles/" + projectilePrefabName), projectilePath + (barrel.transform.up* 0.5f), Quaternion.identity);
+        GameObject projectile = (GameObject)Instantiate(Resources.Load("Projectiles/" + projectilePrefabName), projectilePath + (barrel.transform.up * 0.5f), Quaternion.identity);
 
         // Spawns projectile across all clients
         NetworkServer.Spawn(projectile);
@@ -253,6 +239,54 @@ public class Arm : NetworkBehaviour
             // Pushes player
             player.EnactForce(bulletPath.normalized * -sprayer.pushback);
         }
+    }
+
+
+    /// <summary>
+    /// Deals damage and force to a Player
+    /// </summary>
+    /// <param name="recipient"> Player receiving the damage/force </param>
+    /// <param name="damage"> Amount of damage dealt </param>
+    /// <param name="attackerID"> Player ID dealing the damage </param>
+    /// <param name="pushback"> Pushback force </param>
+    [Command]
+    void CmdAttack(Player recipient, float damage, int attackerID, Vector3 pushback)
+    {
+        if (!isServer)
+            return;
+
+        recipient.DecreaseHealth(damage, attackerID);
+        recipient.RpcEnactForce(pushback);
+    }
+
+
+    /// <summary>
+    /// Tells the server where to draw a bullet path
+    /// </summary>
+    /// <param name="start"> Start point of path </param>
+    /// <param name="end"> End point of path </param>
+    [Command]
+    void CmdDrawBullet(Vector3 start, Vector3 end)
+    {
+        if (!isServer)
+            return;
+
+        RpcDrawBullet(start, end);
+    }
+
+
+    /// <summary>
+    /// Draws the bullet path on every client
+    /// </summary>
+    /// <param name="start"> Start point of path </param>
+    /// <param name="end"> End point of path </param>
+    [ClientRpc]
+    void RpcDrawBullet(Vector3 start, Vector3 end)
+    {
+        LineRenderer path = Instantiate(bullet);
+        Destroy(path.gameObject, 0.2f);
+        path.SetPosition(0, start);
+        path.SetPosition(1, end);
     }
 
 
@@ -309,9 +343,8 @@ public class Arm : NetworkBehaviour
 
 
     // ===========================================================
-    //                 INITIALIZATION AND CONTROLS
+    //                  ARM CONTROLS  AND VISUALS                 
     // ===========================================================
-
 
     // Start is called before the first frame update
     protected void Start()
@@ -331,13 +364,6 @@ public class Arm : NetworkBehaviour
         else if (weaponB) Switch(weaponB);
         else if (weaponC) Switch(weaponC);
         else Switch(weaponD);
-
-        //// Render equippedWeapon
-        //if (equippedWeapon)
-        //{
-        //    arm.GetComponent<MeshFilter>().mesh = equippedWeapon.mesh;
-        //    arm.GetComponent<MeshRenderer>().material = equippedWeapon.material;
-        //}
 
         // Initializes ammoRemaining dictionary for each weapon
         if (weaponA is W_Shootable gunA) ammoRemaining.Add(weaponA, gunA.ammoCapacity);
@@ -385,24 +411,43 @@ public class Arm : NetworkBehaviour
     }
 
 
+    /// <summary>
+    /// Tells the server to refresh the appearance of the Arm
+    /// </summary>
+    /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
+    /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
     [Command]
     public void CmdSwitchAppearance(string meshName, string materialName)
     {
+        if (!isServer)
+            return;
+
         RpcSwitchAppearance(meshName, materialName);
     }
 
 
+    /// <summary>
+    /// Every client refreshes the appearance of their Arm
+    /// </summary>
+    /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
+    /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
     [ClientRpc]
-    public void RpcSwitchAppearance(string meshName, string materialName)
+    private void RpcSwitchAppearance(string meshName, string materialName)
     {
         arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);
         arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
     }
 
+
+    /// <summary>
+    /// Gets the equippedWeapon
+    /// </summary>
+    /// <returns> Weapon currently equipped </returns>
     public Weapon GetEquippedWeapon()
     {
         return equippedWeapon;
     }
+
 
     // Initializes the loadout of the arm based on it being the front arm
     protected void FrontArmInitialize()
@@ -434,7 +479,6 @@ public class Arm : NetworkBehaviour
     /// Reduces the ammo of the equipped weapon by a specified amount
     /// </summary>
     /// <param name="count"> Amount to reduce ammo by </param>
-    //[ClientRpc]
     public void ReduceAmmo(int count)
     {
         // Checks if the equipped weapon should have ammo

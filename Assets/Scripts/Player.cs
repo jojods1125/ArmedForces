@@ -28,9 +28,11 @@ public class Player : NetworkBehaviour
     private float currHealth = 100;
     private bool dying = false;
 
-    //Used for differentiating each player in Game Manager
+    //Used for differentiating each player in GameManager
+    [SyncVar]
     public int playerID;
 
+    // Last player ID to have attacked, reset on death
     private int lastAttackedID;
 
     // UI Manager
@@ -39,9 +41,8 @@ public class Player : NetworkBehaviour
 
 
     // ===========================================================
-    //                       HEALTH AND DEATH
+    //                            DAMAGE
     // ===========================================================
-
 
     /// <summary>
     /// Increases the player's health by health
@@ -49,50 +50,96 @@ public class Player : NetworkBehaviour
     /// <param name="health"> Amount to increase health by </param>
     public void IncreaseHealth(float health)
     {
-        currHealth = Mathf.Min(currHealth + health, maxHealth);
-        if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+        // Increases health and prevents invalid values
+        currHealth = Mathf.Max(Mathf.Min(currHealth + health, maxHealth), 0);
+
+        // If you die by healing for some ungodly reason, you played yourself
+        if (currHealth == 0)
+            RpcKill(playerID);
     }
 
 
     /// <summary>
-    /// Decreases the player's health by health and kills if at 0
+    /// Decreases the player's health by health and kills if at 0 (must call from server)
     /// </summary>
     /// <param name="health"> Amount to decrease health by </param>
     public void DecreaseHealth(float health, int attackerID)
     {
+        // Only calculate damage on the server
         if (!isServer)
             return;
 
-        currHealth = Mathf.Max(currHealth - health, 0);
-        lastAttackedID = attackerID;
+        // Decreases health and prevents invalid values
+        currHealth = Mathf.Min(Mathf.Max(currHealth - health, 0), maxHealth);
+        
+        // Sets last attacked ID to the attacker
+        if (lastAttackedID != playerID)
+            lastAttackedID = attackerID;
 
+        // If the Player runs out of health, kill them
         if (currHealth == 0)
             RpcKill(attackerID);
     }
 
 
     /// <summary>
-    /// Instantly sets the player's health to 0 and kills them
+    /// Retrieves the player's current health
     /// </summary>
+    /// <returns> currHealth float </returns>
+    public float GetCurrHealth()
+    {
+        return currHealth;
+    }
+
+
+
+    // ===========================================================
+    //                      DEATH AND REBIRTH
+    // ===========================================================
+
+    /// <summary>
+    /// Tells the server to kill this Player
+    /// </summary>
+    /// <param name="killerID"> ID of the Player that killed them </param>
+    [Command]
+    public void CmdKill(int killerID)
+    {
+        RpcKill(killerID);
+    }
+
+
+    /// <summary>
+    /// Kills this instance of Player on every client
+    /// </summary>
+    /// <param name="killerID"> ID of the Player that killed them </param>
     [ClientRpc]
     public void RpcKill(int killerID)
     {
+        // Prevent double kill
         if (!dying)
         {
             dying = true;
+
+            // If health still exists, snuff it out
             if (currHealth != 0)
             {
                 currHealth = 0;
-                if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+                //if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
             }
 
+            // Activate the GameManager's respawn process
             GameManager.Instance().Respawn(gameObject);
 
+            // Updates KDR based on who killed; if a self-kill, gives kill to last attacker
             if (killerID == -1)
-                GameManager.Instance().TrackDeath(lastAttackedID, playerID);
+                CmdTrackDeath(lastAttackedID, playerID);
             else
-                GameManager.Instance().TrackDeath(killerID, playerID);
+                CmdTrackDeath(killerID, playerID);
 
+            // Resets the last attacker to self
+            lastAttackedID = playerID;
+
+            // Deactivates the GameObject
             gameObject.SetActive(false);
         }
 
@@ -102,10 +149,15 @@ public class Player : NetworkBehaviour
     }
 
 
+    /// <summary>
+    /// Tells the server's GameManager to track the death
+    /// </summary>
+    /// <param name="killerID"> ID of the killer </param>
+    /// <param name="playerID"> ID of the killed </param>
     [Command]
-    public void CmdKill(int killerID)
+    void CmdTrackDeath(int killerID, int playerID)
     {
-        RpcKill(killerID);
+        GameManager.Instance().TrackDeath(killerID, playerID);
     }
 
 
@@ -130,23 +182,55 @@ public class Player : NetworkBehaviour
 
 
     // ===========================================================
-    //                       OTHER FUNCTIONS
+    //                   START-UP AND CONNECTING
     // ===========================================================
+
+    /// <summary>
+    /// Tells the server that the Player is connected
+    /// </summary>
+    [Command]
+    void CmdPlayerConnected()
+    {
+        // Exits if not the server
+        if (!isServer)
+            return;
+
+        // Retrieves an ID from GameManager
+        int newID = GameManager.Instance().ClientConnected();
+
+        // Updates all instances of this Player across clients
+        RpcPlayerConnected(newID);
+    }
+
+
+    /// <summary>
+    /// Gets info from the server for this Player on every client
+    /// </summary>
+    /// <param name="playerID"> ID being given to this Player </param>
+    [ClientRpc]
+    void RpcPlayerConnected(int playerID)
+    {
+        // Sets the Player's ID and the last attacked ID
+        this.playerID = playerID;
+        lastAttackedID = this.playerID;
+    }
 
 
     protected void Start()
     {
-        playerID = GameManager.Instance().getID();
+        // Tells the server that the Player is connected
+        CmdPlayerConnected();
 
+        // If a copy of the Player on a client, freeze
         if (!isLocalPlayer)
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
         }
 
+        // If UI exists (only local player), connect health bar and weapon UI
         if (uiManager)
         {
-            Debug.LogError("ID is " + playerID);
-            GameManager.Instance().mainPlayer = this;
+            GameManager.Instance().localPlayer = this;
             uiManager.UpdateHealthBar(currHealth / maxHealth);
             uiManager.UpdateWeaponIcons();
         }
@@ -154,53 +238,28 @@ public class Player : NetworkBehaviour
 
     protected void Awake()
     {
+        // Start with full health
         currHealth = maxHealth;
 
+        // Initiate variables
         rb = gameObject.GetComponent<Rigidbody>();
         arms = gameObject.GetComponentsInChildren<Arm>();
     }
 
     void Update()
     {
+        // Constantly update health bar (kinda nasty but works better than event-based)
         if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
     }
 
 
     /// <summary>
-    /// Determines if the player is on the ground
+    /// Tells the server to update the appearance of both Arms
     /// </summary>
-    /// <returns> True if player is on ground, false if not </returns>
-    public bool IsGrounded()
-    {
-        float capsuleHeight = gameObject.GetComponent<CapsuleCollider>().bounds.extents.y;
-        return Physics.Raycast(transform.position, -Vector3.up, capsuleHeight + 0.05f);
-    }
-
-
-    /// <summary>
-    /// Adds the specified force to the player's RigidBody
-    /// </summary>
-    /// <param name="force"> Force to add to the player </param>
-    public void EnactForce(Vector3 force)
-    {
-        rb.AddForce(force);
-    }
-
-
-    [ClientRpc]
-    public void RpcEnactForce(Vector3 force)
-    {
-        if (!isLocalPlayer)
-            return;
-
-        rb.AddForce(force);
-    }
-
-
     public void UpdateAppearance()
     {
-        arms[0].RpcSwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
-        arms[1].RpcSwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+        arms[0].CmdSwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
+        arms[1].CmdSwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
     }
 
 
@@ -214,13 +273,44 @@ public class Player : NetworkBehaviour
     }
 
 
+
+    // ===========================================================
+    //                           MOVEMENT
+    // ===========================================================
+
     /// <summary>
-    /// Retrieves the player's current health
+    /// Determines if the player is on the ground
     /// </summary>
-    /// <returns> currHealth float </returns>
-    public float GetCurrHealth()
+    /// <returns> True if player is on ground, false if not </returns>
+    public bool IsGrounded()
     {
-        return currHealth;
+        float capsuleHeight = gameObject.GetComponent<CapsuleCollider>().bounds.extents.y;
+        return Physics.Raycast(transform.position, -Vector3.up, capsuleHeight + 0.05f);
     }
+
+
+    /// <summary>
+    /// Adds the specified force to the player's RigidBody (used from local calls)
+    /// </summary>
+    /// <param name="force"> Force to add to the player </param>
+    public void EnactForce(Vector3 force)
+    {
+        rb.AddForce(force);
+    }
+
+
+    /// <summary>
+    /// Enacts force on this player on every client (used from server calls)
+    /// </summary>
+    /// <param name="force"> Amount of force to enact </param>
+    [ClientRpc]
+    public void RpcEnactForce(Vector3 force)
+    {
+        if (!isLocalPlayer)
+            return;
+
+        rb.AddForce(force);
+    }
+
 
 }
