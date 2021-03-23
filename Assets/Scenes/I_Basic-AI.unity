@@ -841,6 +841,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_Controlled
       objectReference: {fileID: 0}
+    - target: {fileID: 8282234077870317098, guid: fbaf160863214a247b251b4a76e45415, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: fbaf160863214a247b251b4a76e45415, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16
@@ -1469,12 +1473,18 @@ MonoBehaviour:
   enemy: {fileID: 871795642}
   frontArm: {fileID: 1184613263}
   backArm: {fileID: 221891331}
-  followDist: 3
-  stoppingDist: 2
+  followDist: 6
+  stoppingDist: 4
   stuckDist: 1
-  mapWidth: 17
-  mapHeight: 9
+  mapWidth: 18
+  mapHeight: 8
   safeSpeed: 4
+  lowSprayerAmmo: 200
+  lowShotgunAmmo: 2
+  lowAutoAmmo: 0
+  maxSprayerAmmo: 800
+  maxShotgunAmmo: 10
+  maxAutoAmmo: 40
 --- !u!114 &1586800012 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
@@ -1509,13 +1519,25 @@ PrefabInstance:
       propertyPath: backArmWeapons.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
+    - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: backArmWeapons.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 308df20a53b6de4478172dcc79b2e2e8, type: 2}
+    - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: frontArmWeapons.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 308df20a53b6de4478172dcc79b2e2e8, type: 2}
+    - target: {fileID: 8282234077263579432, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317098, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_Name
       value: Player_Sandbag
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6
+      value: -16
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1556,6 +1578,14 @@ PrefabInstance:
     - target: {fileID: 8282234077870317105, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282234077870317109, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282234078560122466, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
