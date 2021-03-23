@@ -8545,6 +8545,7 @@ MonoBehaviour:
   content: {fileID: 455172338}
   achievementPrefab: {fileID: 1146438363030574227, guid: e3f1bcc76b9597d4db623f09322274db, type: 3}
   tierPrefab: {fileID: 7591037569370411143, guid: d6b93c12015de8545a5cd8e7a8232131, type: 3}
+  progressBarPrefab: {fileID: 1612258747238857711, guid: c665b40e31f0a714e815694f60b1386d, type: 3}
 --- !u!114 &1179617427
 MonoBehaviour:
   m_ObjectHideFlags: 0

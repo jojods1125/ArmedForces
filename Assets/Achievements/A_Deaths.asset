@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   achievementMessage: Congrats, You Died!
   nextTier: 0
-  achieved: 1
+  achieved: 0
   type: 1
   currentValue: 0
   activationValues: 01000000050000000a00000019000000
