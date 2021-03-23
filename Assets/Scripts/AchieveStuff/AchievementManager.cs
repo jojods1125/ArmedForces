@@ -108,8 +108,9 @@ public class AchievementManager : MonoBehaviour
             // Go through each achievement and reset the currentValue and nextTier to 0
             foreach ( Achievement ach in achievements )
             {
-                ach.currentValue = 0;
+                ach.currentValue = ach.initialValue;
                 ach.nextTier = 0;
+                ach.achieved = false;
             }
         }
     }

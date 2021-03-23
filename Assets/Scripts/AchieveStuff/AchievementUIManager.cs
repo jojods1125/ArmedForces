@@ -84,20 +84,22 @@ public class AchievementUIManager : MonoBehaviour
             curr.transform.Find("Description").gameObject.GetComponent<TMP_Text>().text = a.ToString();
             // Current Count
             curr.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
-            // Next Count
+            // Next Count & set finished
             if (!a.IsComplete())
             {
                 curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + a.activationValues[a.nextTier].ToString();
+                curr.transform.Find("Finished").gameObject.SetActive( false );
             }
             else
             {
                 curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
+                curr.transform.Find("Finished").gameObject.SetActive( true );
             }
-            // Set Progress Bar
-            /*Transform progressBar = curr.transform.Find("Progress");
+			// Set Progress Bar
+			/*Transform progressBar = curr.transform.Find("Progress");
             float maxValue = a.activationValues[a.activationValues.Length - 1];
             progressBar.localScale = new Vector3( a.currentValue / maxValue, progressBar.localScale.y, progressBar.localScale.z );*/
-        }
+		}
     }
 
     // Update is called once per frame
@@ -112,8 +114,8 @@ public class AchievementUIManager : MonoBehaviour
             // Get Progress Bars for Display
             Transform progressBars = curr.Find( "Progress Bars" );
 
-            // Update progress bars
-            int currentValue = a.currentValue;
+			// Update progress bars
+			int currentValue = a.currentValue;
             for (int j = 0; j < a.activationValues.Length; j++)
             {
                 // Current working bar
@@ -150,10 +152,105 @@ public class AchievementUIManager : MonoBehaviour
                 }
             }
 
+            /** Set fields in display */
+            // Name
+            curr.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
+            // Description
+            curr.transform.Find("Description").gameObject.GetComponent<TMP_Text>().text = a.ToString();
+            // Current Count
+            curr.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
+            // Next Count & set finished
+            if (!a.IsComplete())
+            {
+                curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + a.activationValues[a.nextTier].ToString();
+                curr.transform.Find("Finished").gameObject.SetActive(false);
+            }
+            else
+            {
+                curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
+                curr.transform.Find("Finished").gameObject.SetActive(true);
+            }
+
             // Set Progress Bar
             /*Transform progressBar = curr.Find("Progress");
             float maxValue = a.activationValues[a.activationValues.Length - 1];
             progressBar.localScale = new Vector3(a.currentValue / maxValue, progressBar.localScale.y, progressBar.localScale.z);*/
+        }
+    }
+
+    /// <summary>
+    /// Helper method to create an Achievement Display
+    /// </summary>
+    /// <param name="a"> Achievement to fill out info </param>
+    /// <param name="context"> Context (parent) to Instantiate into </param>
+    public void MakeAchievementDisplay ( Achievement a, Transform context )
+	{
+        // Create a GameObject based on achDisplay prefab
+        GameObject curr = Instantiate(achievementPrefab, context.transform);
+
+        // Get the Tiers child
+        Transform tiers = curr.transform.Find("Tiers");
+        // Get the Progress Bar child
+        Transform progressBars = curr.transform.Find("Progress Bars");
+
+        // Create a tier for every activation value
+        for (int i = 0; i < a.activationValues.Length; i++)
+        {
+            Instantiate(tierPrefab, tiers);
+            Instantiate(progressBarPrefab, progressBars);
+        }
+
+        // Set size of tier
+        GridLayoutGroup tglg = tiers.GetComponent<GridLayoutGroup>();
+        tglg.cellSize = new Vector2(tglg.cellSize.x / a.activationValues.Length, tglg.cellSize.y);
+        // Set size of progress bars
+        GridLayoutGroup pbglg = progressBars.GetComponent<GridLayoutGroup>();
+        pbglg.cellSize = new Vector2(pbglg.cellSize.x / a.activationValues.Length, pbglg.cellSize.y);
+
+        // Set progress bars
+        int currentValue = a.currentValue;
+        for (int i = 0; i < a.activationValues.Length; i++)
+        {
+            // Current working bar
+            Transform bar = progressBars.GetChild(i);
+
+            // This tiers max
+            int max = a.activationValues[i];
+
+            // Check if this bar needs scaled at all, break if not
+            if (i > 0 && currentValue < a.activationValues[i - 1])
+            {
+                break;
+            }
+            // Check if this bar has been met/exceeded
+            else if (currentValue >= max)
+            {
+                bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+            }
+            // Set the bar scale
+            else
+            {
+                bar.localScale = new Vector3(currentValue / max, bar.localScale.y, bar.localScale.z);
+            }
+        }
+
+        /** Set fields in display */
+        // Name
+        curr.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
+        // Description
+        curr.transform.Find("Description").gameObject.GetComponent<TMP_Text>().text = a.ToString();
+        // Current Count
+        curr.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
+        // Next Count & set finished
+        if (!a.IsComplete())
+        {
+            curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + a.activationValues[a.nextTier].ToString();
+            curr.transform.Find("Finished").gameObject.SetActive(false);
+        }
+        else
+        {
+            curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
+            curr.transform.Find("Finished").gameObject.SetActive(true);
         }
     }
 }

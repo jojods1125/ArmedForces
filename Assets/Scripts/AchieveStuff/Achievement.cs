@@ -104,6 +104,7 @@ public class Achievement : ScriptableObject
             achieved = true;
             return true;
         }
+        achieved = false;
         return false;
     }
 
