@@ -88,6 +88,7 @@ public class Arm : NetworkBehaviour
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-auto.spreadRange, auto.spreadRange), Random.Range(-auto.spreadRange, auto.spreadRange));
             ///Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.green, 1);
 
+
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
             {
@@ -497,9 +498,15 @@ public class Arm : NetworkBehaviour
     public Weapon getWeaponD(){
         return weaponD;
     }
+    public int getAmmo(Weapon weapon){
+        return ammoRemaining[weapon];
+    }
     //Set firing
     public void SetFiring(bool firing){
         this.firing = firing;
+    }
+    public bool getFiring(){
+        return firing;
     }
     //A way for the AI to "release trigger" and reset shooting
     public void releaseTrigger(){
