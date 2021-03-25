@@ -158,6 +158,10 @@ PrefabInstance:
       propertyPath: achievementPrefab
       value: 
       objectReference: {fileID: 1146438363030574227, guid: e3f1bcc76b9597d4db623f09322274db, type: 3}
+    - target: {fileID: 5807852348766420318, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
+      propertyPath: rac
+      value: 
+      objectReference: {fileID: 9100000, guid: fca9c79ca08f2484bb33953d4c985401, type: 2}
     - target: {fileID: 5807852348766420319, guid: e9562ee61ed7dde41ba6d0a7631101d9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -698,7 +702,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 300, y: 100}
-  m_Spacing: {x: 0, y: 0}
+  m_Spacing: {x: 0, y: 12.5}
   m_Constraint: 1
   m_ConstraintCount: 1
 --- !u!1 &840750805
