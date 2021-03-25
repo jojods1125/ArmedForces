@@ -1473,7 +1473,7 @@ MonoBehaviour:
   enemy: {fileID: 871795642}
   frontArm: {fileID: 1184613263}
   backArm: {fileID: 221891331}
-  followDist: 6
+  attackRange: 12
   stoppingDist: 4
   stuckDist: 1
   mapWidth: 18
@@ -1514,11 +1514,11 @@ PrefabInstance:
     - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: frontArmWeapons.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
+      objectReference: {fileID: 11400000, guid: 3e86a95a2de72ce468388c4516465b8c, type: 2}
     - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: backArmWeapons.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
+      objectReference: {fileID: 11400000, guid: 3e86a95a2de72ce468388c4516465b8c, type: 2}
     - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: backArmWeapons.Array.data[2]
       value: 

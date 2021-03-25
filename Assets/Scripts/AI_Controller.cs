@@ -12,13 +12,15 @@ public class AI_Controller : MonoBehaviour
     private float restStart;
     private float restTime;
     private bool enemyRespawn;
+    private float reloadStart;
+    private float reloadTime = 8;
 
     public Player self; //Reference to self
     public Player enemy; //Reference to target
     public Arm frontArm; //Reference to front arm
     public Arm backArm; //Reference to back arm
 
-    public float followDist; //How close the AI follows
+    public float attackRange; //How close the AI follows
     public float stoppingDist; //What range the AI should stop following
     public float stuckDist; //Distance AI must move in a second before decided its stuck
 
@@ -56,7 +58,7 @@ public class AI_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(backArm.getAmmo(backArm.getWeaponA()));
+        Debug.Log(backArm.getAmmo(backArm.getWeaponC()));
     //**
     //Use the shotgun to avoid flying off edges
     //**
@@ -123,9 +125,14 @@ public class AI_Controller : MonoBehaviour
                 return;
             }
         }
+
+    //**
+    //Check if the other player has respawned
+    //If so, rest, then hunt
+    //**
         if(enemy.isActiveAndEnabled && enemyRespawn){
             enemyRespawn = false;
-            state=State.rest;
+            state = State.rest;
             restStart = Time.time;
             restTime = 1;
         }
@@ -140,6 +147,10 @@ public class AI_Controller : MonoBehaviour
     //**
         if(state == State.reload){
             if(Vector3.Magnitude(targetPos - self.transform.position) > stoppingDist){
+                if(Time.time > reloadStart + reloadTime){
+                    targetPos = GameManager.Instance().getRandomRespawnPoint();
+                    reloadStart = Time.time;
+                }
                 followTarget();
             } else{
                 frontArm.SetFiring(false);
@@ -174,16 +185,17 @@ public class AI_Controller : MonoBehaviour
             if(backArm.getAmmo(backArm.getWeaponA()) <= lowSprayerAmmo || backArm.getAmmo(backArm.getWeaponB()) <= lowShotgunAmmo || backArm.getAmmo(backArm.getWeaponC()) <= lowAutoAmmo){
                 targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
                 targetPos.y -= 1;
+                reloadStart = Time.time;
                 state = State.reload;
                 return;
             }
             
             //Check if you need to follow
-            else if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > stoppingDist + followDist){
+            else if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > attackRange){
                 if(enemy.transform.position.x < self.transform.position.x){
-                    targetPos.x = enemy.transform.position.x + followDist;
+                    targetPos.x = enemy.transform.position.x + attackRange / 2;
                 } else{
-                    targetPos.x = enemy.transform.position.x - followDist;
+                    targetPos.x = enemy.transform.position.x - attackRange / 2;
                 }
                 targetPos.y = enemy.transform.position.y + 1;
             }
@@ -201,6 +213,7 @@ public class AI_Controller : MonoBehaviour
             if(backArm.getAmmo(backArm.getWeaponA()) <= lowSprayerAmmo || backArm.getAmmo(backArm.getWeaponB()) <= lowShotgunAmmo || backArm.getAmmo(backArm.getWeaponC()) <= lowAutoAmmo){
                 targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
                 targetPos.y -= 1;
+                reloadStart = Time.time;
                 state = State.reload;
                 return;
             }
@@ -213,10 +226,25 @@ public class AI_Controller : MonoBehaviour
             Vector3.Normalize(targetAngle);
             frontArm.Aim(targetAngle);
             backArm.Aim(targetAngle);
-            if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > stoppingDist + followDist){
+            if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > attackRange){
+                // Raycasts bullet path
+            /**
+            if (Physics.Raycast(frontArm.transform.position, (enemy.transform.position - self.transform.position), out RaycastHit hit))
+            {
+                Debug.Log("HIT " + hit.collider.gameObject.name);
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+                {   
+                }
+            }
+            */
                 state = State.follow;
                 return;
             }
+
+
+
+            
+
         }              
     }
 

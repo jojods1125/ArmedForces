@@ -55,6 +55,11 @@ public class GameManager : MonoBehaviour
         return closestPoint;
     }
 
+    public Vector3 getRandomRespawnPoint()
+    {
+        return spawnPoints[Random.Range(0, spawnPoints.Count - 1)];
+    }
+
     private static GameManager instance;
 
     public static GameManager Instance()

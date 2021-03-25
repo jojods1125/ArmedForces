@@ -9,19 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf80db299a61ac248aa944117fab5e02, type: 3}
-  m_Name: AI_Auto
+  m_Script: {fileID: 11500000, guid: 6148bcc569955e848aa4436ee58d46ac, type: 3}
+  m_Name: AI_Shotgun
   m_EditorClassIdentifier: 
-  weaponName: Machine Gun
+  weaponName: Shotgun
   description: DESCRIPTION
   mesh: {fileID: -5495902117074765545, guid: 5fdd08bfc3e07994bba88274d3cbac84, type: 3}
-  material: {fileID: 2100000, guid: 4a4d2b787eb393a469ae9860f5de4031, type: 2}
-  icon: {fileID: 21300000, guid: 113bdc64338b5be409f9ba847890ffef, type: 3}
+  material: {fileID: 2100000, guid: 9712e2b3862aef7419e65d0d03be0a10, type: 2}
+  icon: {fileID: 21300000, guid: 622923c75ecc3ad49bfbeb3a2f3257d1, type: 3}
   rarity: 0
   fireRate: 0.1
-  ammoCapacity: 50
-  pushback: 25
-  reloadRate: 0.01
-  spreadRange: 0.2
-  bulletDamage: 5
-  bulletPushback: 10
+  ammoCapacity: 10
+  pushback: 75
+  reloadRate: 0.5
+  spreadRange: 0.5
+  bulletDamage: 20
+  burstCount: 5
+  bulletPushback: 25
