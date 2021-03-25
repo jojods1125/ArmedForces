@@ -1479,10 +1479,10 @@ MonoBehaviour:
   mapWidth: 18
   mapHeight: 8
   safeSpeed: 4
-  lowSprayerAmmo: 200
+  lowSprayerAmmo: 300
   lowShotgunAmmo: 2
   lowAutoAmmo: 0
-  maxSprayerAmmo: 800
+  maxSprayerAmmo: 700
   maxShotgunAmmo: 10
   maxAutoAmmo: 40
 --- !u!114 &1586800012 stripped
@@ -1506,11 +1506,11 @@ PrefabInstance:
     - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: frontArmWeapons.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
+      objectReference: {fileID: 11400000, guid: 25f85aae63736c2438ac9a66015bff74, type: 2}
     - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: backArmWeapons.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
+      objectReference: {fileID: 11400000, guid: 25f85aae63736c2438ac9a66015bff74, type: 2}
     - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: frontArmWeapons.Array.data[1]
       value: 

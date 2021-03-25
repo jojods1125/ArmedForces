@@ -9,6 +9,9 @@ public class AI_Controller : MonoBehaviour
     private Vector3 targetPos; //Current place AI is trying to go
     private Vector3 previousPos; //Where the AI was a second ago, used to check if stuck
     private float previousTime; //Used to check if a second has passed
+    private float restStart;
+    private float restTime;
+    private bool enemyRespawn;
 
     public Player self; //Reference to self
     public Player enemy; //Reference to target
@@ -34,6 +37,7 @@ public class AI_Controller : MonoBehaviour
         follow,
         reload,
         attack,
+        rest,
         test
     }
 
@@ -46,11 +50,13 @@ public class AI_Controller : MonoBehaviour
         targetPos = self.transform.position;
         previousPos = self.transform.position;
         previousTime = Time.time;
+        enemyRespawn = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(backArm.getAmmo(backArm.getWeaponA()));
     //**
     //Use the shotgun to avoid flying off edges
     //**
@@ -106,24 +112,35 @@ public class AI_Controller : MonoBehaviour
     //Check if the other player is dead
     //If so, find safe ground and wait
     //**
-            else if(!enemy.isActiveAndEnabled){
-                state = State.follow;
-                targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
-                targetPos.y -= 1;
-                if(Vector3.Magnitude(targetPos - self.transform.position) < stoppingDist){
-                    frontArm.SetFiring(false);
-                    backArm.SetFiring(false);
-                    return;
-                }
+        else if(!enemy.isActiveAndEnabled){
+            enemyRespawn = true;
+            state = State.follow;
+            targetPos = GameManager.Instance().getCloseRespawnPoint(self.transform.position);
+            targetPos.y -= 1;
+            if(Vector3.Magnitude(targetPos - self.transform.position) < stoppingDist){
+                frontArm.SetFiring(false);
+                backArm.SetFiring(false);
+                return;
             }
+        }
+        if(enemy.isActiveAndEnabled && enemyRespawn){
+            enemyRespawn = false;
+            state=State.rest;
+            restStart = Time.time;
+            restTime = 1;
+        }
 
+        if(state == State.rest){
+            if(Time.time > restStart + restTime){
+                state = State.follow;
+            }
+        }
     //**
     //Reload State
     //**
         if(state == State.reload){
             if(Vector3.Magnitude(targetPos - self.transform.position) > stoppingDist){
                 followTarget();
-                return;
             } else{
                 frontArm.SetFiring(false);
                 backArm.SetFiring(false);
