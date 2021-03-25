@@ -6,23 +6,22 @@ public class AI_Controller : MonoBehaviour
 {
 
 
+    private Vector3 targetPos; //Current place AI is trying to go
+    private Vector3 previousPos; //Where the AI was a second ago, used to check if stuck
+    private float previousTime; //Used to check if a second has passed
 
-    private Vector3 targetPos;
-    private Vector3 previousPos;
-    private float previousTime;
+    public Player self; //Reference to self
+    public Player enemy; //Reference to target
+    public Arm frontArm; //Reference to front arm
+    public Arm backArm; //Reference to back arm
 
-    public Player self;
-    public Player enemy;
-    public Arm frontArm;
-    public Arm backArm;
+    public float followDist; //How close the AI follows
+    public float stoppingDist; //What range the AI should stop following
+    public float stuckDist; //Distance AI must move in a second before decided its stuck
 
-    public float followDist;
-    public float stoppingDist;
-    public float stuckDist;
-
-    public float mapWidth;
-    public float mapHeight;
-    public float safeSpeed;
+    public float mapWidth; //Width AI tries to stay in
+    public float mapHeight; //Height AI tries to stay in
+    public float safeSpeed; //AI cannot move too quickly on edges
     public int lowSprayerAmmo;
     public int lowShotgunAmmo;
     public int lowAutoAmmo;
@@ -55,12 +54,12 @@ public class AI_Controller : MonoBehaviour
     //**
     //Use the shotgun to avoid flying off edges
     //**
-        //Don't fly of the Right
+        //Don't fly off the Right
         if(self.transform.position.x > mapWidth && self.GetComponent<Rigidbody>().velocity.x > safeSpeed){
             posAdjust(new Vector3(1,0,0));
             return;
         }
-        //Don't fly of the Left
+        //Don't fly off the Left
         if(self.transform.position.x < -mapWidth && self.GetComponent<Rigidbody>().velocity.x < safeSpeed){
             posAdjust(new Vector3(-1,0,0));
             return;
@@ -204,6 +203,7 @@ public class AI_Controller : MonoBehaviour
         }              
     }
 
+    //Shoot the shotgun in the direction you need to go
     private void posAdjust(Vector3 direction){
             backArm.Switch(backArm.getWeaponB());
             backArm.Aim(direction);
