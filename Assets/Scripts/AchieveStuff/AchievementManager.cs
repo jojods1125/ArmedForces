@@ -84,7 +84,10 @@ public class AchievementManager : MonoBehaviour
                 //      Total: 'currentValue'"
                 Debug.Log(curr.achievementMessage + " Achieved: " + curr.activationValues[curr.nextTier - 1] + "\n Total: " + curr.currentValue);
             }*/
-            curr.CheckNext(); // print out now done in CheckNext method
+            if (curr.CheckNext()) // print out now done in CheckNext method
+            {
+                GameManager.Instance().uiManager.DisplayAchievementPopUp(curr);
+            }
             updated = false;
         }
         else
