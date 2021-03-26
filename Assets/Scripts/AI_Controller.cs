@@ -53,7 +53,7 @@ public class AI_Controller : MonoBehaviour
         previousPos = self.transform.position;
         previousTime = Time.time;
         enemyRespawn = false;
-        reloadTime = 8;
+        reloadTime = 6;
     }
 
     // Update is called once per frame
@@ -100,7 +100,7 @@ public class AI_Controller : MonoBehaviour
                     }        
                 }else{
                     if(self.transform.position.x < 0){
-                        posAdjust(new Vector3(-1,-.5f,0));
+                        posAdjust(new Vector3(-1,.5f,0));
                     }else{
                         posAdjust(new Vector3(1,.5f,0));
                     }
@@ -195,11 +195,30 @@ public class AI_Controller : MonoBehaviour
             
             //Check where you need to follow
             else if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > attackRange){
+
+                float leftPos = enemy.transform.position.x - attackRange / 2;
+                float rightPos = enemy.transform.position.x + attackRange / 2;
+                if(self.transform.position.x > enemy.transform.position.x ){
+                    if(rightPos < mapWidth - 1){
+                        targetPos.x = rightPos;
+                    }else{
+                        targetPos.x = leftPos;
+                    }
+                }else{
+                    if(leftPos > -mapWidth + 1){
+                        targetPos.x = leftPos;
+                    }else{
+                        targetPos.x = rightPos;
+                    }
+                }
+
+                /**
                 if(enemy.transform.position.x < self.transform.position.x){
                     targetPos.x = enemy.transform.position.x + attackRange / 2;
                 } else{
                     targetPos.x = enemy.transform.position.x - attackRange / 2;
                 }
+                */
                 targetPos.y = enemy.transform.position.y + 1;
             }
             //Check if you need to attack
