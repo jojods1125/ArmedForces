@@ -245,7 +245,8 @@ public class MenuManager : MonoBehaviour
 	/// </summary>
     public void LoadLobby()
 	{
-        SceneManager.LoadScene( "L_LobbyMenu" );
+        // SceneManager.LoadScene( "L_LobbyMenu" );
+        SceneManager.LoadScene("OfflineScene");
 	}
 
     /// <summary>
