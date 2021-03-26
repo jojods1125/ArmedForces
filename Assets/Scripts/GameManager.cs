@@ -69,6 +69,11 @@ public class GameManager : NetworkBehaviour
     }
         return closestPoint;
 
+    public Vector3 getRandomRespawnPoint()
+    {
+        return spawnPoints[Random.Range(0, spawnPoints.Count - 1)];
+    }
+
     /// <summary> Singleton instance </summary>
     private static GameManager instance;
 

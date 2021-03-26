@@ -9,19 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf80db299a61ac248aa944117fab5e02, type: 3}
-  m_Name: AI_Auto
+  m_Script: {fileID: 11500000, guid: 37bb4b310cc54bf4b9c9932d776220b5, type: 3}
+  m_Name: AI_Sprayer
   m_EditorClassIdentifier: 
-  weaponName: Machine Gun
+  weaponName: Sprayer
   description: DESCRIPTION
   mesh: {fileID: -5495902117074765545, guid: 5fdd08bfc3e07994bba88274d3cbac84, type: 3}
-  material: {fileID: 2100000, guid: 4a4d2b787eb393a469ae9860f5de4031, type: 2}
-  icon: {fileID: 21300000, guid: 113bdc64338b5be409f9ba847890ffef, type: 3}
+  material: {fileID: 2100000, guid: a2eee8323495b514f87547fc9727a108, type: 2}
+  icon: {fileID: 21300000, guid: 4bd7873dd9d30764bb709f9ee4a029e2, type: 3}
   rarity: 0
-  fireRate: 0.1
-  ammoCapacity: 50
-  pushback: 25
+  fireRate: 0.015
+  ammoCapacity: 800
+  pushback: 11
   reloadRate: 0.01
-  spreadRange: 0.2
-  bulletDamage: 5
-  bulletPushback: 10
+  spreadRange: 0.75
+  sprayDistance: 2
+  bulletDamage: 1
+  bulletPushback: 7
