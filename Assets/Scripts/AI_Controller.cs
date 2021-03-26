@@ -15,10 +15,10 @@ public class AI_Controller : MonoBehaviour
     private float reloadStart;
     private float reloadTime = 8;
 
-    public Player self; //Reference to self
+    public Player_AI self; //Reference to self
     public Player enemy; //Reference to target
-    public Arm frontArm; //Reference to front arm
-    public Arm backArm; //Reference to back arm
+    public Arm_AI frontArm; //Reference to front arm
+    public Arm_AI backArm; //Reference to back arm
 
     public float attackRange; //How close the AI follows
     public float stoppingDist; //What range the AI should stop following
@@ -63,7 +63,7 @@ public class AI_Controller : MonoBehaviour
         if (enemy == null)
             return;
 
-        Debug.Log(backArm.getAmmo(backArm.getWeaponC()));
+        //Debug.Log(backArm.getAmmo(backArm.getWeaponC()));
     //**
     //Use the shotgun to avoid flying off edges
     //**

@@ -4,7 +4,7 @@ using System;
 using Mirror;
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-public class Player : NetworkBehaviour
+public class Player_AI : MonoBehaviour
 {
     // ===========================================================
     //                          VARIABLES
@@ -23,21 +23,17 @@ public class Player : NetworkBehaviour
     public Weapon[] frontArmWeapons = new Weapon[4];
 
     protected Rigidbody rb;
-    private Arm[] arms;
-    [SyncVar]
+    private Arm_AI[] arms;
     private float currHealth = 100;
     private bool dying = false;
 
     //Used for differentiating each player in GameManager
-    [SyncVar]// [HideInInspector]
     public int playerID;
 
     // Last player ID to have attacked, reset on death
-    [SyncVar]
     private int lastAttackedID;
 
     // Last weapon to have attacked, reset to none on death
-    [SyncVar]
     private WeaponType lastAttackedType;
 
     // UI Manager
@@ -72,10 +68,6 @@ public class Player : NetworkBehaviour
     /// <param name="weaponType"> Type of weapon that attacked </param>
     public void DecreaseHealth(float health, int attackerID, WeaponType weaponType)
     {
-        // Only calculate damage on the server
-        if (!isServer)
-            return;
-
         // Decreases health and prevents invalid values
         currHealth = Mathf.Min(Mathf.Max(currHealth - health, 0), maxHealth);
 
@@ -85,23 +77,11 @@ public class Player : NetworkBehaviour
             lastAttackedID = attackerID;
             lastAttackedType = weaponType;
         }
-            
+
 
         // If the Player runs out of health, kill them
         if (currHealth == 0)
             RpcKill(attackerID, weaponType);
-    }
-
-
-    [Command]
-    void CmdDecreaseHealthFromAI(float health, int attackerID, WeaponType weaponType)
-    {
-        DecreaseHealth(health, attackerID, weaponType);
-    }
-
-    public void DecreaseHealthFromAI(float health, int attackerID, WeaponType weaponType)
-    {
-        CmdDecreaseHealthFromAI(health, attackerID, weaponType);
     }
 
 
@@ -125,7 +105,6 @@ public class Player : NetworkBehaviour
     /// </summary>
     /// <param name="killerID"> ID of the Player that killed them </param>
     /// <param name="weaponType"> Type of weapon that killed them </param>
-    [Command]
     public void CmdKill(int killerID, WeaponType weaponType)
     {
         RpcKill(killerID, weaponType);
@@ -137,7 +116,6 @@ public class Player : NetworkBehaviour
     /// </summary>
     /// <param name="killerID"> ID of the Player that killed them </param>
     /// /// <param name="weaponType"> Type of weapon that killed them </param>
-    [ClientRpc]
     public void RpcKill(int killerID, WeaponType weaponType)
     {
         // Prevent double kill
@@ -164,10 +142,6 @@ public class Player : NetworkBehaviour
             // Deactivates the GameObject
             gameObject.SetActive(false);
         }
-
-        // if local player, call achievement event
-        if (isLocalPlayer)
-            AchievementManager.Instance().OnEvent(AchievementType.deaths);
     }
 
 
@@ -177,7 +151,6 @@ public class Player : NetworkBehaviour
     /// <param name="killerID"> ID of the killer </param>
     /// <param name="playerID"> ID of the killed </param>
     /// /// <param name="weaponType"> Type of weapon that killed them </param>
-    [Command]
     void CmdTrackDeath(int killerID, int playerID, WeaponType weaponType)
     {
         GameManager.Instance().TrackDeath(killerID, playerID, weaponType);
@@ -198,7 +171,7 @@ public class Player : NetworkBehaviour
         rb.velocity = Vector3.zero;
         gameObject.transform.position = spawnLocation;
 
-        foreach (Arm arm in arms)
+        foreach (Arm_AI arm in arms)
         {
             arm.FullReload();
         }
@@ -215,16 +188,10 @@ public class Player : NetworkBehaviour
     /// <summary>
     /// Tells the server that the Player is connected
     /// </summary>
-    [Command]
     void CmdPlayerConnected()
     {
-        // Exits if not the server
-        if (!isServer)
-            return;
-
         // Retrieves an ID from GameManager
-        int newID = GameManager.Instance().ClientConnected();
-
+        int newID = GameManager.Instance().AIConnected();
         // Updates all instances of this Player across clients
         RpcPlayerConnected(newID);
     }
@@ -234,7 +201,6 @@ public class Player : NetworkBehaviour
     /// Gets info from the server for this Player on every client
     /// </summary>
     /// <param name="playerID"> ID being given to this Player </param>
-    [ClientRpc]
     void RpcPlayerConnected(int playerID)
     {
         // Sets the Player's ID and the last attacked ID
@@ -247,20 +213,6 @@ public class Player : NetworkBehaviour
     {
         // Tells the server that the Player is connected
         CmdPlayerConnected();
-
-        // If a copy of the Player on a client, freeze
-        if (!isLocalPlayer)
-        {
-            rb.constraints = RigidbodyConstraints.FreezeAll;
-        }
-
-        // If UI exists (only local player), connect health bar and weapon UI
-        if (uiManager)
-        {
-            GameManager.Instance().localPlayer = this;
-            uiManager.UpdateHealthBar(currHealth / maxHealth);
-            uiManager.UpdateWeaponIcons();
-        }
     }
 
     protected void Awake()
@@ -270,7 +222,7 @@ public class Player : NetworkBehaviour
 
         // Initiate variables
         rb = gameObject.GetComponent<Rigidbody>();
-        arms = gameObject.GetComponentsInChildren<Arm>();
+        arms = gameObject.GetComponentsInChildren<Arm_AI>();
     }
 
     void Update()
@@ -294,7 +246,7 @@ public class Player : NetworkBehaviour
     /// Returns references to the Arm objects of the player
     /// </summary>
     /// <returns> Player's Arm objects </returns>
-    public Arm[] GetArms()
+    public Arm_AI[] GetArms()
     {
         return arms;
     }
@@ -330,13 +282,10 @@ public class Player : NetworkBehaviour
     /// Enacts force on this player on every client (used from server calls)
     /// </summary>
     /// <param name="force"> Amount of force to enact </param>
-    [ClientRpc]
     public void RpcEnactForce(Vector3 force)
     {
-        if (!isLocalPlayer)
-            return;
-
         rb.AddForce(force);
     }
+
 
 }

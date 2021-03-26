@@ -2,19 +2,8 @@
 using UnityEngine;
 using Mirror;
 
-/// <summary>
-/// Which side of the player the arm is on; determines weapon loadout
-/// </summary>
-public enum ArmType
-{
-    /// <summary> Closer to camera </summary>
-    Front,
-    /// <summary> Behind player </summary>
-    Back
-}
 
-
-public class Arm : NetworkBehaviour
+public class Arm_AI : MonoBehaviour
 {
     [Header("Local References")]
 
@@ -23,7 +12,7 @@ public class Arm : NetworkBehaviour
     [Tooltip("Tip of the arm, where shots emit from")]
     public GameObject barrel;
     [Tooltip("Player character reference")]
-    public Player player;
+    public Player_AI player;
 
 
     [Header("Arm Data")]
@@ -97,10 +86,7 @@ public class Arm : NetworkBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    if (hit.collider.gameObject.GetComponent<Player>() != null)
-                        CmdAttack(hit.collider.gameObject.GetComponent<Player>(), auto.bulletDamage, player.playerID, bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
-                    else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
-                        Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), auto.bulletDamage, player.playerID, bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
+                    CmdAttack(hit.collider.gameObject.GetComponent<Player>(), auto.bulletDamage, player.playerID, bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
                 }
             }
 
@@ -139,15 +125,14 @@ public class Arm : NetworkBehaviour
                     // Raycasts bullet path
                     if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
                     {
+                        Debug.Log(hit.collider.gameObject.name);
+
                         CmdDrawBullet(barrel.transform.position, hit.point);
 
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
-                            if (hit.collider.gameObject.GetComponent<Player>() != null)
-                                CmdAttack(hit.collider.gameObject.GetComponent<Player>(), semi.bulletDamage, player.playerID, bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
-                            else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
-                                Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), semi.bulletDamage, player.playerID, bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
+                            CmdAttack(hit.collider.gameObject.GetComponent<Player>(), semi.bulletDamage, player.playerID, bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
                         }
                     }
 
@@ -202,12 +187,8 @@ public class Arm : NetworkBehaviour
     /// <param name="coreDamage"> Damage at the impact point </param>
     /// <param name="corePushback"> Pushback at the impact point </param>
     /// <param name="rocketPowered"> Whether to use gravity or not </param>
-    [Command]
     void CmdSpawnProjectile(string projectilePrefabName, Vector3 projectilePath, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered)
     {
-        if (!isServer)
-            return;
-
         // Instantiates a projectile prefab from the Resources/Projectiles folder
         GameObject projectile = (GameObject)Instantiate(Resources.Load("Projectiles/" + projectilePrefabName), projectilePath + (barrel.transform.up * 0.5f), Quaternion.identity);
 
@@ -246,10 +227,7 @@ public class Arm : NetworkBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    if (hit.collider.gameObject.GetComponent<Player>() != null)
-                        CmdAttack(hit.collider.gameObject.GetComponent<Player>(), sprayer.bulletDamage, player.playerID, bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
-                    else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
-                        Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), sprayer.bulletDamage, player.playerID, bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
+                    CmdAttack(hit.collider.gameObject.GetComponent<Player>(), sprayer.bulletDamage, player.playerID, bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
                 }
             }
 
@@ -267,34 +245,20 @@ public class Arm : NetworkBehaviour
     /// <param name="attackerID"> Player ID dealing the damage </param>
     /// <param name="pushback"> Pushback force </param>
     /// <param name="weaponType"> Type of weapon </param>
-    [Command]
     void CmdAttack(Player recipient, float damage, int attackerID, Vector3 pushback, WeaponType weaponType)
     {
-        if (!isServer)
-            return;
-
-        recipient.DecreaseHealth(damage, attackerID, weaponType);
-        recipient.RpcEnactForce(pushback);
+        recipient.DecreaseHealthFromAI(damage, attackerID, weaponType);
+        recipient.EnactForce(pushback);
     }
 
-
-    void Attack_AI(Player_AI recipient, float damage, int attackerID, Vector3 pushback, WeaponType weaponType)
-    {
-        recipient.DecreaseHealth(damage, attackerID, weaponType);
-        recipient.RpcEnactForce(pushback);
-    }
 
     /// <summary>
     /// Tells the server where to draw a bullet path
     /// </summary>
     /// <param name="start"> Start point of path </param>
     /// <param name="end"> End point of path </param>
-    [Command]
     void CmdDrawBullet(Vector3 start, Vector3 end)
     {
-        if (!isServer)
-            return;
-
         RpcDrawBullet(start, end);
     }
 
@@ -304,7 +268,6 @@ public class Arm : NetworkBehaviour
     /// </summary>
     /// <param name="start"> Start point of path </param>
     /// <param name="end"> End point of path </param>
-    [ClientRpc]
     void RpcDrawBullet(Vector3 start, Vector3 end)
     {
         LineRenderer path = Instantiate(bullet);
@@ -445,12 +408,8 @@ public class Arm : NetworkBehaviour
     /// </summary>
     /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
     /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
-    [Command]
     public void CmdSwitchAppearance(string meshName, string materialName)
     {
-        if (!isServer)
-            return;
-
         RpcSwitchAppearance(meshName, materialName);
     }
 
@@ -460,7 +419,6 @@ public class Arm : NetworkBehaviour
     /// </summary>
     /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
     /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
-    [ClientRpc]
     private void RpcSwitchAppearance(string meshName, string materialName)
     {
         arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);

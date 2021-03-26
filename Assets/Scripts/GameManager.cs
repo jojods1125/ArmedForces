@@ -66,8 +66,9 @@ public class GameManager : NetworkBehaviour
                 closestDist = Vector3.Distance(pos, spawnPoint);
             }
         }
-    }
         return closestPoint;
+    }
+       
 
     public Vector3 getRandomRespawnPoint()
     {
@@ -121,11 +122,11 @@ public class GameManager : NetworkBehaviour
             return;
 
         // Instantiates a projectile prefab from the Resources/Projectiles folder
-        GameObject enemy = (GameObject)Resources.Load("AI/" + "Player_Sandbag");
+        //GameObject enemy = (GameObject)Resources.Load("AI/" + "Player_Sandbag");
 
         // Spawns projectile across all clients
-        enemy.GetComponent<NetworkIdentity>().AssignClientAuthority(localPlayer.gameObject.GetComponent<NetworkIdentity>().connectionToClient);
-        NetworkServer.Spawn(enemy, localPlayer.gameObject);
+       // enemy.GetComponent<NetworkIdentity>().AssignClientAuthority(localPlayer.gameObject.GetComponent<NetworkIdentity>().connectionToClient);
+        //NetworkServer.Spawn(enemy, localPlayer.gameObject);
     }
 
     // ===========================================================
@@ -147,6 +148,22 @@ public class GameManager : NetworkBehaviour
 
         // Tells other GameManagers that a player connected
         RpcClientConnected(newID);
+
+        // Adds new key to kills and deaths dictionaries
+        kills.Add(newID, 0);
+        deaths.Add(newID, 0);
+
+        // Gives ID to Player
+        return newID;
+    }
+
+    public int AIConnected()
+    {
+        // Retrieves the ID
+        int newID = getAIID();
+
+        // Tells other GameManagers that a player connected
+        //RpcClientConnected(newID);
 
         // Adds new key to kills and deaths dictionaries
         kills.Add(newID, 0);
@@ -183,6 +200,11 @@ public class GameManager : NetworkBehaviour
         return playerCount;
     }
 
+    int getAIID()
+    {
+        playerCount++;
+        return playerCount;
+    }
 
 
     // ===========================================================
@@ -291,7 +313,10 @@ public class GameManager : NetworkBehaviour
     {
         yield return new WaitForSeconds(playerRespawnTime);
         obj.SetActive(true);
-        obj.GetComponent<Player>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
+        if (obj.GetComponent<Player>() != null)
+            obj.GetComponent<Player>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
+        else if (obj.GetComponent<Player_AI>() != null)
+            obj.GetComponent<Player_AI>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
     }
 
 
