@@ -917,7 +917,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: fbaf160863214a247b251b4a76e45415, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: fbaf160863214a247b251b4a76e45415, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1532,7 +1532,7 @@ MonoBehaviour:
   stoppingDist: 4
   stuckDist: 1
   mapWidth: 18
-  mapHeight: 8
+  mapHeight: 9
   safeSpeed: 4
   lowSprayerAmmo: 300
   lowShotgunAmmo: 2
@@ -1600,7 +1600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8282234077870317105, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalPosition.z

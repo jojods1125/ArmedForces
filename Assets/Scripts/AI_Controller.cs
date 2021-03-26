@@ -13,7 +13,7 @@ public class AI_Controller : MonoBehaviour
     private float restTime;
     private bool enemyRespawn;
     private float reloadStart;
-    private float reloadTime = 8;
+    private float reloadTime;
 
     public Player_AI self; //Reference to self
     public Player enemy; //Reference to target
@@ -53,6 +53,7 @@ public class AI_Controller : MonoBehaviour
         previousPos = self.transform.position;
         previousTime = Time.time;
         enemyRespawn = false;
+        reloadTime = 8;
     }
 
     // Update is called once per frame
@@ -92,20 +93,20 @@ public class AI_Controller : MonoBehaviour
     //Check if you are trying to move and have not
     //Adjust with shotgun and try again
     //**
-        if(frontArm.getFiring() && state != State.attack && Time.time > previousTime + 1){       
-            if(Vector3.Magnitude(self.transform.position - previousPos) < stuckDist){
+        if( Time.time > previousTime + 1){       //If it has been a second
+            if(frontArm.getFiring() && state != State.attack && Vector3.Magnitude(self.transform.position - previousPos) < stuckDist){
                 Vector3 stuckAngle = Vector3.Normalize(targetPos - self.transform.position);
                 if(Mathf.Abs(stuckAngle.x) > Mathf.Abs(stuckAngle.y)){
                     if(self.transform.position.y < 0){
-                        posAdjust(new Vector3(0,-1,0));
+                        posAdjust(new Vector3(-.5f,-1,0));
                     }else{
-                        posAdjust(new Vector3(0,1,0));
+                        posAdjust(new Vector3(.5f,1,0));
                     }        
                 }else{
                     if(self.transform.position.x < 0){
-                        posAdjust(new Vector3(-1,0,0));
+                        posAdjust(new Vector3(-1,-.5f,0));
                     }else{
-                        posAdjust(new Vector3(1,0,0));
+                        posAdjust(new Vector3(1,.5f,0));
                     }
                 }
                 return;
@@ -142,6 +143,8 @@ public class AI_Controller : MonoBehaviour
         }
 
         if(state == State.rest){
+            frontArm.SetFiring(false);
+            backArm.SetFiring(false);
             if(Time.time > restStart + restTime){
                 state = State.follow;
             }
@@ -194,7 +197,7 @@ public class AI_Controller : MonoBehaviour
                 return;
             }
             
-            //Check if you need to follow
+            //Check where you need to follow
             else if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > attackRange){
                 if(enemy.transform.position.x < self.transform.position.x){
                     targetPos.x = enemy.transform.position.x + attackRange / 2;
@@ -253,6 +256,7 @@ public class AI_Controller : MonoBehaviour
             frontArm.Aim(direction);
             frontArm.SetFiring(true);
             frontArm.releaseTrigger();
+
 
     }
 
