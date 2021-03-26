@@ -55,20 +55,6 @@ public class GameManager : NetworkBehaviour
     //                           START-UP
     // ===========================================================
 
-    //Returns the closest spawn point to a position
-    public Vector3 getCloseRespawnPoint(Vector3 pos)
-    {
-        Vector3 closestPoint = spawnPoints[0];
-        float closestDist = int.MaxValue;
-        foreach (Vector3 spawnPoint in spawnPoints){
-            if(Vector3.Distance(pos, spawnPoint) < closestDist){
-                closestPoint = spawnPoint;
-                closestDist = Vector3.Distance(pos, spawnPoint);
-            }
-        }
-    }
-        return closestPoint;
-
     /// <summary> Singleton instance </summary>
     private static GameManager instance;
 
@@ -287,6 +273,24 @@ public class GameManager : NetworkBehaviour
         yield return new WaitForSeconds(playerRespawnTime);
         obj.SetActive(true);
         obj.GetComponent<Player>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
+    }
+
+
+    //Returns the closest spawn point to a position
+    public Vector3 getCloseRespawnPoint(Vector3 pos)
+    {
+        Vector3 closestPoint = spawnPoints[0];
+        float closestDist = int.MaxValue;
+        foreach (Vector3 spawnPoint in spawnPoints)
+        {
+            if (Vector3.Distance(pos, spawnPoint) < closestDist)
+            {
+                closestPoint = spawnPoint;
+                closestDist = Vector3.Distance(pos, spawnPoint);
+            }
+        }
+
+        return closestPoint;
     }
 
 

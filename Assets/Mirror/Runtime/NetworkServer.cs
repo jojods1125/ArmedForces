@@ -615,6 +615,8 @@ namespace Mirror
             logger.LogException(exception);
         }
 
+
+
         /// <summary>
         /// Register a handler for a particular message type.
         /// <para>There are several system message types which you can add handlers for. You can also add your own message types.</para>

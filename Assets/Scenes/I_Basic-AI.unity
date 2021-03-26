@@ -1526,8 +1526,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   self: {fileID: 1586800012}
   enemy: {fileID: 871795642}
-  frontArm: {fileID: 1184613263}
-  backArm: {fileID: 221891331}
+  frontArm: {fileID: 0}
+  backArm: {fileID: 0}
   followDist: 6
   stoppingDist: 4
   stuckDist: 1
@@ -1558,14 +1558,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4089810492114355075, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
-      propertyPath: sceneId
-      value: 4006781437
-      objectReference: {fileID: 0}
-    - target: {fileID: 6160160177948397252, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
-      propertyPath: enemy
-      value: 
-      objectReference: {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
     - target: {fileID: 3305675465212334390, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: backArmWeapons.Array.data[0]
       value: 
@@ -1586,6 +1578,14 @@ PrefabInstance:
       propertyPath: frontArmWeapons.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: 308df20a53b6de4478172dcc79b2e2e8, type: 2}
+    - target: {fileID: 4089810492114355075, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: sceneId
+      value: 4006781437
+      objectReference: {fileID: 0}
+    - target: {fileID: 6160160177948397252, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
+      propertyPath: enemy
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8282234077263579432, guid: 99c63d3031d6da244a9937a75e329d70, type: 3}
       propertyPath: m_LocalPosition.z
       value: -2
