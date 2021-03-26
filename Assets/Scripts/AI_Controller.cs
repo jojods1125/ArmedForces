@@ -59,7 +59,6 @@ public class AI_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(state);
     //**
     //Use the shotgun to avoid flying off edges
     //**
