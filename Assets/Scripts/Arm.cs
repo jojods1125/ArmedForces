@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 /// <summary>
 /// Which side of the player the arm is on; determines weapon loadout
@@ -12,15 +13,25 @@ public enum ArmType
     Back
 }
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class Arm : MonoBehaviour
+
+public class Arm : NetworkBehaviour
 {
+    [Header("Local References")]
+
+    [Tooltip("The arm GameObject")]
+    public GameObject arm;
     [Tooltip("Tip of the arm, where shots emit from")]
     public GameObject barrel;
     [Tooltip("Player character reference")]
     public Player player;
+
+
+    [Header("Arm Data")]
+
     [Tooltip("Whether the arm uses the player's Front Arm or Back Arm weapons")]
     public ArmType armType;
+    [Tooltip("Bullet prefab reference")]
+    public LineRenderer bullet;
 
 
     /// <summary> Whether or not the player is pressing the fire trigger </summary>
@@ -47,11 +58,16 @@ public class Arm : MonoBehaviour
 
     /// <summary> Amount of ammo remaining in each weapon </summary>
     private readonly Dictionary<Weapon, int> ammoRemaining = new Dictionary<Weapon, int>();
-
+    /// <summary> Dictionary used for knowing which weapons are in which slots </summary>
     private readonly Dictionary<Weapon, char> weaponLetters = new Dictionary<Weapon, char>();
-
+    /// <summary> UIManager, as retrieved from GameManager </summary>
     protected UIManager uiManager;
 
+
+
+    // ===========================================================
+    //                      ATTACKS AND DAMAGE
+    // ===========================================================
 
     /// <summary>
     /// Fires an AutoGun Weapon
@@ -70,17 +86,21 @@ public class Arm : MonoBehaviour
 
             // Calculates bullet path and draws ray
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-auto.spreadRange, auto.spreadRange), Random.Range(-auto.spreadRange, auto.spreadRange));
-            Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.green, 1);
+            ///Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.green, 1);
 
 
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
             {
-                //Debug.Log("HIT " + hit.collider.gameObject.name);
+                CmdDrawBullet(barrel.transform.position, hit.point);
+
+                ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * auto.bulletPushback);
-                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(auto.bulletDamage, player.playerID, WeaponType.auto);
+                    if (hit.collider.gameObject.GetComponent<Player>() != null)
+                        CmdAttack(hit.collider.gameObject.GetComponent<Player>(), auto.bulletDamage, player.playerID, bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
+                    else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
+                        Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), auto.bulletDamage, player.playerID, bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
                 }
             }
 
@@ -114,16 +134,20 @@ public class Arm : MonoBehaviour
                 {
                     // Calculates bullet path and draws ray
                     Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-semi.spreadRange, semi.spreadRange), Random.Range(-semi.spreadRange, semi.spreadRange));
-                    Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.red, 1);
+                    ///Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.red, 1);
 
                     // Raycasts bullet path
                     if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
                     {
+                        CmdDrawBullet(barrel.transform.position, hit.point);
+
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
-                            hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * semi.bulletPushback);
-                            hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(semi.bulletDamage, player.playerID, WeaponType.semi);
+                            if (hit.collider.gameObject.GetComponent<Player>() != null)
+                                CmdAttack(hit.collider.gameObject.GetComponent<Player>(), semi.bulletDamage, player.playerID, bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
+                            else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
+                                Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), semi.bulletDamage, player.playerID, bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
                         }
                     }
 
@@ -157,17 +181,42 @@ public class Arm : MonoBehaviour
 
                 // Creates projectile and spawns it at the correct location
                 Vector3 projectilePath = new Vector3(barrel.transform.position.x, barrel.transform.position.y);
-                GameObject projectile = Instantiate(launcher.projectilePrefab, projectilePath + (barrel.transform.up * 0.5f), Quaternion.identity);
 
-                // Initializes the projectile prefab with the appropriate launcher values
-                projectile.GetComponent<Projectile>().Initialize(barrel.transform.up, launcher.projectilePower, launcher.explosionRadius,
-                                        launcher.coreDamage, launcher.corePushback, launcher.rocketPowered, player.playerID);
+                // Spawns the projectile in the server
+                CmdSpawnProjectile(launcher.projectilePrefab.name, projectilePath, launcher.projectilePower, launcher.explosionRadius, launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
 
                 // Pushes player
                 player.EnactForce(barrel.transform.up.normalized * -launcher.pushback);
             }
         }
 
+    }
+
+    /// <summary>
+    /// Instantiates a projectile prefab on the server and tells the clients to spawn it
+    /// </summary>
+    /// <param name="projectilePrefabName"> String of the prefab's name, which gets loaded from Resources/Projectiles </param>
+    /// <param name="projectilePath"> Location of barrel </param>
+    /// <param name="projectilePower"> Power of the projectile </param>
+    /// <param name="explosionRadius"> Radius of the explosion </param>
+    /// <param name="coreDamage"> Damage at the impact point </param>
+    /// <param name="corePushback"> Pushback at the impact point </param>
+    /// <param name="rocketPowered"> Whether to use gravity or not </param>
+    [Command]
+    void CmdSpawnProjectile(string projectilePrefabName, Vector3 projectilePath, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered)
+    {
+        if (!isServer)
+            return;
+
+        // Instantiates a projectile prefab from the Resources/Projectiles folder
+        GameObject projectile = (GameObject)Instantiate(Resources.Load("Projectiles/" + projectilePrefabName), projectilePath + (barrel.transform.up * 0.5f), Quaternion.identity);
+
+        // Spawns projectile across all clients
+        NetworkServer.Spawn(projectile);
+
+        // Initializes the projectile with the appropriate launcher values across all clients
+        projectile.GetComponent<Projectile>().RpcInitialize(barrel.transform.up, projectilePower, explosionRadius,
+                                coreDamage, corePushback, rocketPowered, player.playerID);
     }
 
 
@@ -188,7 +237,8 @@ public class Arm : MonoBehaviour
 
             // Calculates bullet path and draws ray
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-sprayer.spreadRange, sprayer.spreadRange), Random.Range(-sprayer.spreadRange, sprayer.spreadRange));
-            Debug.DrawRay(barrel.transform.position, bulletPath * sprayer.sprayDistance, Color.yellow, 1);
+            ///Debug.DrawRay(barrel.transform.position, bulletPath * sprayer.sprayDistance, Color.yellow, 1);
+            CmdDrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
 
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit, sprayer.sprayDistance))
@@ -196,8 +246,10 @@ public class Arm : MonoBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * sprayer.bulletPushback);
-                    hit.collider.gameObject.GetComponent<Player>().DecreaseHealth(sprayer.bulletDamage, player.playerID, WeaponType.sprayer);
+                    if (hit.collider.gameObject.GetComponent<Player>() != null)
+                        CmdAttack(hit.collider.gameObject.GetComponent<Player>(), sprayer.bulletDamage, player.playerID, bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
+                    else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
+                        Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), sprayer.bulletDamage, player.playerID, bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
                 }
             }
 
@@ -207,12 +259,70 @@ public class Arm : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Deals damage and force to a Player
+    /// </summary>
+    /// <param name="recipient"> Player receiving the damage/force </param>
+    /// <param name="damage"> Amount of damage dealt </param>
+    /// <param name="attackerID"> Player ID dealing the damage </param>
+    /// <param name="pushback"> Pushback force </param>
+    /// <param name="weaponType"> Type of weapon </param>
+    [Command]
+    void CmdAttack(Player recipient, float damage, int attackerID, Vector3 pushback, WeaponType weaponType)
+    {
+        if (!isServer)
+            return;
+
+        recipient.DecreaseHealth(damage, attackerID, weaponType);
+        recipient.RpcEnactForce(pushback);
+    }
+
+
+    void Attack_AI(Player_AI recipient, float damage, int attackerID, Vector3 pushback, WeaponType weaponType)
+    {
+        recipient.DecreaseHealth(damage, attackerID, weaponType);
+        recipient.RpcEnactForce(pushback);
+    }
+
+    /// <summary>
+    /// Tells the server where to draw a bullet path
+    /// </summary>
+    /// <param name="start"> Start point of path </param>
+    /// <param name="end"> End point of path </param>
+    [Command]
+    void CmdDrawBullet(Vector3 start, Vector3 end)
+    {
+        if (!isServer)
+            return;
+
+        RpcDrawBullet(start, end);
+    }
+
+
+    /// <summary>
+    /// Draws the bullet path on every client
+    /// </summary>
+    /// <param name="start"> Start point of path </param>
+    /// <param name="end"> End point of path </param>
+    [ClientRpc]
+    void RpcDrawBullet(Vector3 start, Vector3 end)
+    {
+        LineRenderer path = Instantiate(bullet);
+        Destroy(path.gameObject, 0.2f);
+        path.SetPosition(0, start);
+        path.SetPosition(1, end);
+    }
+
+
 
     void FixedUpdate()
     {
         // If the player is using the firing input, call the appropriate weapon firing function
         if (firing)
         {
+            if (!Application.isFocused)
+                return;
+
             if (equippedWeapon is W_SemiGun semi)
             {
                 FireSemi(semi);
@@ -257,9 +367,8 @@ public class Arm : MonoBehaviour
 
 
     // ===========================================================
-    //                 INITIALIZATION AND CONTROLS
+    //                  ARM CONTROLS  AND VISUALS
     // ===========================================================
-
 
     // Start is called before the first frame update
     protected void Start()
@@ -280,18 +389,15 @@ public class Arm : MonoBehaviour
         else if (weaponC) Switch(weaponC);
         else Switch(weaponD);
 
-        // Render equippedWeapon
-        if (equippedWeapon)
-        {
-            gameObject.GetComponent<MeshFilter>().mesh = equippedWeapon.mesh;
-            gameObject.GetComponent<MeshRenderer>().material = equippedWeapon.material;
-        }
-
         // Initializes ammoRemaining dictionary for each weapon
-        if (weaponA is W_Shootable gunA) ammoRemaining.Add(weaponA, gunA.ammoCapacity);
-        if (weaponB is W_Shootable gunB) ammoRemaining.Add(weaponB, gunB.ammoCapacity);
-        if (weaponC is W_Shootable gunC) ammoRemaining.Add(weaponC, gunC.ammoCapacity);
-        if (weaponD is W_Shootable gunD) ammoRemaining.Add(weaponD, gunD.ammoCapacity);
+        if (!ammoRemaining.ContainsKey(weaponA))
+            if (weaponA is W_Shootable gunA) ammoRemaining.Add(weaponA, gunA.ammoCapacity);
+        if (!ammoRemaining.ContainsKey(weaponB))
+            if (weaponB is W_Shootable gunB) ammoRemaining.Add(weaponB, gunB.ammoCapacity);
+        if (!ammoRemaining.ContainsKey(weaponC))
+            if (weaponC is W_Shootable gunC) ammoRemaining.Add(weaponC, gunC.ammoCapacity);
+        if (!ammoRemaining.ContainsKey(weaponD))
+            if (weaponD is W_Shootable gunD) ammoRemaining.Add(weaponD, gunD.ammoCapacity);
         
         // Starts the match with full ammo in each weapon
         FullReload();
@@ -301,12 +407,15 @@ public class Arm : MonoBehaviour
     // Aims the arm based on joystick angle
     public void Aim(Vector3 aimVal)
     {
-        float degrees = Vector3.Angle(Vector3.up, transform.position + (aimVal * 1000));
-        Vector3 eulerRotation = transform.rotation.eulerAngles;
+        if (!Application.isFocused)
+            return;
+
+        float degrees = Vector3.Angle(Vector3.up, arm.transform.position + (aimVal * 1000));
+        Vector3 eulerRotation = arm.transform.rotation.eulerAngles;
         if (aimVal.x > 0)
             degrees = -degrees;
         if (aimVal.sqrMagnitude > 0.5)
-            transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, degrees);
+            arm.transform.rotation = Quaternion.Euler(eulerRotation.x, eulerRotation.y, degrees);
     }
 
     
@@ -314,18 +423,58 @@ public class Arm : MonoBehaviour
     // Switches the arm's currently equipped weapon
     public void Switch(Weapon weapon)
     {
+        if (!Application.isFocused)
+            return;
+
         if (weapon)
         {
             // Change currently equipped weapon
             equippedWeapon = weapon;
 
             // Change equipped weapon visuals
-            gameObject.GetComponent<MeshFilter>().mesh = weapon.mesh;
-            gameObject.GetComponent<MeshRenderer>().material = weapon.material;
+            CmdSwitchAppearance(weapon.mesh.name, weapon.material.name);
 
             // Update UI
             if (uiManager) uiManager.UpdateSelectedUI(armType, weaponLetters[weapon]);
         }
+    }
+
+
+    /// <summary>
+    /// Tells the server to refresh the appearance of the Arm
+    /// </summary>
+    /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
+    /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
+    [Command]
+    public void CmdSwitchAppearance(string meshName, string materialName)
+    {
+        if (!isServer)
+            return;
+
+        RpcSwitchAppearance(meshName, materialName);
+    }
+
+
+    /// <summary>
+    /// Every client refreshes the appearance of their Arm
+    /// </summary>
+    /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
+    /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
+    [ClientRpc]
+    private void RpcSwitchAppearance(string meshName, string materialName)
+    {
+        arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);
+        arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
+    }
+
+
+    /// <summary>
+    /// Gets the equippedWeapon
+    /// </summary>
+    /// <returns> Weapon currently equipped </returns>
+    public Weapon GetEquippedWeapon()
+    {
+        return equippedWeapon;
     }
 
 

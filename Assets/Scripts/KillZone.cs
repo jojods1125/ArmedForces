@@ -10,7 +10,10 @@ public class KillZone : MonoBehaviour
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            other.gameObject.GetComponent<Player>().Kill(-1, WeaponType.none);
+            if (other.gameObject.GetComponent<Player>() != null)
+                other.gameObject.GetComponent<Player>().CmdKill(-1, WeaponType.none);
+            else if (other.gameObject.GetComponent<Player_AI>() != null)
+                other.gameObject.GetComponent<Player_AI>().CmdKill(-1, WeaponType.none);
         }
 
     }

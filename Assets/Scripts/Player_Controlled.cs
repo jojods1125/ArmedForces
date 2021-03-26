@@ -17,17 +17,20 @@ public class Player_Controlled : Player
     // Start is called before the first frame update
     new void Start()
     {
-        inputActions = new PlayerControls();
+        if (isLocalPlayer)
+        {
+            inputActions = new PlayerControls();
 
-        inputActions.GunGuy.MoveLeft.performed += ctx => MoveLeft(true);
-        inputActions.GunGuy.MoveLeft.canceled += ctx => MoveLeft(false);
-        inputActions.GunGuy.MoveLeft.Enable();
+            inputActions.GunGuy.MoveLeft.performed += ctx => MoveLeft(true);
+            inputActions.GunGuy.MoveLeft.canceled += ctx => MoveLeft(false);
+            inputActions.GunGuy.MoveLeft.Enable();
 
-        inputActions.GunGuy.MoveRight.performed += ctx => MoveRight(true);
-        inputActions.GunGuy.MoveRight.canceled += ctx => MoveRight(false);
-        inputActions.GunGuy.MoveRight.Enable();
+            inputActions.GunGuy.MoveRight.performed += ctx => MoveRight(true);
+            inputActions.GunGuy.MoveRight.canceled += ctx => MoveRight(false);
+            inputActions.GunGuy.MoveRight.Enable();
 
-        uiManager = GameManager.Instance().uiManager;
+            uiManager = GameManager.Instance().uiManager;
+        }
 
         base.Start();
     }
@@ -39,6 +42,9 @@ public class Player_Controlled : Player
     /// <param name="pressed"> Whether the player is pressing the movement button or not </param>
     void MoveLeft(bool pressed)
     {
+        if (!Application.isFocused)
+            return;
+
         if (pressed)
         {
             currWalkMomentum += -walkMomentum;
@@ -58,6 +64,9 @@ public class Player_Controlled : Player
     /// <param name="pressed"> Whether the player is pressing the movement button or not </param>
     void MoveRight(bool pressed)
     {
+        if (!Application.isFocused)
+            return;
+
         if (pressed)
         {
             currWalkMomentum += walkMomentum;
@@ -74,6 +83,9 @@ public class Player_Controlled : Player
     // Called every fixed tic
     void FixedUpdate()
     {
+        if (!Application.isFocused)
+            return;
+
         if (rb.velocity.magnitude < maxWalkSpeed)
             rb.AddForce(currWalkMomentum, 0, 0);
 
