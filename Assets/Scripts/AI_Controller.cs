@@ -95,7 +95,8 @@ public class AI_Controller : MonoBehaviour
     //**
         if( Time.time > previousTime + 1){       //If it has been a second
             if(frontArm.getFiring() && state != State.attack && Vector3.Magnitude(self.transform.position - previousPos) < stuckDist){
-                Vector3 stuckAngle = Vector3.Normalize(targetPos - self.transform.position);
+                Vector3 stuckAngle = (targetPos - self.transform.position);
+
                 if(Mathf.Abs(stuckAngle.x) > Mathf.Abs(stuckAngle.y)){
                     if(self.transform.position.y < 0){
                         posAdjust(new Vector3(-.5f,-1,0));
@@ -104,9 +105,9 @@ public class AI_Controller : MonoBehaviour
                     }        
                 }else{
                     if(self.transform.position.x < 0){
-                        posAdjust(new Vector3(-1,.5f,0));
+                        posAdjust(new Vector3(-.5f,-1,0));
                     }else{
-                        posAdjust(new Vector3(1,.5f,0));
+                        posAdjust(new Vector3(.5f,-1,0));
                     }
                 }
                 return;
