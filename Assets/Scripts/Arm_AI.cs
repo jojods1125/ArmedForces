@@ -284,8 +284,6 @@ public class Arm_AI : MonoBehaviour
         // If the player is using the firing input, call the appropriate weapon firing function
         if (firing)
         {
-            if (!Application.isFocused)
-                return;
 
             if (equippedWeapon is W_SemiGun semi)
             {
