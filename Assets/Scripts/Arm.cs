@@ -72,10 +72,11 @@ public class Arm : MonoBehaviour
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-auto.spreadRange, auto.spreadRange), Random.Range(-auto.spreadRange, auto.spreadRange));
             Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.green, 1);
 
+
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
             {
-                ///Debug.Log("HIT " + hit.collider.gameObject.name);
+                //Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     hit.collider.gameObject.GetComponent<Player>().EnactForce(bulletPath.normalized * auto.bulletPushback);
@@ -347,24 +348,35 @@ public class Arm : MonoBehaviour
         weaponD = player.backArmWeapons[3];
     }
 
+    //Get weaponA
     public Weapon getWeaponA(){
         return weaponA;
     }
+    //Get weaponB
     public Weapon getWeaponB(){
         return weaponB;
     }
+    //Get weaponC
     public Weapon getWeaponC(){
         return weaponC;
     }
+    //Get weaponD
     public Weapon getWeaponD(){
         return weaponD;
     }
+    public int getAmmo(Weapon weapon){
+        return ammoRemaining[weapon];
+    }
+    //Set firing
     public void SetFiring(bool firing){
         this.firing = firing;
     }
+    public bool getFiring(){
+        return firing;
+    }
+    //A way for the AI to "release trigger" and reset shooting
     public void releaseTrigger(){
-        singleShotFired = false;
-        
+        singleShotFired = false;  
     }
 
     // ===========================================================
