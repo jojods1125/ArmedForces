@@ -97,6 +97,9 @@ public class MenuManager : MonoBehaviour
             MakeDisplay(curr, a);
         }
 
+        // Set up Weapon loadout
+
+
     }
 
     private void FixedUpdate()
