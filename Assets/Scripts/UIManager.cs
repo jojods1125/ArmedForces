@@ -43,6 +43,15 @@ public class UIManager : MonoBehaviour
     [Header("Health Bar References")]
     public GameObject healthBar_bar;
 
+    [Header("Match Info References")]
+    public GameObject matchClock;
+
+    [Header("DEBUG: Player Stat References")]
+    public GameObject p1_KDR;
+    public GameObject p2_KDR;
+    public GameObject p3_KDR;
+    public GameObject p4_KDR;
+
     private Image previous_L_select;
     private Image previous_R_select;
 
@@ -51,22 +60,32 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+    }
+
+    /// <summary>
+    /// Update the UI to show which weapons are in the loadout
+    /// </summary>
+    public void UpdateWeaponIcons()
+    {
         // Gather all the image references
         Image[] weapons_L_images = new Image[] { weaponA_L_image, weaponB_L_image, weaponC_L_image, weaponD_L_image };
         Image[] weapons_R_images = new Image[] { weaponA_R_image, weaponB_R_image, weaponC_R_image, weaponD_R_image };
 
         // Update back arm images
-        for (int i = 0; i < GameManager.Instance().mainPlayer.backArmWeapons.Length; i++)
+        if (GameManager.Instance().localPlayer)
         {
-            weapons_L_images[i].sprite = GameManager.Instance().mainPlayer.backArmWeapons[i].icon;
-        }
+            for (int i = 0; i < GameManager.Instance().localPlayer.backArmWeapons.Length; i++)
+            {
+                weapons_L_images[i].sprite = GameManager.Instance().localPlayer.backArmWeapons[i].icon;
+            }
 
-        // Update front arm images
-        for (int i = 0; i < GameManager.Instance().mainPlayer.frontArmWeapons.Length; i++)
-        {
-            weapons_R_images[i].sprite = GameManager.Instance().mainPlayer.frontArmWeapons[i].icon;
+            // Update front arm images
+            for (int i = 0; i < GameManager.Instance().localPlayer.frontArmWeapons.Length; i++)
+            {
+                weapons_R_images[i].sprite = GameManager.Instance().localPlayer.frontArmWeapons[i].icon;
+            }
         }
-
     }
 
 
