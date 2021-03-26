@@ -247,6 +247,9 @@ public class Arm_AI : MonoBehaviour
     /// <param name="weaponType"> Type of weapon </param>
     void CmdAttack(Player recipient, float damage, int attackerID, Vector3 pushback, WeaponType weaponType)
     {
+        if (recipient == null)
+            return;
+
         recipient.DecreaseHealthFromAI(damage, attackerID, weaponType);
         recipient.EnactForce(pushback);
     }
