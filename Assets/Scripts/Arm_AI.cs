@@ -71,7 +71,7 @@ public class Arm_AI : MonoBehaviour
             fireRateTimeStamp = Time.time;
             reloadRateTimeStamp = Time.time;
             ReduceAmmo(1);
-            AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.auto);
+            // AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.auto);
 
             // Calculates bullet path and draws ray
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-auto.spreadRange, auto.spreadRange), Random.Range(-auto.spreadRange, auto.spreadRange));
@@ -113,7 +113,7 @@ public class Arm_AI : MonoBehaviour
                 fireRateTimeStamp = Time.time;
                 reloadRateTimeStamp = Time.time;
                 ReduceAmmo(1);
-                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.semi);
+                // AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.semi);
 
                 // Burst loop
                 for (int i = 0; i < semi.burstCount; i++)
@@ -125,8 +125,6 @@ public class Arm_AI : MonoBehaviour
                     // Raycasts bullet path
                     if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
                     {
-                        Debug.Log(hit.collider.gameObject.name);
-
                         CmdDrawBullet(barrel.transform.position, hit.point);
 
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);
@@ -162,7 +160,7 @@ public class Arm_AI : MonoBehaviour
                 fireRateTimeStamp = Time.time;
                 reloadRateTimeStamp = Time.time;
                 ReduceAmmo(1);
-                AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.launcher);
+                // AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.launcher);
 
                 // Creates projectile and spawns it at the correct location
                 Vector3 projectilePath = new Vector3(barrel.transform.position.x, barrel.transform.position.y);
@@ -214,7 +212,7 @@ public class Arm_AI : MonoBehaviour
             fireRateTimeStamp = Time.time;
             reloadRateTimeStamp = Time.time;
             ReduceAmmo(1);
-            AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.sprayer);
+            // AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.sprayer);
 
             // Calculates bullet path and draws ray
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-sprayer.spreadRange, sprayer.spreadRange), Random.Range(-sprayer.spreadRange, sprayer.spreadRange));
@@ -286,8 +284,6 @@ public class Arm_AI : MonoBehaviour
         // If the player is using the firing input, call the appropriate weapon firing function
         if (firing)
         {
-            if (!Application.isFocused)
-                return;
 
             if (equippedWeapon is W_SemiGun semi)
             {

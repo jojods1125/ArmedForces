@@ -190,9 +190,11 @@ public class Player_AI : MonoBehaviour
     /// </summary>
     void CmdPlayerConnected()
     {
+        // Debug.LogError("CALLING AICONNECTED");
         // Retrieves an ID from GameManager
         int newID = GameManager.Instance().AIConnected();
         // Updates all instances of this Player across clients
+        // Debug.LogError("ABOUT TO CALL RPCPLAYERCONNECTED");
         RpcPlayerConnected(newID);
     }
 
@@ -204,14 +206,25 @@ public class Player_AI : MonoBehaviour
     void RpcPlayerConnected(int playerID)
     {
         // Sets the Player's ID and the last attacked ID
+        // Debug.LogError("ID: " + this.playerID);
         this.playerID = playerID;
+        // Debug.LogError("ID: " + this.playerID);
         lastAttackedID = this.playerID;
     }
 
 
-    protected void Start()
+/*    protected void Start()
     {
         // Tells the server that the Player is connected
+        Debug.LogError("STARTING AI");
+        CmdPlayerConnected();
+    }*/
+
+    // Activate the AI
+    public void Activate()
+    {
+        // Tells the server that the Player is connected
+        // Debug.LogError("STARTING AI");
         CmdPlayerConnected();
     }
 

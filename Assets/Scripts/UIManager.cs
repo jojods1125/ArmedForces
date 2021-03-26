@@ -55,7 +55,17 @@ public class UIManager : MonoBehaviour
     private Image previous_L_select;
     private Image previous_R_select;
 
-
+    [Header("Achievement PopUp References")]
+    [Tooltip("Display Prefab")]
+    public GameObject achievementPrefab;
+    [Tooltip("Tier Prefab")]
+    public GameObject tierPrefab;
+    [Tooltip("Progress Bar Prefab")]
+    public GameObject progressBarPrefab;
+    [Tooltip("Panel containing Achievement")]
+    public GameObject panel;
+    [Tooltip("Animator Controller")]
+    public RuntimeAnimatorController rac;
 
     // Start is called before the first frame update
     void Start()
@@ -237,5 +247,120 @@ public class UIManager : MonoBehaviour
         // Scale health bar
         healthBar_bar.transform.localScale = new Vector3(myHealth, healthBar_bar.transform.localScale.y,
             healthBar_bar.transform.localScale.z);
+    }
+
+    public void DisplayAchievementPopUp( Achievement a )
+    {
+
+        GameObject popUp = Instantiate(achievementPrefab, panel.transform);
+
+        // Get the Tiers child
+        Transform tiers = popUp.transform.Find("Tiers");
+        // Get the Progress Bar child
+        Transform progressBars = popUp.transform.Find("Progress Bars");
+
+        // clear children if existing
+        if (tiers.childCount != 0)
+        {
+            foreach (Transform t in tiers.transform)
+            {
+                GameObject.Destroy( t.gameObject );
+            }
+        }
+
+
+        // Create a tier for every activation value
+        for (int i = 0; i < a.activationValues.Length; i++)
+        {
+            Instantiate(tierPrefab, tiers);
+            Instantiate(progressBarPrefab, progressBars);
+        }
+
+        // Set size of tier
+        GridLayoutGroup tglg = tiers.GetComponent<GridLayoutGroup>();
+        tglg.cellSize = new Vector2(tglg.cellSize.x / a.activationValues.Length, tglg.cellSize.y);
+        // Set size of progress bars
+        GridLayoutGroup pbglg = progressBars.GetComponent<GridLayoutGroup>();
+        pbglg.cellSize = new Vector2(pbglg.cellSize.x / a.activationValues.Length, pbglg.cellSize.y);
+
+        // Set progress bars
+        int currentValue = a.currentValue;
+        for (int i = 0; i < a.activationValues.Length; i++)
+        {
+            // Current working bar
+            Transform bar = progressBars.GetChild(i);
+
+            // This tiers max
+            int max = a.activationValues[i];
+
+            // Check if this bar needs scaled at all, break if not
+            if (i > 0 && currentValue < a.activationValues[i - 1])
+            {
+                break;
+            }
+            // Check if this bar has been met/exceeded
+            else if (currentValue >= max)
+            {
+                bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+            }
+            // Set the bar scale
+            else
+            {
+                bar.localScale = new Vector3(currentValue / max, bar.localScale.y, bar.localScale.z);
+            }
+        }
+
+        /** Set fields in display */
+        // Name
+        popUp.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
+        // Description
+        popUp.transform.Find("Description").gameObject.GetComponent<TMP_Text>().text = a.ToString();
+        // Current Count
+        popUp.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
+        // Next Count & set finished
+        if (!a.IsComplete())
+        {
+            popUp.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + a.activationValues[a.nextTier].ToString();
+            popUp.transform.Find("Finished").gameObject.SetActive(false);
+        }
+        else
+        {
+            popUp.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
+            popUp.transform.Find("Finished").gameObject.SetActive(true);
+        }
+
+        // Play Animation
+        Animator anim = GetComponent<Animator>();
+        anim.Play("Achievement PopUp");
+        // Animation Event calls to destroy Pop up after animation
+    }
+
+    /// <summary>
+    /// Destroys the Achievement PopUp
+    /// Gets called as an Animation Event
+    /// </summary>
+    public void DestroyPopUpAchievement( GameObject popUp )
+    {
+
+        Transform panel = transform.Find("Canvas_Achievements").Find("Panel");
+        /*if (panel.childCount != 0)
+        {
+            GameObject.Destroy(panel.GetChild(0).gameObject);
+        }*/
+        StartCoroutine( DeletePopUp( panel ) );
+    }
+
+    public IEnumerator DeletePopUp(Transform panel)
+    {
+        /*for (int i = 0; i < panel.childCount; i++)
+        {
+            Destroy( panel.GetChild( 0 ).gameObject );
+            yield return new WaitForSeconds(4);
+        }*/
+        while (panel.childCount > 0)
+        {
+            Destroy(panel.GetChild(0).gameObject);
+            yield return new WaitForSeconds(2);
+        }
     }
 }
