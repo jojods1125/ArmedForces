@@ -118,8 +118,12 @@ public class GameManager : NetworkBehaviour
         // Increase game time every serverGameTimeStep
         InvokeRepeating(nameof(IncrementTime), 0, serverGameTimeStep);
 
-        ai.Activate();
-        aiC = ai.GetComponent<AI_Controller>();
+        if (matchType == MatchType.Training)
+        {
+            ai.Activate();
+            aiC = ai.GetComponent<AI_Controller>();
+        }
+        
     }
 
 
@@ -192,7 +196,8 @@ public class GameManager : NetworkBehaviour
     {
         // Refreshes arms so new player sees them
         localPlayer.UpdateAppearance();
-        aiC.Activate();
+        if (matchType == MatchType.Training)
+            aiC.Activate();
     }
 
 
