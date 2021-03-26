@@ -56,12 +56,17 @@ public class AI_Controller : MonoBehaviour
         reloadTime = 6;
     }
 
+    // Activate the Controller - set the enemy
+    public void Activate()
+    {
+        // Debug.LogError("Setting AI Enemy");
+        enemy = GameManager.Instance().localPlayer;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        enemy = GameManager.Instance().localPlayer;
-
-        if (enemy == null)
+         if (enemy == null)
             return;
 
     //**

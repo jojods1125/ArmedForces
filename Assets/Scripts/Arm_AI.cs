@@ -125,8 +125,6 @@ public class Arm_AI : MonoBehaviour
                     // Raycasts bullet path
                     if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
                     {
-                        Debug.Log(hit.collider.gameObject.name);
-
                         CmdDrawBullet(barrel.transform.position, hit.point);
 
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);

@@ -34,6 +34,9 @@ public class GameManager : NetworkBehaviour
     [Tooltip("Local player within the scene [DO NOT SET IN EDITOR IN ONLINE SCENES]")]
     public Player localPlayer;
 
+    public Player_AI ai;
+    public AI_Controller aiC;
+
 
     /// <summary> List of spawn point locations </summary>
     private List<Vector3> spawnPoints = new List<Vector3>();
@@ -90,6 +93,7 @@ public class GameManager : NetworkBehaviour
 
     void Awake()
     {
+        // Debug.LogError("I SHOULD BE FIRST");
         // Set singleton
         if (instance != null && instance != this)
             Destroy(this.gameObject);
@@ -113,6 +117,9 @@ public class GameManager : NetworkBehaviour
     {
         // Increase game time every serverGameTimeStep
         InvokeRepeating(nameof(IncrementTime), 0, serverGameTimeStep);
+
+        ai.Activate();
+        aiC = ai.GetComponent<AI_Controller>();
     }
 
 
@@ -159,8 +166,10 @@ public class GameManager : NetworkBehaviour
 
     public int AIConnected()
     {
+        // Debug.LogError("CALLING AIID");
         // Retrieves the ID
         int newID = getAIID();
+        // Debug.LogError(newID);
 
         // Tells other GameManagers that a player connected
         //RpcClientConnected(newID);
@@ -183,6 +192,7 @@ public class GameManager : NetworkBehaviour
     {
         // Refreshes arms so new player sees them
         localPlayer.UpdateAppearance();
+        aiC.Activate();
     }
 
 
@@ -202,6 +212,7 @@ public class GameManager : NetworkBehaviour
 
     int getAIID()
     {
+        // Debug.LogError("IN GETAIID");
         playerCount++;
         return playerCount;
     }

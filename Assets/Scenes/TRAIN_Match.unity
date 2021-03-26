@@ -2296,5 +2296,9 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 126081587}
+    - target: {fileID: 7621204008605508432, guid: 33ba948622f3d424481b6d78079982ff, type: 3}
+      propertyPath: ai
+      value: 
+      objectReference: {fileID: 2107254670}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33ba948622f3d424481b6d78079982ff, type: 3}
