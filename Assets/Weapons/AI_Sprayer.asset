@@ -21,7 +21,7 @@ MonoBehaviour:
   fireRate: 0.015
   ammoCapacity: 800
   pushback: 11
-  reloadRate: 0.01
+  reloadRate: 0.005
   spreadRange: 0.75
   sprayDistance: 2
   bulletDamage: 1

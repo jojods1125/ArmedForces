@@ -63,7 +63,6 @@ public class AI_Controller : MonoBehaviour
         if (enemy == null)
             return;
 
-        //Debug.Log(backArm.getAmmo(backArm.getWeaponC()));
     //**
     //Use the shotgun to avoid flying off edges
     //**
@@ -83,7 +82,7 @@ public class AI_Controller : MonoBehaviour
             return;
         }
         //Don't fly off the bottom
-        if(self.transform.position.y < -mapHeight + 1){
+        if(self.transform.position.y < -mapHeight + 1 && self.GetComponent<Rigidbody>().velocity.y < 0){
             posAdjust(new Vector3(0,-1,0));
             return;
         }
@@ -93,7 +92,7 @@ public class AI_Controller : MonoBehaviour
     //Check if you are trying to move and have not
     //Adjust with shotgun and try again
     //**
-        if(frontArm.getFiring() && Time.time > previousTime + 1){       
+        if(frontArm.getFiring() && state != State.attack && Time.time > previousTime + 1){       
             if(Vector3.Magnitude(self.transform.position - previousPos) < stuckDist){
                 Vector3 stuckAngle = Vector3.Normalize(targetPos - self.transform.position);
                 if(Mathf.Abs(stuckAngle.x) > Mathf.Abs(stuckAngle.y)){
@@ -232,16 +231,6 @@ public class AI_Controller : MonoBehaviour
             frontArm.Aim(targetAngle);
             backArm.Aim(targetAngle);
             if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > attackRange){
-                // Raycasts bullet path
-            /**
-            if (Physics.Raycast(frontArm.transform.position, (enemy.transform.position - self.transform.position), out RaycastHit hit))
-            {
-                Debug.Log("HIT " + hit.collider.gameObject.name);
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
-                {   
-                }
-            }
-            */
                 state = State.follow;
                 return;
             }
