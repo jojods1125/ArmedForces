@@ -47,6 +47,12 @@ public class Achievement : ScriptableObject
     [Tooltip("Initial value of the property (typically 0)")]
     public int initialValue;
 
+    /**
+     * CREATE DICTIONARY<INT, WEAPON> FOR UNLOCKABLES
+     * CREATE METHOD TO CHECK FOR UNLOCKABLES
+     */
+
+
     /// <summary>
     /// Adds a given amount to the property value
     /// </summary>
@@ -106,6 +112,32 @@ public class Achievement : ScriptableObject
         }
         achieved = false;
         return false;
+    }
+
+    /// <summary>
+    /// Unlocks the corresponding reward if its point is reached
+    /// </summary>
+    public void unlockReward ()
+    {
+        
+    }
+
+    /// <summary>
+    /// Says whether the last tier had a reward tied to it
+    /// </summary>
+    /// <returns> Whether or not the last tier had a reward </returns>
+    public bool hadReward ()
+    {
+        return true;
+    }
+
+    /// <summary>
+    /// Gives the last reward unlocked if any
+    /// </summary>
+    /// <returns> Last unlocked reward, null otherwise </returns>
+    public string lastReward()
+    {
+        return null;
     }
 
     /// <summary>

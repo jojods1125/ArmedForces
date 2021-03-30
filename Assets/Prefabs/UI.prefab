@@ -440,8 +440,8 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 300, y: 100}
-  m_Spacing: {x: 0, y: 12.5}
+  m_CellSize: {x: 168, y: 40}
+  m_Spacing: {x: 0, y: 5}
   m_Constraint: 1
   m_ConstraintCount: 1
 --- !u!1 &2326991568035671984
@@ -1930,7 +1930,7 @@ MonoBehaviour:
   p2_KDR: {fileID: 985728617540417948}
   p3_KDR: {fileID: 1579122998303327716}
   p4_KDR: {fileID: 2326991568035671984}
-  achievementPrefab: {fileID: 1146438363030574227, guid: e3f1bcc76b9597d4db623f09322274db, type: 3}
+  achievementPopUpPrefab: {fileID: 1146438363030574227, guid: a38ea3b907dcea34895e32c3467c712e, type: 3}
   tierPrefab: {fileID: 7591037569370411143, guid: d6b93c12015de8545a5cd8e7a8232131, type: 3}
   progressBarPrefab: {fileID: 1612258747238857711, guid: c665b40e31f0a714e815694f60b1386d, type: 3}
   panel: {fileID: 2057535479131402653}
