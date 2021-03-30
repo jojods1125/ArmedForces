@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: A_SemiShotsFired
   m_EditorClassIdentifier: 
   achievementMessage: Take Aim!
-  nextTier: 0
   achieved: 0
   type: 3
   currentValue: 0
+  nextTier: 0
   activationValues: 01000000050000000a00000019000000320000004b0000007d000000
-  initialValue: 0
   weaponType: 2
