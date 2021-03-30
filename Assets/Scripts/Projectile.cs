@@ -1,16 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Mirror;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public class Projectile : MonoBehaviour
+[RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(MeshRenderer))]
+public class Projectile : NetworkBehaviour
 {
     public GameObject prefab_Explosion;
 
     private Rigidbody proj_rb;
+    private Collider proj_collide;
+    private MeshRenderer proj_rend;
     private float explosionRadius;
     private float coreDamage;
     private float corePushback;
+
     //The if of the player that shot the projectile
     private int playerID;
 
@@ -23,7 +25,8 @@ public class Projectile : MonoBehaviour
     /// <param name="coreDamage"> Damage at the core of the explosion if projectile has explosionRadius </param>
     /// <param name="corePushback"> Pushback at the core of the explosion if projectile has explosionRadius </param>
     /// <param name="rocketPowered"> True if gravity does not affect, false if gravity affects </param>
-    public void Initialize(Vector3 direction, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered, int playerID)
+    [ClientRpc]
+    public void RpcInitialize(Vector3 direction, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered, int playerID)
     {
         this.explosionRadius = explosionRadius;
         this.coreDamage = coreDamage;
@@ -37,6 +40,8 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // THIS HAPPENS CLIENT-SIDE, CAUSING A SLIGHT OFFSET FROM WHAT THE SERVER HAS
+
         if (other.gameObject.layer != LayerMask.NameToLayer("Bound"))
         {
             // Creates explosion if there is an explosion radius
@@ -60,12 +65,15 @@ public class Projectile : MonoBehaviour
                 // For each object hit
                 for (int i = 0; i < exploded.Length; i++)
                 {
-                    /// TODO: Make players in explosion take damage
+                    // Players in explosion take damage
                     if (exploded[i].gameObject.layer == LayerMask.NameToLayer("Player"))
                     {
                         float damageMultiplier = 1 / (explosionRadius / (explosionRadius - Vector3.Distance(exploded[i].ClosestPoint(gameObject.transform.position), gameObject.transform.position)));
                         damageMultiplier = Mathf.Min(Mathf.Max(damageMultiplier, 0), 1);
-                        exploded[i].gameObject.GetComponent<Player>().DecreaseHealth(coreDamage * damageMultiplier, playerID, WeaponType.launcher);
+                        if (exploded[i].gameObject.GetComponent<Player>() != null)
+                            exploded[i].gameObject.GetComponent<Player>().DecreaseHealth(coreDamage * damageMultiplier, playerID, WeaponType.launcher);
+                        else if (exploded[i].gameObject.GetComponent<Player_AI>() != null)
+                            exploded[i].gameObject.GetComponent<Player_AI>().DecreaseHealth(coreDamage * damageMultiplier, playerID, WeaponType.launcher);
                     }
 
                     // Add explosion force to rigidbody if exists
@@ -73,7 +81,11 @@ public class Projectile : MonoBehaviour
                     if (rb != null) { rb.AddExplosionForce(corePushback, gameObject.transform.position, explosionRadius); }
                 }
 
-                Destroy(gameObject);
+                // Give clients 0.5 seconds to catch up to server, then destroy
+                proj_rb.constraints = RigidbodyConstraints.FreezeAll;
+                proj_collide.enabled = false;
+                proj_rend.enabled = false;
+                Destroy(gameObject, .5f);
             }
             // Does not create an explosion if there is no explosion radius
             else
@@ -86,13 +98,20 @@ public class Projectile : MonoBehaviour
                     rb.AddForce(direction.normalized * corePushback);
                 }
 
-                /// TODO: Make player take damage
+                // Player take damage
                 if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    other.gameObject.GetComponent<Player>().DecreaseHealth(coreDamage, playerID, WeaponType.launcher);
+                    if (other.gameObject.GetComponent<Player>() != null)
+                        other.gameObject.GetComponent<Player>().DecreaseHealth(coreDamage, playerID, WeaponType.launcher);
+                    else if (other.gameObject.GetComponent<Player_AI>() != null)
+                        other.gameObject.GetComponent<Player_AI>().DecreaseHealth(coreDamage, playerID, WeaponType.launcher);
                 }
 
-                Destroy(gameObject);
+                // Give clients 0.5 seconds to catch up to server, then destroy
+                proj_rb.constraints = RigidbodyConstraints.FreezeAll;
+                proj_collide.enabled = false;
+                proj_rend.enabled = false;
+                Destroy(gameObject, .5f);
             }
         }
     }
@@ -101,6 +120,8 @@ public class Projectile : MonoBehaviour
     private void Awake()
     {
         proj_rb = gameObject.GetComponent<Rigidbody>();
+        proj_collide = gameObject.GetComponent<Collider>();
+        proj_rend = gameObject.GetComponent<MeshRenderer>();
         Destroy(gameObject, 10);
     }
 }

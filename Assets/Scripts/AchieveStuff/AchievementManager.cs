@@ -84,7 +84,10 @@ public class AchievementManager : MonoBehaviour
                 //      Total: 'currentValue'"
                 Debug.Log(curr.achievementMessage + " Achieved: " + curr.activationValues[curr.nextTier - 1] + "\n Total: " + curr.currentValue);
             }*/
-            curr.CheckNext(); // print out now done in CheckNext method
+            if (curr.CheckNext()) // print out now done in CheckNext method
+            {
+                GameManager.Instance().uiManager.DisplayAchievementPopUp(curr);
+            }
             updated = false;
         }
         else
@@ -103,15 +106,15 @@ public class AchievementManager : MonoBehaviour
     private void FixedUpdate()
     {
         // Check for reset button (Start and Select)
-        if ( Gamepad.current[GamepadButton.Start].isPressed && Gamepad.current[GamepadButton.Select].isPressed)
+        if (Gamepad.current != null && Gamepad.current.added && Gamepad.current[GamepadButton.Start].isPressed && Gamepad.current[GamepadButton.Select].isPressed)
         {
             // Go through each achievement and reset the currentValue and nextTier to 0
-            foreach ( Achievement ach in achievements )
+            foreach (Achievement ach in achievements)
             {
-                ach.currentValue = 0;
+                ach.currentValue = ach.initialValue;
                 ach.nextTier = 0;
+                ach.achieved = false;
             }
         }
     }
-
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /**
  * Base idea of what Achievements are
@@ -29,6 +27,8 @@ public class Achievement : ScriptableObject
     [Header("Achievement")]
     [Tooltip("Name of the achievement")]
     public string achievementMessage;
+    /*[Tooltip("Description of achievement")]
+    public string achievementDescription;*/
     [Min(0)]
     [Tooltip("Tier working towards (last met + 1)")]
     public int nextTier;
@@ -104,6 +104,40 @@ public class Achievement : ScriptableObject
             achieved = true;
             return true;
         }
+        achieved = false;
         return false;
+    }
+
+    /// <summary>
+    /// Creates a string description of the Achievement based on the type
+    /// and secondary type, if applicable.
+    /// </summary>
+    /// <returns> Description of Achievement </returns>
+    public override string ToString()
+    {
+        // Initial Description
+        string returnable = "Number of ";
+
+        // Depending on type, add to Description
+        switch (type)
+        {
+            case AchievementType.kills:
+                returnable += "Kills";
+                break;
+            case AchievementType.deaths:
+                returnable += "Deaths";
+                break;
+            case AchievementType.shotsFired:
+                returnable += "Shots Fired";
+                break;
+            case AchievementType.wins:
+                returnable += "Wins";
+                break;
+            default:
+                returnable = "ERROR IN \'Achievement.toString()\' METHOD";
+                break;
+        }
+
+        return returnable;
     }
 }

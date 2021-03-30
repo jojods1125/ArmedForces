@@ -26,4 +26,32 @@ public class TypedAchievement : Achievement
     /*[Tooltip("What weapon")]
     public Weapon gun;*/
 
+    public override string ToString()
+    {
+        // Get the base Achievements toString()
+        string returnable = base.ToString() + " with a";
+
+        // Depending on subtype, add to Description
+        switch (weaponType)
+        {
+            case WeaponType.auto:
+                returnable += "n Automatic Weapon";
+                break;
+            case WeaponType.semi:
+                returnable += " Semi-Automatic Weapon";
+                break;
+            case WeaponType.launcher:
+                returnable += " Launcher Weapon";
+                break;
+            case WeaponType.sprayer:
+                returnable += " Sprayer Weapon";
+                break;
+            default:
+                returnable = "ERROR IN \'TypedAchievement.toString()\' METHOD";
+                break;
+        }
+
+        return returnable;
+    }
+
 }

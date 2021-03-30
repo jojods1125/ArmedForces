@@ -4,5 +4,20 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Menus/L_MainMenu.unity
+    guid: f7b86518fcd4a1b489295dcd07a6ac44
+  - enabled: 1
+    path: Assets/Scenes/OfflineScene.unity
+    guid: a4824ea4ae4aa5547892f38d7680df3a
+  - enabled: 1
+    path: Assets/Scenes/OnlineScene_J.unity
+    guid: ecb5dfa0773e1ac4e97d06e5ec88f3a3
+  - enabled: 1
+    path: Assets/Scenes/TRAIN_Lobby.unity
+    guid: b8b82f221f748fc4da2da73dbc9faa65
+  - enabled: 1
+    path: Assets/Scenes/TRAIN_Match.unity
+    guid: 38bbfff0a45d83a4fa4075ffda68ed38
   m_configObjects: {}
