@@ -281,7 +281,7 @@ public class UIManager : MonoBehaviour
             // get achievement
             Achievement a = popUpQueue.Dequeue();
             GameObject popUp = Instantiate(achievementPopUpPrefab, panel.transform);
-            Debug.Log("DISPLAYING ANIMATION FOR" + " " + a.name);
+            //Debug.Log("DISPLAYING ANIMATION FOR" + " " + a.name);
             //popUp.gameObject.name += popUpCount++;
 
             /** Set fields in display */
@@ -293,8 +293,11 @@ public class UIManager : MonoBehaviour
             {
                 popUp.transform.Find("Reward?").gameObject.GetComponent<TMP_Text>().text = "Unlocked: " + a.lastReward();
             }
-            // Set finished
-            popUp.transform.Find("Finished").gameObject.SetActive(a.IsComplete());
+            // Set finished if tiered
+            if (a is A_Tiered)
+            {
+                popUp.transform.Find("Finished").gameObject.SetActive(((A_Tiered)a).IsComplete());
+            }
 
             // Play Animation
             anim.Play("Achievement PopUp");
