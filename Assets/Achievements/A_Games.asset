@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ee55d058369d6c40ad37838ef999824, type: 3}
-  m_Name: New Repeatable Achievement
+  m_Name: A_Games
   m_EditorClassIdentifier: 
-  achievementMessage: 
+  achievementMessage: Victory Chicken Royale Dinner!!!
   achieved: 0
-  type: 0
+  type: 4
   currentValue: 0
-  repeatValue: 0
+  repeatValue: 3
+  timesAchieved: 0
