@@ -9,7 +9,7 @@ public class A_Repeatable : Achievement
     public int repeatValue;
 
     // Number of times the repeatValue has been met
-    private int timesAchieved = 0;
+    public int timesAchieved = 0;
 
     /// <summary>
     /// Checks to see if the repeatable milestone has been met

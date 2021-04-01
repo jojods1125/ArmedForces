@@ -146,7 +146,7 @@ public class MenuManager : MonoBehaviour
             {
                 // cast 
                 A_Tiered at = (A_Tiered)a;
-                int currentValue = a.currentValue;
+                int currentValue = at.currentValue;
                 for (int j = 0; j < at.activationValues.Length; j++)
                 {
                     // Current working bar
@@ -180,6 +180,26 @@ public class MenuManager : MonoBehaviour
                         }
                         /*float percent = currentValue / (float)max;*/
                         bar.localScale = new Vector3(percent, bar.localScale.y, bar.localScale.z);
+                    }
+                }
+            }
+            else if (a is A_Repeatable)
+            {
+                A_Repeatable ar = (A_Repeatable)a;
+                int currentValue = ar.currentValue % ar.repeatValue;
+                for (int j = 0; j < ar.repeatValue; j++)
+                {
+                    // Current working bar
+                    Transform bar = progressBars.GetChild(j);
+
+                    // set bar to full if past or at progress
+                    if (j < currentValue)
+                    {
+                        bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+                    }
+                    else
+                    {
+                        bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
                     }
                 }
             }
@@ -408,6 +428,40 @@ public class MenuManager : MonoBehaviour
                 else
                 {
                     bar.localScale = new Vector3(currentValue / max, bar.localScale.y, bar.localScale.z);
+                }
+            }
+        }
+        else if (a is A_Repeatable)
+        {
+            A_Repeatable ar = (A_Repeatable)a;
+            // create tiers and progress bars
+            for (int i = 0; i < ar.repeatValue; i++)
+            {
+                Instantiate(tierPrefab, tiers);
+                Instantiate(progressBarPrefab, progressBars);
+            }
+
+            // Set size of tier
+            GridLayoutGroup tglg = tiers.GetComponent<GridLayoutGroup>();
+            tglg.cellSize = new Vector2(tglg.cellSize.x / ar.repeatValue, tglg.cellSize.y);
+            // Set size of progress bars
+            GridLayoutGroup pbglg = progressBars.GetComponent<GridLayoutGroup>();
+            pbglg.cellSize = new Vector2(pbglg.cellSize.x / ar.repeatValue, pbglg.cellSize.y);
+
+            int currentValue = ar.currentValue % ar.repeatValue;
+            for (int j = 0; j < ar.repeatValue; j++)
+            {
+                // Current working bar
+                Transform bar = progressBars.GetChild(j);
+
+                // set bar to full if past or at progress
+                if (j < currentValue)
+                {
+                    bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+                }
+                else
+                {
+                    break;
                 }
             }
         }

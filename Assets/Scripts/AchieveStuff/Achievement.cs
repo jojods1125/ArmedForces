@@ -13,7 +13,7 @@
 /// </summary>
 public enum AchievementType
 {
-    kills, deaths, wins, shotsFired
+    kills, deaths, wins, shotsFired, games
 }
 
 /// <summary>
@@ -99,6 +99,9 @@ public class Achievement : ScriptableObject
                 break;
             case AchievementType.wins:
                 returnable += "Wins";
+                break;
+            case AchievementType.games:
+                returnable += "Games Played";
                 break;
             default:
                 returnable = "ERROR IN \'Achievement.toString()\' METHOD";
