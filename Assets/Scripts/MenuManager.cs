@@ -62,6 +62,10 @@ public class MenuManager : MonoBehaviour
     [Tooltip("Progress Bar Prefab")]
     public GameObject progressBarPrefab;
 
+    [Header("Weapon Loadout Display")]
+    [Tooltip("List of Weapons")]
+    public List<Weapon> weapons;
+
     // Current Menu on
     private GameObject currentMenu;
     // Last visited Menu
@@ -488,5 +492,11 @@ public class MenuManager : MonoBehaviour
                 curr.transform.Find("Finished").gameObject.SetActive(true);
             }
         }
+    }
+
+
+    public void displayWeapons (char weaponSlot)
+    {
+        
     }
 }
