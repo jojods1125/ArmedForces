@@ -16,7 +16,7 @@ public enum WeaponType
 /// More properties for the Kill Achievement
 /// inlcuding specifying type of kills
 /// </summary>
-public class TypedAchievement : Achievement
+public class A_Typed : A_Tiered
 {
 
     [Header("Typing Properties")]

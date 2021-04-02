@@ -57,7 +57,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Achievement PopUp References")]
     [Tooltip("Display Prefab")]
-    public GameObject achievementPrefab;
+    public GameObject achievementPopUpPrefab;
     [Tooltip("Tier Prefab")]
     public GameObject tierPrefab;
     [Tooltip("Progress Bar Prefab")]
@@ -66,6 +66,10 @@ public class UIManager : MonoBehaviour
     public GameObject panel;
     [Tooltip("Animator Controller")]
     public RuntimeAnimatorController rac;
+
+    // number of popUps made
+    private float popUpCount = 0f;
+    private Queue<Achievement> popUpQueue = new Queue<Achievement>();
 
     // Start is called before the first frame update
     void Start()
@@ -249,89 +253,95 @@ public class UIManager : MonoBehaviour
             healthBar_bar.transform.localScale.z);
     }
 
+    /// <summary>
+    /// Display a PopUp achievement when called and start an animation for it
+    /// </summary>
+    /// <param name="a"></param>
     public void DisplayAchievementPopUp( Achievement a )
     {
+        popUpQueue.Enqueue(a);
+        // call coroutine
+        //StartCoroutine( DisplayPopUp( a ) );
+    }
 
-        GameObject popUp = Instantiate(achievementPrefab, panel.transform);
-
-        // Get the Tiers child
-        Transform tiers = popUp.transform.Find("Tiers");
-        // Get the Progress Bar child
-        Transform progressBars = popUp.transform.Find("Progress Bars");
-
-        // clear children if existing
-        if (tiers.childCount != 0)
+    private void Update()
+    {
+        Animator anim = GetComponent<Animator>();
+        AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(0);
+        // if animation not playing
+        if (animState.length <= animState.normalizedTime && popUpQueue.Count > 0)
         {
-            foreach (Transform t in tiers.transform)
+            // Delete popUp if one exists
+            if (popUpCount > 0)
             {
-                GameObject.Destroy( t.gameObject );
+                Destroy(transform.Find("Canvas_Achievements").Find("Panel").GetChild(0).gameObject);
+                popUpCount--;
             }
+
+            // get achievement
+            Achievement a = popUpQueue.Dequeue();
+            GameObject popUp = Instantiate(achievementPopUpPrefab, panel.transform);
+            //Debug.Log("DISPLAYING ANIMATION FOR" + " " + a.name);
+            //popUp.gameObject.name += popUpCount++;
+
+            /** Set fields in display */
+            // Name
+            popUp.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
+
+            // Reward
+            if (a.hadReward())
+            {
+                popUp.transform.Find("Reward?").gameObject.GetComponent<TMP_Text>().text = "Unlocked: " + a.lastReward();
+            }
+            // Set finished if tiered
+            if (a is A_Tiered)
+            {
+                popUp.transform.Find("Finished").gameObject.SetActive(((A_Tiered)a).IsComplete());
+            }
+
+            // Play Animation
+            anim.Play("Achievement PopUp");
+            popUpCount++;
+            // Animation Event calls to destroy Pop up after animation
+        }
+    }
+
+    /*public IEnumerator DisplayPopUp( Achievement a )
+    {
+        Animator anim = GetComponent<Animator>();
+        AnimatorStateInfo animState = anim.GetCurrentAnimatorStateInfo(0);
+        while ( animState.length > animState.normalizedTime && popUpCount > 0)
+        {
+            Debug.Log("WAITING FOR ANIMATION" + " " + a.name);
+            yield return new WaitForSeconds(3);
         }
 
-
-        // Create a tier for every activation value
-        for (int i = 0; i < a.activationValues.Length; i++)
+        // Animation not running, delete popUp if one exists
+        if (popUpCount > 0)
         {
-            Instantiate(tierPrefab, tiers);
-            Instantiate(progressBarPrefab, progressBars);
+            Destroy(transform.Find("Canvas_Achievements").Find("Panel").GetChild(0).gameObject);
+            popUpCount--;
         }
 
-        // Set size of tier
-        GridLayoutGroup tglg = tiers.GetComponent<GridLayoutGroup>();
-        tglg.cellSize = new Vector2(tglg.cellSize.x / a.activationValues.Length, tglg.cellSize.y);
-        // Set size of progress bars
-        GridLayoutGroup pbglg = progressBars.GetComponent<GridLayoutGroup>();
-        pbglg.cellSize = new Vector2(pbglg.cellSize.x / a.activationValues.Length, pbglg.cellSize.y);
+        GameObject popUp = Instantiate(achievementPopUpPrefab, panel.transform);
+        Debug.Log("DISPLAYING ANIMATION FOR" + " " + a.name);
+        //popUp.gameObject.name += popUpCount++;
 
-        // Set progress bars
-        int currentValue = a.currentValue;
-        for (int i = 0; i < a.activationValues.Length; i++)
-        {
-            // Current working bar
-            Transform bar = progressBars.GetChild(i);
-
-            // This tiers max
-            int max = a.activationValues[i];
-
-            // Check if this bar needs scaled at all, break if not
-            if (i > 0 && currentValue < a.activationValues[i - 1])
-            {
-                break;
-            }
-            // Check if this bar has been met/exceeded
-            else if (currentValue >= max)
-            {
-                bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
-            }
-            // Set the bar scale
-            else
-            {
-                bar.localScale = new Vector3(currentValue / max, bar.localScale.y, bar.localScale.z);
-            }
-        }
-
-        /** Set fields in display */
+        //                              Set fields in display 
         // Name
         popUp.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
-        // Description
-        popUp.transform.Find("Description").gameObject.GetComponent<TMP_Text>().text = a.ToString();
-        // Current Count
-        popUp.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
-        // Next Count & set finished
-        if (!a.IsComplete())
+
+        // Reward
+        if (a.hadReward())
         {
-            popUp.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + a.activationValues[a.nextTier].ToString();
-            popUp.transform.Find("Finished").gameObject.SetActive(false);
+            popUp.transform.Find("Reward?").gameObject.GetComponent<TMP_Text>().text = "Unlocked: " + a.lastReward();
         }
-        else
-        {
-            popUp.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
-            popUp.transform.Find("Finished").gameObject.SetActive(true);
-        }
+        // Set finished
+        popUp.transform.Find("Finished").gameObject.SetActive(a.IsComplete());
 
         // Play Animation
-        Animator anim = GetComponent<Animator>();
         anim.Play("Achievement PopUp");
+        popUpCount++;
         // Animation Event calls to destroy Pop up after animation
     }
 
@@ -339,28 +349,26 @@ public class UIManager : MonoBehaviour
     /// Destroys the Achievement PopUp
     /// Gets called as an Animation Event
     /// </summary>
-    public void DestroyPopUpAchievement( GameObject popUp )
+    /*public void DestroyPopUpAchievement( GameObject popUp )
     {
 
         Transform panel = transform.Find("Canvas_Achievements").Find("Panel");
-        /*if (panel.childCount != 0)
-        {
-            GameObject.Destroy(panel.GetChild(0).gameObject);
-        }*/
         StartCoroutine( DeletePopUp( panel ) );
-    }
+    }*/
 
-    public IEnumerator DeletePopUp(Transform panel)
+    /// <summary>
+    /// Helper Method to DestroyPopUpAchievement
+    /// waits while childCount is greater than 0
+    /// </summary>
+    /// <param name="panel"> Panel object to look at </param>
+    /// <returns> wait </returns>
+    /*public IEnumerator DeletePopUp(Transform panel)
     {
-        /*for (int i = 0; i < panel.childCount; i++)
-        {
-            Destroy( panel.GetChild( 0 ).gameObject );
-            yield return new WaitForSeconds(4);
-        }*/
         while (panel.childCount > 0)
         {
             Destroy(panel.GetChild(0).gameObject);
+            popUpCount--;
             yield return new WaitForSeconds(2);
         }
-    }
+    }*/
 }

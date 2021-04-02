@@ -62,7 +62,7 @@ public class AchievementManager : MonoBehaviour
                     curr = ach;
                     break;
                 }
-                else if (((TypedAchievement)ach).weaponType == wType)
+                else if (((A_Typed)ach).weaponType == wType)
                 {
                     // weapon type was specified, check
                     ach.AddValue( amount );
@@ -76,19 +76,14 @@ public class AchievementManager : MonoBehaviour
         // Check if milestone completed?
         if (updated && curr != null)
         {
-            /*if (curr.CheckNext())
+            if (curr is A_Tiered)
             {
-                // print out?
-                // tie to UI?
-                // log "message! Achieved: 'milestone'
-                //      Total: 'currentValue'"
-                Debug.Log(curr.achievementMessage + " Achieved: " + curr.activationValues[curr.nextTier - 1] + "\n Total: " + curr.currentValue);
-            }*/
-            if (curr.CheckNext()) // print out now done in CheckNext method
-            {
-                GameManager.Instance().uiManager.DisplayAchievementPopUp(curr);
+                if (((A_Tiered)curr).CheckNext()) // print out now done in CheckNext method
+                {
+                    GameManager.Instance().uiManager.DisplayAchievementPopUp(curr);
+                }
+                updated = false;
             }
-            updated = false;
         }
         else
         {
@@ -108,12 +103,16 @@ public class AchievementManager : MonoBehaviour
         // Check for reset button (Start and Select)
         if (Gamepad.current != null && Gamepad.current.added && Gamepad.current[GamepadButton.Start].isPressed && Gamepad.current[GamepadButton.Select].isPressed)
         {
-            // Go through each achievement and reset the currentValue and nextTier to 0
+            // Go through each achievement and reset the currentValue
             foreach (Achievement ach in achievements)
             {
-                ach.currentValue = ach.initialValue;
-                ach.nextTier = 0;
+                ach.currentValue = 0;
                 ach.achieved = false;
+                // Set nextTier to 0 if tiered
+                if (ach is A_Tiered)
+                {
+                    ((A_Tiered)ach).nextTier = 0;
+                }
             }
         }
     }
