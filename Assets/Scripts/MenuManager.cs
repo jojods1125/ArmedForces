@@ -56,7 +56,7 @@ public class MenuManager : MonoBehaviour
 
     [Header("Achievement Menu Display")]
     [Tooltip("Content of the ScrollView")]
-    public GameObject content;
+    public GameObject achievementContent;
     [Tooltip("Display Prefab")]
     public GameObject achievementPrefab;
     [Tooltip("Tier Prefab")]
@@ -67,6 +67,14 @@ public class MenuManager : MonoBehaviour
     [Header("Weapon Loadout Display")]
     [Tooltip("List of Weapons")]
     public List<Weapon> weapons;
+    [Tooltip("Content of the ScrollView")]
+    public GameObject weaponContent;
+    [Tooltip("Group Type Prefab")]
+    public GameObject groupPrefab;
+    [Tooltip("Weapon Display Prefab")]
+    public GameObject weaponPrefab;
+    [Tooltip("Weapon Description Box")]
+    public GameObject descriptionBox;
 
     // Current Menu on
     private GameObject currentMenu;
@@ -101,13 +109,197 @@ public class MenuManager : MonoBehaviour
         foreach (Achievement a in AchievementManager.Instance().achievements)
         {
             // Create a GameObject based on achDisplay prefab
-            GameObject curr = Instantiate(achievementPrefab, content.transform);
+            GameObject curr = Instantiate(achievementPrefab, achievementContent.transform);
 
             MakeDisplay(curr, a);
         }
 
         // Set up Weapon loadout
+        Dictionary<string, Dictionary<WeaponRarity, List<Weapon>>> order = new Dictionary<string, Dictionary<WeaponRarity, List<Weapon>>>();
+        // Dictionary 1 - Type { Auto = 0, Semi = 1, Launcher = 2, Sprayer = 3, ... }
+        for (int i = 0; i < System.Enum.GetValues(typeof(WeaponType)).Length - 1; i++)  // - 1 gets rid of "none" from enum
+        {
+            switch (i)
+            {
+                case 0:
+                    order.Add("Automatic", new Dictionary<WeaponRarity, List<Weapon>>());
+                    break;
+                case 1:
+                    order.Add("Semiautomatic", new Dictionary<WeaponRarity, List<Weapon>>());
+                    break;
+                case 2:
+                    order.Add("Launcher", new Dictionary<WeaponRarity, List<Weapon>>());
+                    break;
+                case 3:
+                    order.Add("Sprayer", new Dictionary<WeaponRarity, List<Weapon>>());
+                    break;
+                default:
+                    Debug.LogError("Something went wrong");
+                    break;
+            }
+            // Dictionary 2 - Rarity { Common = 0, Uncommon = 1, Rare = 2, Legenday = 3 }
+            foreach (WeaponRarity rarity in System.Enum.GetValues(typeof(WeaponRarity)))
+            {
+                string type = "";
+                switch (i)
+                {
+                    case 0:
+                        type = "Automatic";
+                        break;
+                    case 1:
+                        type = "Semiautomatic";
+                        break;
+                    case 2:
+                        type = "Launcher";
+                        break;
+                    case 3:
+                        type = "Sprayer";
+                        break;
+                    default:
+                        Debug.LogError("Something went wrong");
+                        break;
+                }
+                order[type].Add(rarity, new List<Weapon>());
+            }
+        }
+        
+        // Sort through existing Weapons
+        foreach (Weapon w in weapons)
+        {
+            WeaponRarity wr = w.rarity;
 
+            if (w is W_AutoGun) // ordering[0]
+            {
+                switch (wr)
+                {
+                    case WeaponRarity.Common:
+                        order["Automatic"][WeaponRarity.Common].Add(w);
+                        break;
+                    case WeaponRarity.Uncommon:
+                        order["Automatic"][WeaponRarity.Uncommon].Add(w);
+                        break;
+                    case WeaponRarity.Rare:
+                        order["Automatic"][WeaponRarity.Rare].Add(w);
+                        break;
+                    case WeaponRarity.Legendary:
+                        order["Automatic"][WeaponRarity.Rare].Add(w);
+                        break;
+                    default:
+                        Debug.LogError("Auto weapon does not have listed rarity");
+                        break;
+                }
+            }
+            else if (w is W_SemiGun) // ordering[1]
+            {
+                switch (wr)
+                {
+                    case WeaponRarity.Common:
+                        order["Semiautomatic"][WeaponRarity.Common].Add(w);
+                        break;
+                    case WeaponRarity.Uncommon:
+                        order["Semiautomatic"][WeaponRarity.Uncommon].Add(w);
+                        break;
+                    case WeaponRarity.Rare:
+                        order["Semiautomatic"][WeaponRarity.Rare].Add(w);
+                        break;
+                    case WeaponRarity.Legendary:
+                        order["Semiautomatic"][WeaponRarity.Legendary].Add(w);
+                        break;
+                    default:
+                        Debug.LogError("Semi weapon does not have listed rarity");
+                        break;
+                }
+            }
+            else if (w is W_Launcher) // ordering[2]
+            {
+                switch (wr)
+                {
+                    case WeaponRarity.Common:
+                        order["Launcher"][WeaponRarity.Common].Add(w);
+                        break;
+                    case WeaponRarity.Uncommon:
+                        order["Launcher"][WeaponRarity.Uncommon].Add(w);
+                        break;
+                    case WeaponRarity.Rare:
+                        order["Launcher"][WeaponRarity.Rare].Add(w);
+                        break;
+                    case WeaponRarity.Legendary:
+                        order["Launcher"][WeaponRarity.Legendary].Add(w);
+                        break;
+                    default:
+                        Debug.LogError("Launcher weapon does not have listed rarity");
+                        break;
+                }
+            }
+            else if (w is W_Sprayer) // ordering[3]
+            {
+                switch (wr)
+                {
+                    case WeaponRarity.Common:
+                        order["Sprayer"][WeaponRarity.Common].Add(w);
+                        break;
+                    case WeaponRarity.Uncommon:
+                        order["Sprayer"][WeaponRarity.Uncommon].Add(w);
+                        break;
+                    case WeaponRarity.Rare:
+                        order["Sprayer"][WeaponRarity.Rare].Add(w);
+                        break;
+                    case WeaponRarity.Legendary:
+                        order["Sprayer"][WeaponRarity.Legendary].Add(w);
+                        break;
+                    default:
+                        Debug.LogError("Sprayer weapon does not have listed rarity");
+                        break;
+                }
+            }
+        }   // Done with Sorting
+
+        // Construct the display
+        foreach (KeyValuePair<string, Dictionary<WeaponRarity, List<Weapon>>> type in order)
+        {
+            // Create group
+            GameObject typeGroup = Instantiate(groupPrefab, weaponContent.transform);
+
+            // Put name in group
+            typeGroup.transform.Find("Weapon Type").Find("Text").GetComponent<Text>().text = type.Key;
+
+            // Get area for Weapons
+            Transform weaponList = typeGroup.transform.Find("Weapons");
+
+            foreach (KeyValuePair<WeaponRarity, List<Weapon>> rarity in type.Value)
+            {
+                Color background;
+                switch (rarity.Key)
+                {
+                    case WeaponRarity.Common:
+                        background = Color.white;
+                        break;
+                    case WeaponRarity.Uncommon:
+                        background = Color.green;
+                        break;
+                    case WeaponRarity.Rare:
+                        background = Color.blue;
+                        break;
+                    case WeaponRarity.Legendary:
+                        background = Color.magenta;
+                        break;
+                    default:
+                        background = Color.black;
+                        break;
+                }
+                foreach (Weapon w in rarity.Value)
+                {
+                    // Create Weapon Display
+                    GameObject weapon = Instantiate(weaponPrefab, weaponList);
+
+                    // Set image
+                    weapon.transform.Find("Image").GetComponent<Image>().sprite = w.icon;
+
+                    // Set Rarity
+                    weapon.GetComponent<Image>().color = background;
+                }
+            }
+        }
 
     }
 
@@ -146,7 +338,7 @@ public class MenuManager : MonoBehaviour
             // Get Achievement
             Achievement a = AchievementManager.Instance().achievements[i];
             // Get Achievement Display
-            Transform curr = content.transform.GetChild(i);
+            Transform curr = achievementContent.transform.GetChild(i);
             // Get Progress Bars for Display
             Transform progressBars = curr.Find("Progress Bars");
 

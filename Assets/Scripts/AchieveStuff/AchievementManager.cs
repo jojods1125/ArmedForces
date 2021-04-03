@@ -30,6 +30,7 @@ public class AchievementManager : MonoBehaviour
         else
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
     }
 
