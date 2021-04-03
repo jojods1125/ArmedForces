@@ -22,6 +22,8 @@ public class MenuManager : MonoBehaviour
     public GameObject LoadoutMenu;
     [Tooltip("Pregame Menu Link")]
     public GameObject PregameMenu;
+    [Tooltip("Weapon Selection Screen Link")]
+    public GameObject SelectionMenu;
 
     [Header("Menus")]
     [Tooltip("Group of all Menus")]
@@ -76,6 +78,9 @@ public class MenuManager : MonoBehaviour
 
     // Map selected
     private string mapName;
+
+    // Weapon Selected
+    private char currentWeapon;
 
     // Start is called before the first frame update
     void Start()
@@ -287,6 +292,12 @@ public class MenuManager : MonoBehaviour
 	/// </summary>
     public void Loadout()
 	{
+        // set inactive if active
+        if (SelectionMenu.activeSelf)
+        {
+            SelectionMenu.SetActive(false);
+        }
+
         LoadoutMenu.SetActive( true );
         //setActiveMenu( LoadoutMenu );
         currentMenu = LoadoutMenu;
@@ -295,6 +306,24 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to LoadoutFirst
         EventSystem.current.SetSelectedGameObject(loadoutFirstButton);
+    }
+
+    /// <summary>
+    /// Enables the Weapon Selection Screen given the current Weapon slot
+    /// </summary>
+    /// <param name="weaponSlot"> Weapon Slot to modify </param>
+    public void DisplayWeapons(string weaponSlot)
+    {
+        currentWeapon = weaponSlot[0];
+
+        SelectionMenu.SetActive(true);
+        currentMenu = SelectionMenu;
+
+        // Clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        // Set button to LoadoutFirst
+        // EventSystem.current.SetSelectedGameObject(loadoutFirstButton);
+
     }
 
     /// <summary>
@@ -492,11 +521,5 @@ public class MenuManager : MonoBehaviour
                 curr.transform.Find("Finished").gameObject.SetActive(true);
             }
         }
-    }
-
-
-    public void displayWeapons (char weaponSlot)
-    {
-        
     }
 }
