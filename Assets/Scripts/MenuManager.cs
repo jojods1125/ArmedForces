@@ -43,6 +43,8 @@ public class MenuManager : MonoBehaviour
     public GameObject trainingFirstButton;
     [Tooltip("First Selected Button on Pregame Menu")]
     public GameObject pregameFirstButton;
+    [Tooltip("First Selected Weapon Selection")]
+    public GameObject selectionFirstButton;
 
     [Header("Return to last Menu Button for each Menu")]
     [Tooltip("Return to Main Button on Achievements Menu")]
