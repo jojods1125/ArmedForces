@@ -78,6 +78,12 @@ public class MenuManager : MonoBehaviour
     [Tooltip("Weapon Description Box")]
     public GameObject descriptionBox;
 
+    // List of Weapon Buttons
+    private List<GameObject> weaponButtons = new List<GameObject>();
+    // Max Damage
+    private float maxDamage = 25f;
+
+
     // Current Menu on
     private GameObject currentMenu;
     // Last visited Menu
@@ -293,6 +299,13 @@ public class MenuManager : MonoBehaviour
                 {
                     // Create Weapon Display
                     GameObject weapon = Instantiate(weaponPrefab, weaponList);
+                    weaponButtons.Add(weapon);
+
+                    // Set Weapon & stats
+                    WeaponButtonContatiner wbc = weapon.transform.GetComponent<WeaponButtonContatiner>();
+                    wbc.weapon = w;
+                    // assign attributes
+
 
                     // Set image
                     weapon.transform.Find("Image").GetComponent<Image>().sprite = w.icon;
@@ -335,100 +348,123 @@ public class MenuManager : MonoBehaviour
         }
 
         // update Achievements Menu
-        for (int i = 0; i < AchievementManager.Instance().achievements.Count; i++)
+        if (AchievementsMenu.activeSelf)
         {
-            // Get Achievement
-            Achievement a = AchievementManager.Instance().achievements[i];
-            // Get Achievement Display
-            Transform curr = achievementContent.transform.GetChild(i);
-            // Get Progress Bars for Display
-            Transform progressBars = curr.Find("Progress Bars");
-
-            // Update progress bars if tiered
-            if (a is A_Tiered)
+            for (int i = 0; i < AchievementManager.Instance().achievements.Count; i++)
             {
-                // cast 
-                A_Tiered at = (A_Tiered)a;
-                int currentValue = at.currentValue;
-                for (int j = 0; j < at.activationValues.Length; j++)
+                // Get Achievement
+                Achievement a = AchievementManager.Instance().achievements[i];
+                // Get Achievement Display
+                Transform curr = achievementContent.transform.GetChild(i);
+                // Get Progress Bars for Display
+                Transform progressBars = curr.Find("Progress Bars");
+
+                // Update progress bars if tiered
+                if (a is A_Tiered)
                 {
-                    // Current working bar
-                    Transform bar = progressBars.GetChild(j);
+                    // cast 
+                    A_Tiered at = (A_Tiered)a;
+                    int currentValue = at.currentValue;
+                    for (int j = 0; j < at.activationValues.Length; j++)
+                    {
+                        // Current working bar
+                        Transform bar = progressBars.GetChild(j);
 
-                    // This tiers max
-                    int max = at.activationValues[j];
+                        // This tiers max
+                        int max = at.activationValues[j];
 
-                    // Check if this bar needs scaled at all -> Zero the scale
-                    if (j > 0 && currentValue < at.activationValues[j - 1])
-                    {
-                        bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
-                    }
-                    // Check if this bar has been met/exceeded -> Max the scale
-                    else if (currentValue >= max)
-                    {
-                        bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
-                    }
-                    // Set the bar scale
-                    else
-                    {
-                        float percent = 0f;
-                        if (j > 0)
+                        // Check if this bar needs scaled at all -> Zero the scale
+                        if (j > 0 && currentValue < at.activationValues[j - 1])
                         {
-                            int delta = at.activationValues[j - 1];
-                            percent = (currentValue - delta) / ((float)max - delta);
+                            bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
+                        }
+                        // Check if this bar has been met/exceeded -> Max the scale
+                        else if (currentValue >= max)
+                        {
+                            bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+                        }
+                        // Set the bar scale
+                        else
+                        {
+                            float percent = 0f;
+                            if (j > 0)
+                            {
+                                int delta = at.activationValues[j - 1];
+                                percent = (currentValue - delta) / ((float)max - delta);
+                            }
+                            else
+                            {
+                                percent = currentValue / (float)max;
+                            }
+                            /*float percent = currentValue / (float)max;*/
+                            bar.localScale = new Vector3(percent, bar.localScale.y, bar.localScale.z);
+                        }
+                    }
+                }
+                else if (a is A_Repeatable)
+                {
+                    A_Repeatable ar = (A_Repeatable)a;
+                    int currentValue = ar.currentValue % ar.repeatValue;
+                    for (int j = 0; j < ar.repeatValue; j++)
+                    {
+                        // Current working bar
+                        Transform bar = progressBars.GetChild(j);
+
+                        // set bar to full if past or at progress
+                        if (j < currentValue)
+                        {
+                            bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
                         }
                         else
                         {
-                            percent = currentValue / (float)max;
+                            bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
                         }
-                        /*float percent = currentValue / (float)max;*/
-                        bar.localScale = new Vector3(percent, bar.localScale.y, bar.localScale.z);
                     }
                 }
-            }
-            else if (a is A_Repeatable)
-            {
-                A_Repeatable ar = (A_Repeatable)a;
-                int currentValue = ar.currentValue % ar.repeatValue;
-                for (int j = 0; j < ar.repeatValue; j++)
+                /** Set fields in display */
+                // Name
+                curr.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
+                // Description
+                curr.transform.Find("Description").gameObject.GetComponent<TMP_Text>().text = a.ToString();
+                // Current Count
+                curr.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
+                // Next Count & set finished
+                if (a is A_Tiered)
                 {
-                    // Current working bar
-                    Transform bar = progressBars.GetChild(j);
-
-                    // set bar to full if past or at progress
-                    if (j < currentValue)
+                    A_Tiered at = (A_Tiered)a;
+                    if (!at.IsComplete() && at.nextTier < at.activationValues.Length)
                     {
-                        bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+                        curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + at.activationValues[at.nextTier].ToString();
+                        curr.transform.Find("Finished").gameObject.SetActive(false);
                     }
                     else
                     {
-                        bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
+                        curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
+                        curr.transform.Find("Finished").gameObject.SetActive(true);
                     }
                 }
             }
-            /** Set fields in display */
-            // Name
-            curr.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
-            // Description
-            curr.transform.Find("Description").gameObject.GetComponent<TMP_Text>().text = a.ToString();
-            // Current Count
-            curr.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
-            // Next Count & set finished
-            if (a is A_Tiered)
-            {
-                A_Tiered at = (A_Tiered)a;
-                if (!at.IsComplete() && at.nextTier < at.activationValues.Length)
-                {
-                    curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + at.activationValues[at.nextTier].ToString();
-                    curr.transform.Find("Finished").gameObject.SetActive(false);
-                }
-                else
-                {
-                    curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
-                    curr.transform.Find("Finished").gameObject.SetActive(true);
-                }
-            }
         }
+
+        // Update Weapon display
+        if (SelectionMenu.activeSelf)
+		{
+            foreach (GameObject button in weaponButtons)
+			{
+                if (EventSystem.current.currentSelectedGameObject == button)
+				{
+                    Weapon weapon = button.GetComponent<WeaponButtonContatiner>().weapon;
+                    Transform nameAndDesc = descriptionBox.transform.Find("Name and Description");
+                    nameAndDesc.Find("Name").GetComponent<Text>().text = weapon.weaponName;
+                    nameAndDesc.Find("Description").GetComponent<Text>().text = weapon.description;
+
+                    Transform attributes = descriptionBox.transform.Find("Attributes");
+                    Transform dmg = attributes.Find("Damage");
+                    float damagePercent = 
+                    dmg.Find("BarBack").Find("Positive").localScale = new Vector3();
+				}
+			}
+		}
 
     }
 
