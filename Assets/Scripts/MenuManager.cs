@@ -77,12 +77,35 @@ public class MenuManager : MonoBehaviour
     public GameObject weaponPrefab;
     [Tooltip("Weapon Description Box")]
     public GameObject descriptionBox;
+    [Tooltip("Back Arm Loadout")]
+    public Weapon[] backArm = new Weapon[4];
+    [Tooltip("Front Arm Loadout")]
+    public Weapon[] frontArm = new Weapon[4];
 
     // List of Weapon Buttons
     private List<GameObject> weaponButtons = new List<GameObject>();
-    // Max Damage
-    private float maxDamage = 25f;
 
+    [Header("Max Bar Values")]
+    [Tooltip("Max Damage")]
+    public float maxDamage;
+    [Tooltip("Max Recoil")]
+    public float maxRecoil;
+    [Tooltip("Max Pushback")]
+    public float maxPushback;
+    [Tooltip("Max Ammo")]
+    public float maxAmmo;
+    [Tooltip("Max Reload Speed")]
+    public float maxReloadSpeed;
+
+    [Header("Variable Attributes")]
+    [Tooltip("Max Fire rate")]
+    public float maxFireRate;
+    [Tooltip("Max Scatter Count")]
+    public float maxScatterCount;
+    [Tooltip("Max Projectile Power")]
+    public float maxProjectilePower;
+    [Tooltip("Max Spray Distance")]
+    public float maxSprayDistance;
 
     // Current Menu on
     private GameObject currentMenu;
@@ -97,6 +120,8 @@ public class MenuManager : MonoBehaviour
 
     // Weapon Selected
     private char currentWeapon;
+    // Arm Selected - String
+    private string currentArm;
 
     // Start is called before the first frame update
     void Start()
@@ -295,17 +320,58 @@ public class MenuManager : MonoBehaviour
                         background = Color.black;
                         break;
                 }
+
                 foreach (Weapon w in rarity.Value)
                 {
                     // Create Weapon Display
                     GameObject weapon = Instantiate(weaponPrefab, weaponList);
+                    weapon.GetComponent<Button>().onClick.AddListener(() => ChooseWeapon(w));
                     weaponButtons.Add(weapon);
 
                     // Set Weapon & stats
                     WeaponButtonContatiner wbc = weapon.transform.GetComponent<WeaponButtonContatiner>();
                     wbc.weapon = w;
                     // assign attributes
-
+                    if (w is W_AutoGun)
+					{
+                        W_AutoGun auto = (W_AutoGun)w;
+                        wbc.damage = auto.bulletDamage;
+                        wbc.recoil = auto.pushback;
+                        wbc.pushback = auto.bulletPushback;
+                        wbc.variable = 1f / auto.fireRate;
+                        wbc.ammoCapacity = auto.ammoCapacity;
+                        wbc.reloadSpeed = 1f / auto.reloadRate;
+					}
+                    else if (w is W_SemiGun)
+					{
+                        W_SemiGun semi = (W_SemiGun)w;
+                        wbc.damage = semi.bulletDamage;
+                        wbc.recoil = semi.pushback;
+                        wbc.pushback = semi.bulletPushback;
+                        wbc.variable = 1f / semi.burstCount;
+                        wbc.ammoCapacity = semi.ammoCapacity;
+                        wbc.reloadSpeed = 1f / semi.reloadRate;
+                    }
+                    else if (w is W_Launcher)
+					{
+                        W_Launcher launcher = (W_Launcher)w;
+                        wbc.damage = launcher.coreDamage;
+                        wbc.recoil = launcher.pushback;
+                        wbc.pushback = launcher.corePushback;
+                        wbc.variable = 1f / launcher.projectilePower;
+                        wbc.ammoCapacity = launcher.ammoCapacity;
+                        wbc.reloadSpeed = 1f / launcher.reloadRate;
+                    }
+                    else if (w is W_Sprayer)
+					{
+                        W_Sprayer sprayer = (W_Sprayer)w;
+                        wbc.damage = sprayer.bulletDamage;
+                        wbc.recoil = sprayer.pushback;
+                        wbc.pushback = sprayer.bulletPushback;
+                        wbc.variable = 1f / sprayer.sprayDistance;
+                        wbc.ammoCapacity = sprayer.ammoCapacity;
+                        wbc.reloadSpeed = 1f / sprayer.reloadRate;
+                    }
 
                     // Set image
                     weapon.transform.Find("Image").GetComponent<Image>().sprite = w.icon;
@@ -453,16 +519,97 @@ public class MenuManager : MonoBehaviour
 			{
                 if (EventSystem.current.currentSelectedGameObject == button)
 				{
-                    Weapon weapon = button.GetComponent<WeaponButtonContatiner>().weapon;
-                    Transform nameAndDesc = descriptionBox.transform.Find("Name and Description");
+                    WeaponButtonContatiner  wpc = button.GetComponent<WeaponButtonContatiner>();
+                    Weapon weapon = wpc.weapon;
+                    Transform nameAndDesc = descriptionBox.transform.Find("Name and Desc");
                     nameAndDesc.Find("Name").GetComponent<Text>().text = weapon.weaponName;
                     nameAndDesc.Find("Description").GetComponent<Text>().text = weapon.description;
 
+                    // Get attribute holder
                     Transform attributes = descriptionBox.transform.Find("Attributes");
                     Transform dmg = attributes.Find("Damage");
-                    float damagePercent = 
-                    dmg.Find("BarBack").Find("Positive").localScale = new Vector3();
-				}
+                    Transform recoil = attributes.Find("Recoil");
+                    Transform pushBack = attributes.Find("PushBack");
+                    Transform variable = attributes.Find("VariableAttribute");
+                    Transform ammoCap = attributes.Find("AmmoCap");
+                    Transform reloadSpeed = attributes.Find("ReloadSpeed");
+
+                    // Zero vector
+                    Vector3 zeroed = new Vector3(0f, 0f, 0f);
+
+                    // Set damage bar
+                    Vector3 damageBar = new Vector3(wpc.damage / maxDamage, 1f, 1f);
+                    if (wpc.damage > 0)
+                    {
+                        dmg.Find("BarBack").Find("Positive").localScale = damageBar;
+                        dmg.Find("BarBack").Find("Negative").localScale = zeroed;
+                    }
+                    else if (wpc.damage < 0)
+					{
+                        dmg.Find("BarBack").Find("Negative").localScale = damageBar;
+                        dmg.Find("BarBack").Find("Positive").localScale = zeroed;
+                    }
+
+                    // Set recoil bar
+                    Vector3 recoilBar = new Vector3(wpc.recoil / maxRecoil, 1f, 1f);
+                    if (wpc.recoil > 0)
+                    {
+                        recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
+                        recoil.Find("BarBack").Find("Negative").localScale = zeroed;
+                    }
+                    else if (wpc.recoil < 0)
+                    {
+                        recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
+                        recoil.Find("BarBack").Find("Positive").localScale = zeroed;
+                    }
+
+                    // Set pushback bar
+                    Vector3 pushbackBar = new Vector3(wpc.pushback / maxPushback, 1f, 1f);
+                    if (wpc.pushback > 0)
+                    {
+                        pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
+                        pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
+                    }
+                    else if (wpc.pushback < 0)
+                    {
+                        pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
+                        pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
+                    }
+
+                    // Set variable bar
+                    string variableText = "{{INVALID}}";
+                    float variableMax = 0;
+                    if (weapon is W_AutoGun)
+                    {
+                        variableText = "Fire Rate";
+                        variableMax = maxFireRate;
+                    }
+                    else if (weapon is W_SemiGun)
+                    {
+                        variableText = "Scatter Count";
+                        variableMax = maxScatterCount;
+                    }
+                    else if (weapon is W_Launcher)
+                    {
+                        variableText = "Projectile Power";
+                        variableMax = maxProjectilePower;
+                    }
+                    else if (weapon is W_Sprayer)
+					{
+                        variableText = "Sprayer Distance";
+                        variableMax = maxSprayDistance;
+					}
+
+                    variable.Find("Text").GetComponent<Text>().text = variableText;
+                    variable.Find("BarBack").Find("Positive").localScale = new Vector3(wpc.variable / variableMax, 1f, 1f);
+
+                    // Set ammo capacity bar
+                    ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wpc.ammoCapacity / maxAmmo, 1f, 1f);
+
+                    // Set reload speed bar
+                    reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wpc.reloadSpeed / maxReloadSpeed, 1f, 1f);
+
+                }
 			}
 		}
 
@@ -528,6 +675,22 @@ public class MenuManager : MonoBehaviour
             SelectionMenu.SetActive(false);
         }
 
+        if (!MainMenu.activeSelf)
+		{
+            MainMenu.SetActive(true);
+		}
+
+        // Set Loadout Images
+        Transform back = LoadoutMenu.transform.Find("Back Arm Loadout");
+        Transform front = LoadoutMenu.transform.Find("Front Arm Loadout");
+        
+        // Back
+        for (int i = 0; i < backArm.Length; i++)
+		{
+            back.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = backArm[i].icon;
+            front.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = frontArm[i].icon;
+		}
+
         LoadoutMenu.SetActive( true );
         //setActiveMenu( LoadoutMenu );
         currentMenu = LoadoutMenu;
@@ -544,7 +707,18 @@ public class MenuManager : MonoBehaviour
     /// <param name="weaponSlot"> Weapon Slot to modify </param>
     public void DisplayWeapons(string weaponSlot)
     {
-        currentWeapon = weaponSlot[0];
+        char arm = weaponSlot[0];
+        if (arm.Equals('B'))
+		{
+            currentArm = "Back";
+		}
+        else if (arm.Equals('F'))
+		{
+            currentArm = "Front";
+		}
+        currentWeapon = weaponSlot[1];
+        MainMenu.SetActive(false);
+        LoadoutMenu.SetActive(false);
 
         SelectionMenu.SetActive(true);
         currentMenu = SelectionMenu;
@@ -552,9 +726,28 @@ public class MenuManager : MonoBehaviour
         // Clear selected object
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to LoadoutFirst
-        // EventSystem.current.SetSelectedGameObject(loadoutFirstButton);
-
+        EventSystem.current.SetSelectedGameObject(selectionFirstButton);
     }
+
+
+    public void ChooseWeapon( Weapon weapon )
+	{
+        Debug.Log("In ChooseWeapon for " + currentArm + "\'s weapon " + currentWeapon + " to have weapon " + weapon.name);
+
+        // Change Loadout
+        int index = currentWeapon - 65;
+        if (currentArm.Equals("Back"))
+		{
+            backArm[index] = weapon;
+		}
+        else if (currentArm.Equals("Front"))
+		{
+            frontArm[index] = weapon;
+		}
+
+        // go back to Loadout menu
+        Loadout();
+	}
 
     /// <summary>
     /// Changes the active menu to the Pregame menu
