@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player_Controlled : Player
 {
-    private PlayerControls inputActions;
+    public Player_Networked player;
     private float currWalkMomentum = 0;
     private bool movingL = false;
     private bool movingR = false;
@@ -14,69 +15,57 @@ public class Player_Controlled : Player
     //                  INPUTS AND INSTANTIATION
     // ===========================================================
 
-    // Start is called before the first frame update
-    new void Start()
-    {
-        if (isLocalPlayer)
-        {
-            inputActions = new PlayerControls();
-
-            inputActions.GunGuy.MoveLeft.performed += ctx => MoveLeft(true);
-            inputActions.GunGuy.MoveLeft.canceled += ctx => MoveLeft(false);
-            inputActions.GunGuy.MoveLeft.Enable();
-
-            inputActions.GunGuy.MoveRight.performed += ctx => MoveRight(true);
-            inputActions.GunGuy.MoveRight.canceled += ctx => MoveRight(false);
-            inputActions.GunGuy.MoveRight.Enable();
-
-            uiManager = GameManager.Instance().uiManager;
-        }
-
-        base.Start();
-    }
-
-
     /// <summary>
     /// Sets variables that, on FixedUpdate, will make player movement reflect left-moving input
     /// </summary>
     /// <param name="pressed"> Whether the player is pressing the movement button or not </param>
-    void MoveLeft(bool pressed)
+    public void OnMoveLeft(InputAction.CallbackContext context)
     {
         if (!Application.isFocused)
             return;
 
-        if (pressed)
+        if (context.performed)
         {
             currWalkMomentum += -walkMomentum;
             movingL = true;
         }
-        else
+        else if (context.canceled)
         {
             currWalkMomentum += walkMomentum;
             movingL = false;
         }
     }
 
-
     /// <summary>
     /// Sets variables that, on FixedUpdate, will make player movement reflect right-moving input
     /// </summary>
     /// <param name="pressed"> Whether the player is pressing the movement button or not </param>
-    void MoveRight(bool pressed)
+    public void OnMoveRight(InputAction.CallbackContext context)
     {
         if (!Application.isFocused)
             return;
 
-        if (pressed)
+        if (context.performed)
         {
             currWalkMomentum += walkMomentum;
             movingR = true;
         }
-        else
+        else if (context.canceled)
         {
             currWalkMomentum += -walkMomentum;
             movingR = false;
         }
+    }
+
+
+    new void Start()
+    {
+        if ((matchType == MatchType.Online && player.isLocalPlayer) || matchType != MatchType.Online)
+        {
+            uiManager = GameManager.Instance().uiManager;
+        }
+
+        base.Start();
     }
 
 

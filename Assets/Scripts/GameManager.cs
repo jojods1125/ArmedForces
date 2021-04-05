@@ -1,17 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 using TMPro;
 
 
 public enum MatchType
 {
     Training,
-    Online
+    Online,
+    Local
 }
 
-public class GameManager : NetworkBehaviour
+public class GameManager : MonoBehaviour
 {
     [Header("Match Information")]
 
@@ -32,10 +32,13 @@ public class GameManager : NetworkBehaviour
     [Tooltip("UI Manager within the scene")]
     public UIManager uiManager;
     [Tooltip("Local player within the scene [DO NOT SET IN EDITOR IN ONLINE SCENES]")]
+    [SerializeField]
     public Player localPlayer;
+    [Tooltip("Local players within the scene [ONLY SET IN LOCAL MULTIPLAYER]")]
+    public Player[] localPlayers = new Player[4];
 
-    public Player_AI ai;
-    public AI_Controller aiC;
+    public Player ai;
+    private AI_Controller aiC;
 
 
     /// <summary> List of spawn point locations </summary>
@@ -44,13 +47,12 @@ public class GameManager : NetworkBehaviour
     private int playerCount = 0;
 
     /// <summary> Current number of seconds since match began </summary>
-    [SyncVar]
     private float currentGameTime = 0;
 
     /// <summary> Dictionary of player IDs to kills </summary>
-    private SyncDictionary<int,int> kills = new SyncDictionary<int, int>();
+    private Dictionary<int,int> kills = new Dictionary<int, int>();
     /// <summary> Dictionary of player IDs to deaths </summary>
-    private SyncDictionary<int,int> deaths = new SyncDictionary<int, int>();
+    private Dictionary<int,int> deaths = new Dictionary<int, int>();
 
 
 
@@ -105,11 +107,6 @@ public class GameManager : NetworkBehaviour
         {
             spawnPoints.Add(child.position);
         }
-
-        if (matchType == MatchType.Training)
-        {
-            SpawnEnemy();
-        }
     }
 
 
@@ -127,19 +124,6 @@ public class GameManager : NetworkBehaviour
     }
 
 
-    void SpawnEnemy()
-    {
-        if (!isServer)
-            return;
-
-        // Instantiates a projectile prefab from the Resources/Projectiles folder
-        //GameObject enemy = (GameObject)Resources.Load("AI/" + "Player_Sandbag");
-
-        // Spawns projectile across all clients
-       // enemy.GetComponent<NetworkIdentity>().AssignClientAuthority(localPlayer.gameObject.GetComponent<NetworkIdentity>().connectionToClient);
-        //NetworkServer.Spawn(enemy, localPlayer.gameObject);
-    }
-
     // ===========================================================
     //                      CLIENT CONNECTIONS
     // ===========================================================
@@ -150,10 +134,6 @@ public class GameManager : NetworkBehaviour
     /// <returns> New ID for the player </returns>
     public int ClientConnected()
     {
-        // THIS RUNS ON SERVER
-        if (!isServer)
-            return -1;
-
         // Retrieves the ID
         int newID = getID();
 
@@ -163,6 +143,8 @@ public class GameManager : NetworkBehaviour
         // Adds new key to kills and deaths dictionaries
         kills.Add(newID, 0);
         deaths.Add(newID, 0);
+
+        uiManager.ui_Players[newID = 1].gameObject.SetActive(true);
 
         // Gives ID to Player
         return newID;
@@ -191,11 +173,11 @@ public class GameManager : NetworkBehaviour
     /// Tells every instance of GameManager that a player connected
     /// </summary>
     /// <param name="newID"> ID of the new player </param>
-    [ClientRpc]
     public void RpcClientConnected(int newID)
     {
         // Refreshes arms so new player sees them
         localPlayer.UpdateAppearance();
+
         if (matchType == MatchType.Training)
             aiC.Activate();
     }
@@ -205,17 +187,13 @@ public class GameManager : NetworkBehaviour
     /// Updates playerCount on the server and retrieves it as the ID
     /// </summary>
     /// <returns> New ID for the player </returns>
-    int getID()
+    public int getID()
     {
-        // THIS RUNS ON SERVER
-        if (!isServer)
-            return -1;
-
         playerCount++;
         return playerCount;
     }
 
-    int getAIID()
+    public int getAIID()
     {
         // Debug.LogError("IN GETAIID");
         playerCount++;
@@ -230,13 +208,10 @@ public class GameManager : NetworkBehaviour
     /// <summary>
     /// Increments time
     /// </summary>
-    void IncrementTime()
+    public void IncrementTime()
     {
-        // Increases the server's time by serverGameTimeStep, which is a SyncVar
-        if (isServer)
-        {
+        if (matchType != MatchType.Online)
             currentGameTime += serverGameTimeStep;
-        }
 
         // Formats minutes and seconds remaining
         int mins = Mathf.Max((totalGameTime - (int)currentGameTime) / 60, 0);
@@ -247,7 +222,7 @@ public class GameManager : NetworkBehaviour
 
         /// TODO: ADD FUNCTIONALITY FOR ROUND ENDING
         // Server notification if round ends
-        if (isServer && currentGameTime >= totalGameTime)
+        if (currentGameTime >= totalGameTime)
         {
             ServerMessage("ROUND ENDED");
         }
@@ -285,17 +260,13 @@ public class GameManager : NetworkBehaviour
     /// /// <param name="weaponType"> Type of weapon that killed </param>
     public void TrackDeath(int killer, int deceased, WeaponType weaponType)
     {
-        // THIS RUNS ON SERVER
-        if (!isServer)
-            return;
-
         // Updates the deaths and kills for the deceased and killer
         deaths[deceased]++;
         if (killer != deceased && killer != -1)
         {
             kills[killer]++;
             // if the killer is the mainPlayer
-            if (killer == localPlayer.playerID)
+            if (killer == localPlayer.GetPlayerID())
             {
                 AchievementManager.Instance().OnEvent(AchievementType.kills, 1, weaponType);
             }
@@ -329,10 +300,12 @@ public class GameManager : NetworkBehaviour
     {
         yield return new WaitForSeconds(playerRespawnTime);
         obj.SetActive(true);
-        if (obj.GetComponent<Player>() != null)
+        if (obj.GetComponent<Player_Networked>() != null)
+            obj.GetComponent<Player_Networked>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
+        else if (obj.GetComponent<Player>() != null)
             obj.GetComponent<Player>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
-        else if (obj.GetComponent<Player_AI>() != null)
-            obj.GetComponent<Player_AI>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
+        //else if (obj.GetComponent<Player_AI>() != null)
+        //    obj.GetComponent<Player_AI>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
     }
 
 
@@ -347,9 +320,6 @@ public class GameManager : NetworkBehaviour
     /// <param name="msg"> Message to send </param>
     public void ServerMessage(string msg) //this will be serverside
     {
-        if (!isServer)
-            return;
-
         RpcServerMessage(msg);
     }
 
@@ -358,10 +328,9 @@ public class GameManager : NetworkBehaviour
     /// Send a message across all clients
     /// </summary>
     /// <param name="msg"> Message to send </param>
-    [ClientRpc]
     private void RpcServerMessage(string msg)
     {
-        Debug.LogError("SERVER MSG: " + msg);
+        Debug.Log("SERVER MSG: " + msg);
     }
 
 

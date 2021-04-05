@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 7159978887230406099}
   - component: {fileID: 5778492838927807564}
   - component: {fileID: 7159978887230406092}
+  - component: {fileID: 1105715933675733798}
+  - component: {fileID: -1451558600590410919}
   m_Layer: 8
   m_Name: P_Default
   m_TagString: Untagged
@@ -126,3 +128,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab_Explosion: {fileID: 4602660630726238711, guid: a16dd68dd2a7e5146908dc1144271cd0, type: 3}
+--- !u!114 &1105715933675733798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7159978887230406093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &-1451558600590410919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7159978887230406093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05c1a3bbf13a0024086bd73151d89862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  projectile: {fileID: 7159978887230406092}

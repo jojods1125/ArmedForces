@@ -15,10 +15,10 @@ public class AI_Controller : MonoBehaviour
     private float reloadStart;
     private float reloadTime;
 
-    public Player_AI self; //Reference to self
+    public Player self; //Reference to self
     public Player enemy; //Reference to target
-    public Arm_AI frontArm; //Reference to front arm
-    public Arm_AI backArm; //Reference to back arm
+    public Arm frontArm; //Reference to front arm
+    public Arm backArm; //Reference to back arm
 
     public float attackRange; //How close the AI follows
     public float stoppingDist; //What range the AI should stop following

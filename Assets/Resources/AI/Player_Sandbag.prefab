@@ -464,7 +464,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8282234077263579433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8465308789354084504}
@@ -552,8 +552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e087b23b62cf29846a9d9a301bb4330f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.05
+  matchType: 0
   maxHealth: 100
   walkMomentum: 10
   maxWalkSpeed: 5
@@ -568,7 +567,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
   - {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
   - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
-  playerID: 0
+  rb: {fileID: 0}
+  currHealth: 100
 --- !u!114 &8137692596167749702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,13 +581,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a77193d37f2f54cbd7bd984cd116e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
+  matchType: 0
   arm: {fileID: 9093051126470135228}
   barrel: {fileID: 8282234078560122467}
   player: {fileID: 3305675465212334390}
-  armType: 0
+  armSide: 0
   bullet: {fileID: 1382963012375385782, guid: 18134884a647d4b47a1d47a0cbc28987, type: 3}
+  equippedWeapon: {fileID: 0}
+  onlineArm: {fileID: 0}
 --- !u!114 &8240895006659837287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,13 +601,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a77193d37f2f54cbd7bd984cd116e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
+  matchType: 0
   arm: {fileID: 9093051127276069410}
   barrel: {fileID: 8282234077263579433}
   player: {fileID: 3305675465212334390}
-  armType: 1
+  armSide: 0
   bullet: {fileID: 1382963012375385782, guid: 18134884a647d4b47a1d47a0cbc28987, type: 3}
+  equippedWeapon: {fileID: 0}
+  onlineArm: {fileID: 0}
 --- !u!114 &6160160177948397252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,12 +625,18 @@ MonoBehaviour:
   enemy: {fileID: 0}
   frontArm: {fileID: 8137692596167749702}
   backArm: {fileID: 8240895006659837287}
-  followDist: 3
+  attackRange: 0
   stoppingDist: 2
   stuckDist: 1
   mapWidth: 17
   mapHeight: 9
   safeSpeed: 4
+  lowSprayerAmmo: 0
+  lowShotgunAmmo: 0
+  lowAutoAmmo: 0
+  maxSprayerAmmo: 0
+  maxShotgunAmmo: 0
+  maxAutoAmmo: 0
 --- !u!114 &4089810492114355075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -669,7 +677,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8282234078560122467}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8465308789078726406}
