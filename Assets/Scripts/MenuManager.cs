@@ -67,8 +67,6 @@ public class MenuManager : MonoBehaviour
     public GameObject progressBarPrefab;
 
     [Header("Weapon Loadout Display")]
-    [Tooltip("List of Weapons")]
-    public List<Weapon> weapons;
     [Tooltip("Content of the ScrollView")]
     public GameObject weaponContent;
     [Tooltip("Group Type Prefab")]
@@ -195,9 +193,10 @@ public class MenuManager : MonoBehaviour
                 order[type].Add(rarity, new List<Weapon>());
             }
         }
-        
+
         // Sort through existing Weapons
-        foreach (Weapon w in weapons)
+        List<Weapon> allWeapons = WeaponManager.Instance().weapons;
+        foreach (Weapon w in allWeapons)
         {
             WeaponRarity wr = w.rarity;
 

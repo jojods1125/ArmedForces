@@ -4508,6 +4508,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 490964251}
   m_CullTransparentMesh: 0
+--- !u!1 &528381506
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 528381507}
+  - component: {fileID: 528381508}
+  m_Layer: 0
+  m_Name: WeaponManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &528381507
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528381506}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1179617425}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &528381508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528381506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da94193e43c48164c8c87da2506d04b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapons:
+  - {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
+  - {fileID: 11400000, guid: c0654668b0796c84eba8c7d930987956, type: 2}
+  - {fileID: 11400000, guid: 23ff3fae40bdea64fba3218142df8ea6, type: 2}
+  - {fileID: 11400000, guid: 84b23d62f01cc61479f769c5030d7804, type: 2}
+  - {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
+  - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
 --- !u!1 &552495285
 GameObject:
   m_ObjectHideFlags: 0
@@ -7298,13 +7348,6 @@ MonoBehaviour:
   achievementPrefab: {fileID: 1146438363030574227, guid: e3f1bcc76b9597d4db623f09322274db, type: 3}
   tierPrefab: {fileID: 7591037569370411143, guid: d6b93c12015de8545a5cd8e7a8232131, type: 3}
   progressBarPrefab: {fileID: 1612258747238857711, guid: c665b40e31f0a714e815694f60b1386d, type: 3}
-  weapons:
-  - {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
-  - {fileID: 11400000, guid: c0654668b0796c84eba8c7d930987956, type: 2}
-  - {fileID: 11400000, guid: 23ff3fae40bdea64fba3218142df8ea6, type: 2}
-  - {fileID: 11400000, guid: 84b23d62f01cc61479f769c5030d7804, type: 2}
-  - {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
-  - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
   weaponContent: {fileID: 2008869432}
   groupPrefab: {fileID: 3838088369049439431, guid: 7d2c791145a4a7b4788c1d84db5fbf5a, type: 3}
   weaponPrefab: {fileID: 4970655156858171585, guid: 7802398b723f95e4f9ae03c2641fc202, type: 3}
@@ -7340,6 +7383,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2054040178}
+  - {fileID: 528381507}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
