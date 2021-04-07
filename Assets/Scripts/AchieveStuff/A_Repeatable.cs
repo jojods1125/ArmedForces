@@ -41,4 +41,29 @@ public class A_Repeatable : Achievement
     {
         return base.ToString() + ": Goal of " + repeatValue + " reached " + timesAchieved + " times";
     }
+
+    /// <summary>
+    /// Puts the important data into a CSV string in order to save it
+    /// </summary>
+    /// <returns> CSV string to save into PlayerPrefs </returns>
+    public override string SaveToString()
+    {
+        return achievementMessage + ">" + achieved + ">" + currentValue + ">" + repeatValue + ">" + timesAchieved;
+    }
+
+    /// <summary>
+    /// Takes a CSV string and parses it into the usable data
+    /// </summary>
+    /// <param name="json"> CSV string to parse through </param>
+    public override void LoadFromString(string json)
+    {
+        string[] data = json.Split('>');
+        if (achievementMessage.Equals(data[0]))
+        {
+            achieved = data[1].Equals("True");
+            currentValue = int.Parse(data[2]);
+            repeatValue = int.Parse(data[3]);
+            timesAchieved = int.Parse(data[4]);
+        }
+    }
 }

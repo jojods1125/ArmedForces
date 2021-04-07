@@ -114,19 +114,26 @@ public class Achievement : ScriptableObject
         return returnable;
     }
 
-    public string ToJson()
+    /// <summary>
+    /// Puts the important data into a "greater than seperated values" string in order to save it
+    /// </summary>
+    /// <returns> CSV string to save into PlayerPrefs </returns>
+    public virtual string SaveToString()
     {
-        string json = "{ ";
-        json += "message: \"" + achievementMessage + "\",\n";
-        json += "achieved: " + achieved + "\",\n";
-        json += "AchievementType: " + type + ",\n";
-        json += "currentValue: " + currentValue + "\",\n";
-        json += "}";
-        return json;
+        return achievementMessage + ">" + achieved + ">" + currentValue;
     }
 
-    public void FromJson( string json )
+    /// <summary>
+    /// Takes a CSV string and parses it into the usable data
+    /// </summary>
+    /// <param name="json"> CSV string to parse through </param>
+    public virtual void LoadFromString( string json )
     {
-        
+        string[] data = json.Split('>');
+        if (achievementMessage.Equals(data[0]))
+        {
+            achieved = data[1].Equals("True");
+            currentValue = int.Parse(data[2]);
+		}
     }
 }

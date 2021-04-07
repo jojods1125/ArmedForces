@@ -43,7 +43,7 @@ public class AchievementManager : MonoBehaviour
         }
 
         // PlayerPrefs
-        // LoadPrefs();
+        LoadPrefs();
     }
 
     // ===========================================================
@@ -58,7 +58,7 @@ public class AchievementManager : MonoBehaviour
         string lists = JsonUtility.ToJson(alc);
         PlayerPrefs.SetString("AchLists", lists);*/
 
-        // Tiered
+        /*// Tiered
         //string tiered = JsonConvert.SerializeObject(alc.tiered);
         string tiered = JsonUtility.ToJson(alc.tiered, true);
         PlayerPrefs.SetString("TieredAchs", tiered);
@@ -69,11 +69,29 @@ public class AchievementManager : MonoBehaviour
         // Repeatable
         //string repeatable = JsonConvert.SerializeObject(alc.repeatable);
         string repeatable = JsonUtility.ToJson(alc.repeatable, true);
-        PlayerPrefs.SetString("RepeatableAchs", repeatable);
+        PlayerPrefs.SetString("RepeatableAchs", repeatable);*/
 
         /*// string aListJSON = JsonUtility.ToJson(this, true);
         string aListJSON = JsonConvert.SerializeObject(achievements);
         PlayerPrefs.SetString("AllAchievements", aListJSON);*/
+
+        string data = "";
+        foreach (Achievement a in achievements)
+		{
+            if (a is A_Typed)
+            {
+                data += ((A_Typed)a).SaveToString() + "\n";
+            }
+            else if (a is A_Tiered)
+            {
+                data += ((A_Tiered)a).SaveToString() + "\n";
+            }
+            else if (a is A_Repeatable)
+			{
+                data += ((A_Repeatable)a).SaveToString() + "\n";
+			}
+		}
+        PlayerPrefs.SetString("AllAchs", data);
     }
 
     public void LoadPrefs()
@@ -100,7 +118,7 @@ public class AchievementManager : MonoBehaviour
             achievements = alc.CreateBaseList();
         }*/
 
-        if (PlayerPrefs.HasKey("TieredAchs") && PlayerPrefs.HasKey("TypedAchs") && PlayerPrefs.HasKey("RepeatableAchs"))
+        /*if (PlayerPrefs.HasKey("TieredAchs") && PlayerPrefs.HasKey("TypedAchs") && PlayerPrefs.HasKey("RepeatableAchs"))
         {
             // Tiered
             string tieredString = PlayerPrefs.GetString("TieredAchs");
@@ -116,7 +134,7 @@ public class AchievementManager : MonoBehaviour
             List<A_Repeatable> repeatable = JsonUtility.FromJson<List<A_Repeatable>>(repeatableString);
             alc.SetLists(tiered, typed, repeatable);
             achievements = alc.CreateBaseList();
-        }
+        }*/
 
         /*if (PlayerPrefs.HasKey("AllAchievements"))
         {
@@ -124,6 +142,31 @@ public class AchievementManager : MonoBehaviour
             // achievements = JsonUtility.FromJson<AchievementManager>(aListJSON).achievements;
             achievements = JsonConvert.DeserializeObject<List<Achievement>>(aListJSON);
         }*/
+
+        if (PlayerPrefs.HasKey("AllAchs"))
+        {
+            string[] data = PlayerPrefs.GetString("AllAchs").Split('\n');
+            for (int i = 0; i < data.Length; i++)
+            {
+                string info = data[i];
+                Achievement a = achievements[i];
+                if (info.Contains(a.achievementMessage))
+                {
+                    if (a is A_Typed)
+                    {
+                        ((A_Typed)a).LoadFromString(info);
+                    }
+                    else if (a is A_Tiered)
+                    {
+                        ((A_Tiered)a).LoadFromString(info);
+                    }
+                    else if (a is A_Repeatable)
+                    {
+                        ((A_Repeatable)a).LoadFromString(info);
+                    }
+                }
+            }
+        }
     }
 
     // ===========================================================
