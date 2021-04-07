@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Repeatable Achievement", menuName = "Achievement/Repeatable")]
+[Serializable]
 public class A_Repeatable : Achievement
 {
     [Header("Repeat Value")]

@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Achievement", menuName = "Achievement/Tiered")]
+[Serializable]
 public class A_Tiered : Achievement
 {
     [Header("Tiered Properties")]

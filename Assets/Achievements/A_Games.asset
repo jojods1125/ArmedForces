@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ee55d058369d6c40ad37838ef999824, type: 3}
   m_Name: A_Games
   m_EditorClassIdentifier: 
-  achievementMessage: Victory Chicken Royale Dinner!!!
+  achievementMessage: Games Played
   achieved: 0
   type: 4
   currentValue: 0

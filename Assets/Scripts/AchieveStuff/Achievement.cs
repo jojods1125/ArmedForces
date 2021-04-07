@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /**
  * Base idea of what Achievements are
@@ -11,6 +12,7 @@
 /// Types of Achievements
 /// Used for checking in Manager
 /// </summary>
+[Serializable]
 public enum AchievementType
 {
     kills, deaths, wins, shotsFired, games
@@ -19,6 +21,7 @@ public enum AchievementType
 /// <summary>
 /// Base Achievement variables and methods
 /// </summary>
+[Serializable]
 public class Achievement : ScriptableObject
 {
     [Header("Achievement Info")]
@@ -109,5 +112,21 @@ public class Achievement : ScriptableObject
         }
 
         return returnable;
+    }
+
+    public string ToJson()
+    {
+        string json = "{ ";
+        json += "message: \"" + achievementMessage + "\",\n";
+        json += "achieved: " + achieved + "\",\n";
+        json += "AchievementType: " + type + ",\n";
+        json += "currentValue: " + currentValue + "\",\n";
+        json += "}";
+        return json;
+    }
+
+    public void FromJson( string json )
+    {
+        
     }
 }
