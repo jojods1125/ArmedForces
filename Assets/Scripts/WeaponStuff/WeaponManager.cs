@@ -22,7 +22,7 @@ public class WeaponManager : MonoBehaviour
         else
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(this.gameObject);
         }
     }
 
@@ -33,6 +33,9 @@ public class WeaponManager : MonoBehaviour
     public List<Weapon> weapons;
     public Weapon[] back = new Weapon[4];
     public Weapon[] front = new Weapon[4];
+
+    // Dictionary of playerId to loadout?
+
 
     /// <summary>
     /// Gets a weapon from the existing list given a name
@@ -75,6 +78,9 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Loads the Loadouts into the corresponding arms from PlayerPrefs
+    /// </summary>
     public void LoadLoadout()
 	{
         // Weapon slot
