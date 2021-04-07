@@ -22,15 +22,20 @@ public class WeaponManager : MonoBehaviour
         else
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(this.gameObject);
         }
     }
 
     // ===========================================================
-    //                    SINGLETON PATTERN
+    //                  Accessing and Saving
     // ===========================================================
 
     public List<Weapon> weapons;
+    public Weapon[] back = new Weapon[4];
+    public Weapon[] front = new Weapon[4];
+
+    // Dictionary of playerId to loadout?
+
 
     /// <summary>
     /// Gets a weapon from the existing list given a name
@@ -41,13 +46,68 @@ public class WeaponManager : MonoBehaviour
 	{
         foreach (Weapon w in weapons)
 		{
-            if (w.name.Equals(name))
+            if (w.weaponName.Equals(name))
 			{
                 return w;
 			}
 		}
         return null;
 	}
+
+    /// <summary>
+    /// Saves the Loadout into PlayerPrefs
+    /// </summary>
+    public void SaveLoadout()
+	{
+        // Weapon slot
+        char slot = 'A';
+
+        // Go through back loadout
+        foreach (Weapon w in back)
+		{
+            PlayerPrefs.SetString("Back" + slot++, w.weaponName);
+		}
+
+        // Reset slot
+        slot = 'A';
+
+        // Go through front loadout
+        foreach (Weapon w in front)
+        {
+            PlayerPrefs.SetString("Front" + slot++, w.weaponName);
+        }
+    }
+
+    /// <summary>
+    /// Loads the Loadouts into the corresponding arms from PlayerPrefs
+    /// </summary>
+    public void LoadLoadout()
+	{
+        // Weapon slot
+        char slot = 'A';
+
+        // Go through back loadout
+        for (int i = 0; i < back.Length; i++)
+		{
+            string file = "Back" + (char)(slot + i);
+            if (PlayerPrefs.HasKey(file))
+			{
+                string data = PlayerPrefs.GetString("Back" + (char)(slot + i));
+                back[i] = getByName(data);
+			}
+		}
+
+        // Go through front loadout
+        for (int i = 0; i < front.Length; i++)
+        {
+            string file = "Front" + (char)(slot + i);
+            if (PlayerPrefs.HasKey(file))
+            {
+                string data = PlayerPrefs.GetString("Front" + (char)(slot + i));
+                front[i] = getByName(data);
+            }
+        }
+    }
 
     // Start is called before the first frame update
     void Start()

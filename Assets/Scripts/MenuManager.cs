@@ -75,10 +75,6 @@ public class MenuManager : MonoBehaviour
     public GameObject weaponPrefab;
     [Tooltip("Weapon Description Box")]
     public GameObject descriptionBox;
-    [Tooltip("Back Arm Loadout")]
-    public Weapon[] backArm = new Weapon[4];
-    [Tooltip("Front Arm Loadout")]
-    public Weapon[] frontArm = new Weapon[4];
 
     // List of Weapon Buttons
     private List<GameObject> weaponButtons = new List<GameObject>();
@@ -193,6 +189,9 @@ public class MenuManager : MonoBehaviour
                 order[type].Add(rarity, new List<Weapon>());
             }
         }
+
+        // Load weapons
+        WeaponManager.Instance().LoadLoadout();
 
         // Sort through existing Weapons
         List<Weapon> allWeapons = WeaponManager.Instance().weapons;
@@ -518,8 +517,9 @@ public class MenuManager : MonoBehaviour
 			{
                 if (EventSystem.current.currentSelectedGameObject == button)
 				{
-                    WeaponButtonContatiner  wpc = button.GetComponent<WeaponButtonContatiner>();
-                    Weapon weapon = wpc.weapon;
+                    WeaponButtonContatiner  wbc = button.GetComponent<WeaponButtonContatiner>();
+                    Weapon weapon = wbc.weapon;
+                    descriptionBox.SetActive(true);
                     Transform nameAndDesc = descriptionBox.transform.Find("Name and Desc");
                     nameAndDesc.Find("Name").GetComponent<Text>().text = weapon.weaponName;
                     nameAndDesc.Find("Description").GetComponent<Text>().text = weapon.description;
@@ -537,39 +537,39 @@ public class MenuManager : MonoBehaviour
                     Vector3 zeroed = new Vector3(0f, 0f, 0f);
 
                     // Set damage bar
-                    Vector3 damageBar = new Vector3(wpc.damage / maxDamage, 1f, 1f);
-                    if (wpc.damage > 0)
+                    Vector3 damageBar = new Vector3(wbc.damage / maxDamage, 1f, 1f);
+                    if (wbc.damage > 0)
                     {
                         dmg.Find("BarBack").Find("Positive").localScale = damageBar;
                         dmg.Find("BarBack").Find("Negative").localScale = zeroed;
                     }
-                    else if (wpc.damage < 0)
+                    else if (wbc.damage < 0)
 					{
                         dmg.Find("BarBack").Find("Negative").localScale = damageBar;
                         dmg.Find("BarBack").Find("Positive").localScale = zeroed;
                     }
 
                     // Set recoil bar
-                    Vector3 recoilBar = new Vector3(wpc.recoil / maxRecoil, 1f, 1f);
-                    if (wpc.recoil > 0)
+                    Vector3 recoilBar = new Vector3(wbc.recoil / maxRecoil, 1f, 1f);
+                    if (wbc.recoil > 0)
                     {
                         recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
                         recoil.Find("BarBack").Find("Negative").localScale = zeroed;
                     }
-                    else if (wpc.recoil < 0)
+                    else if (wbc.recoil < 0)
                     {
                         recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
                         recoil.Find("BarBack").Find("Positive").localScale = zeroed;
                     }
 
                     // Set pushback bar
-                    Vector3 pushbackBar = new Vector3(wpc.pushback / maxPushback, 1f, 1f);
-                    if (wpc.pushback > 0)
+                    Vector3 pushbackBar = new Vector3(wbc.pushback / maxPushback, 1f, 1f);
+                    if (wbc.pushback > 0)
                     {
                         pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
                         pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
                     }
-                    else if (wpc.pushback < 0)
+                    else if (wbc.pushback < 0)
                     {
                         pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
                         pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
@@ -600,13 +600,13 @@ public class MenuManager : MonoBehaviour
 					}
 
                     variable.Find("Text").GetComponent<Text>().text = variableText;
-                    variable.Find("BarBack").Find("Positive").localScale = new Vector3(wpc.variable / variableMax, 1f, 1f);
+                    variable.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.variable / variableMax, 1f, 1f);
 
                     // Set ammo capacity bar
-                    ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wpc.ammoCapacity / maxAmmo, 1f, 1f);
+                    ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.ammoCapacity / maxAmmo, 1f, 1f);
 
                     // Set reload speed bar
-                    reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wpc.reloadSpeed / maxReloadSpeed, 1f, 1f);
+                    reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.reloadSpeed / maxReloadSpeed, 1f, 1f);
 
                 }
 			}
@@ -683,11 +683,11 @@ public class MenuManager : MonoBehaviour
         Transform back = LoadoutMenu.transform.Find("Back Arm Loadout");
         Transform front = LoadoutMenu.transform.Find("Front Arm Loadout");
         
-        // Back
-        for (int i = 0; i < backArm.Length; i++)
+        // Loadouts
+        for (int i = 0; i < WeaponManager.Instance().back.Length; i++)
 		{
-            back.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = backArm[i].icon;
-            front.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = frontArm[i].icon;
+            back.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().back[i].icon;
+            front.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().front[i].icon;
 		}
 
         LoadoutMenu.SetActive( true );
@@ -737,12 +737,17 @@ public class MenuManager : MonoBehaviour
         int index = currentWeapon - 65;
         if (currentArm.Equals("Back"))
 		{
-            backArm[index] = weapon;
+            WeaponManager.Instance().back[index] = weapon;
 		}
         else if (currentArm.Equals("Front"))
 		{
-            frontArm[index] = weapon;
+            WeaponManager.Instance().front[index] = weapon;
 		}
+
+        descriptionBox.SetActive(false);
+
+        // Save loadout
+        WeaponManager.Instance().SaveLoadout();
 
         // go back to Loadout menu
         Loadout();

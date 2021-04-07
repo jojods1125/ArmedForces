@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,8 +16,6 @@ public class AchievementManager : MonoBehaviour
 {
     [SerializeField]
     public List<Achievement> achievements;
-
-    private AchievementListContainer alc = new AchievementListContainer();
 
     // ===========================================================
     //                    SINGLETON PATTERN
@@ -50,32 +47,13 @@ public class AchievementManager : MonoBehaviour
     //              Persisten Data (PlayerPrefs)
     // ===========================================================
 
+    /// <summary>
+    /// Save the important Achievement data based on the type of Achievement
+    /// </summary>
     public void SavePrefs()
     {
-        alc.CreateSeperateLists(achievements);
-
-        /*//string lists = JsonConvert.SerializeObject(alc);
-        string lists = JsonUtility.ToJson(alc);
-        PlayerPrefs.SetString("AchLists", lists);*/
-
-        /*// Tiered
-        //string tiered = JsonConvert.SerializeObject(alc.tiered);
-        string tiered = JsonUtility.ToJson(alc.tiered, true);
-        PlayerPrefs.SetString("TieredAchs", tiered);
-        // Typed
-        //string typed = JsonConvert.SerializeObject(alc.typed);
-        string typed = JsonUtility.ToJson(alc.typed, true);
-        PlayerPrefs.SetString("TypedAchs", typed);
-        // Repeatable
-        //string repeatable = JsonConvert.SerializeObject(alc.repeatable);
-        string repeatable = JsonUtility.ToJson(alc.repeatable, true);
-        PlayerPrefs.SetString("RepeatableAchs", repeatable);*/
-
-        /*// string aListJSON = JsonUtility.ToJson(this, true);
-        string aListJSON = JsonConvert.SerializeObject(achievements);
-        PlayerPrefs.SetString("AllAchievements", aListJSON);*/
-
         string data = "";
+        // Go through all Achievements, cast to type, and get their data
         foreach (Achievement a in achievements)
 		{
             if (a is A_Typed)
@@ -91,65 +69,26 @@ public class AchievementManager : MonoBehaviour
                 data += ((A_Repeatable)a).SaveToString() + "\n";
 			}
 		}
+
+        // Put collective data in PlayerPrefs
         PlayerPrefs.SetString("AllAchs", data);
     }
 
+    /// <summary>
+    /// Loads the important Achievement data from PlayerPrefs
+    /// </summary>
     public void LoadPrefs()
     {
-        /*if (PlayerPrefs.HasKey("AchLists"))
-        {
-            string lists = PlayerPrefs.GetString("AchLists");
-            JsonUtility.FromJsonOverwrite(lists, alc);
-            Debug.LogError("Loading");
-            foreach (A_Typed at in alc.typed)
-            {
-                Debug.LogError("Typed: " + at.ToString());
-            }
-            foreach (A_Tiered at in alc.tiered)
-            {
-                Debug.LogError("Tiered: " + at.ToString());
-            }
-            foreach (A_Repeatable ar in alc.repeatable)
-            {
-                Debug.LogError("Repeatable: " + ar.ToString());
-            }
-
-            //JsonConvert.PopulateObject(lists, alc);
-            achievements = alc.CreateBaseList();
-        }*/
-
-        /*if (PlayerPrefs.HasKey("TieredAchs") && PlayerPrefs.HasKey("TypedAchs") && PlayerPrefs.HasKey("RepeatableAchs"))
-        {
-            // Tiered
-            string tieredString = PlayerPrefs.GetString("TieredAchs");
-            //List<A_Tiered> tiered = JsonConvert.DeserializeObject<List<A_Tiered>>(tieredString);
-            List<A_Tiered> tiered = JsonUtility.FromJson<List<A_Tiered>>(tieredString);
-            // Typed
-            string typedString = PlayerPrefs.GetString("TypedAchs");
-            //List<A_Typed> typed = JsonConvert.DeserializeObject<List<A_Typed>>(typedString);
-            List<A_Typed> typed = JsonUtility.FromJson<List<A_Typed>>(typedString);
-            // Repeatable
-            string repeatableString = PlayerPrefs.GetString("RepeatableAchs");
-            //List<A_Repeatable> repeatable = JsonConvert.DeserializeObject<List<A_Repeatable>>(repeatableString);
-            List<A_Repeatable> repeatable = JsonUtility.FromJson<List<A_Repeatable>>(repeatableString);
-            alc.SetLists(tiered, typed, repeatable);
-            achievements = alc.CreateBaseList();
-        }*/
-
-        /*if (PlayerPrefs.HasKey("AllAchievements"))
-        {
-            string aListJSON = PlayerPrefs.GetString("AllAchievements");
-            // achievements = JsonUtility.FromJson<AchievementManager>(aListJSON).achievements;
-            achievements = JsonConvert.DeserializeObject<List<Achievement>>(aListJSON);
-        }*/
-
+        // Check if the Key exists
         if (PlayerPrefs.HasKey("AllAchs"))
         {
+            // Get the data from storage
             string[] data = PlayerPrefs.GetString("AllAchs").Split('\n');
-            for (int i = 0; i < data.Length; i++)
+            for (int i = 0; i < data.Length - 1; i++)
             {
                 string info = data[i];
                 Achievement a = achievements[i];
+                // Load the data into the correctly typed achievement
                 if (info.Contains(a.achievementMessage))
                 {
                     if (a is A_Typed)
