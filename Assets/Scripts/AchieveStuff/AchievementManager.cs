@@ -146,7 +146,7 @@ public class AchievementManager : MonoBehaviour
         if (PlayerPrefs.HasKey("AllAchs"))
         {
             string[] data = PlayerPrefs.GetString("AllAchs").Split('\n');
-            for (int i = 0; i < data.Length; i++)
+            for (int i = 0; i < data.Length - 1; i++)
             {
                 string info = data[i];
                 Achievement a = achievements[i];
