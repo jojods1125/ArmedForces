@@ -31,9 +31,9 @@ public class GameManager : MonoBehaviour
     public GameObject spawnPointContainer;
     [Tooltip("UI Manager within the scene")]
     public UIManager uiManager;
-    [Tooltip("Local player within the scene [DO NOT SET IN EDITOR IN ONLINE SCENES]")]
-    [SerializeField]
-    public Player localPlayer;
+    //[Tooltip("Local player within the scene [DO NOT SET IN EDITOR IN ONLINE SCENES]")]
+    //[SerializeField]
+    //public Player localPlayer;
     [Tooltip("Local players within the scene [ONLY SET IN LOCAL MULTIPLAYER]")]
     public Player[] localPlayers = new Player[4];
 
@@ -134,8 +134,12 @@ public class GameManager : MonoBehaviour
     /// <returns> New ID for the player </returns>
     public int ClientConnected()
     {
+        Debug.Log("Client Connected executed");
+
         // Retrieves the ID
         int newID = getID();
+
+        Debug.Log("New ID is " + newID);
 
         // Tells other GameManagers that a player connected
         RpcClientConnected(newID);
@@ -144,7 +148,7 @@ public class GameManager : MonoBehaviour
         kills.Add(newID, 0);
         deaths.Add(newID, 0);
 
-        uiManager.ui_Players[newID = 1].gameObject.SetActive(true);
+        uiManager.ui_Players[newID].gameObject.SetActive(true);
 
         // Gives ID to Player
         return newID;
@@ -176,7 +180,7 @@ public class GameManager : MonoBehaviour
     public void RpcClientConnected(int newID)
     {
         // Refreshes arms so new player sees them
-        localPlayer.UpdateAppearance();
+        //localPlayer.UpdateAppearance();
 
         if (matchType == MatchType.Training)
             aiC.Activate();
@@ -189,8 +193,9 @@ public class GameManager : MonoBehaviour
     /// <returns> New ID for the player </returns>
     public int getID()
     {
+        int newID = playerCount;
         playerCount++;
-        return playerCount;
+        return newID;
     }
 
     public int getAIID()
@@ -233,17 +238,17 @@ public class GameManager : MonoBehaviour
     {
         // Player score UI updates
 
+        if (kills.ContainsKey(0) && deaths.ContainsKey(0))
+            uiManager.p1_KDR.GetComponent<TMP_Text>().text = "P1 - K: " + kills[0] + " D: " + deaths[0];
+
         if (kills.ContainsKey(1) && deaths.ContainsKey(1))
-            uiManager.p1_KDR.GetComponent<TMP_Text>().text = "P1 - K: " + kills[1] + " D: " + deaths[1];
+            uiManager.p2_KDR.GetComponent<TMP_Text>().text = "P2 - K: " + kills[1] + " D: " + deaths[1];
 
         if (kills.ContainsKey(2) && deaths.ContainsKey(2))
-            uiManager.p2_KDR.GetComponent<TMP_Text>().text = "P2 - K: " + kills[2] + " D: " + deaths[2];
+            uiManager.p3_KDR.GetComponent<TMP_Text>().text = "P3 - K: " + kills[2] + " D: " + deaths[2];
 
         if (kills.ContainsKey(3) && deaths.ContainsKey(3))
-            uiManager.p3_KDR.GetComponent<TMP_Text>().text = "P3 - K: " + kills[3] + " D: " + deaths[3];
-
-        if (kills.ContainsKey(4) && deaths.ContainsKey(4))
-            uiManager.p4_KDR.GetComponent<TMP_Text>().text = "P4 - K: " + kills[4] + " D: " + deaths[4];
+            uiManager.p4_KDR.GetComponent<TMP_Text>().text = "P4 - K: " + kills[3] + " D: " + deaths[3];
     }
 
 
@@ -266,7 +271,11 @@ public class GameManager : MonoBehaviour
         {
             kills[killer]++;
             // if the killer is the mainPlayer
-            if (killer == localPlayer.GetPlayerID())
+            if (matchType != MatchType.Local && killer == localPlayers[0].GetPlayerID())
+            {
+                AchievementManager.Instance().OnEvent(AchievementType.kills, 1, weaponType);
+            }
+            else if (matchType == MatchType.Local)
             {
                 AchievementManager.Instance().OnEvent(AchievementType.kills, 1, weaponType);
             }

@@ -439,7 +439,7 @@ public class Arm : MonoBehaviour
                 SwitchAppearance(weapon.mesh.name, weapon.material.name);
 
             // Update UI
-            if (uiManager) uiManager.ui_Players[0].UpdateSelectedUI(armSide, weaponLetters[weapon]);
+            if (uiManager) uiManager.ui_Players[player.GetPlayerID()].UpdateSelectedUI(armSide, weaponLetters[weapon]);
         }
     }
 

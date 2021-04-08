@@ -1861,8 +1861,9 @@ GameObject:
   - component: {fileID: 5807852348766420319}
   - component: {fileID: 5807852348766420318}
   - component: {fileID: 3346563356395482303}
+  - component: {fileID: 3358012508820436045}
   m_Layer: 0
-  m_Name: UI
+  m_Name: UI_Single
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1900,31 +1901,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3358771af40214da2a591aaa4a14d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponA_L_image: {fileID: 5807852349644029214}
-  weaponB_L_image: {fileID: 5807852349871915951}
-  weaponC_L_image: {fileID: 5807852348653647608}
-  weaponD_L_image: {fileID: 5807852350202883800}
-  weaponA_R_image: {fileID: 5807852349234846880}
-  weaponB_R_image: {fileID: 5807852349089060655}
-  weaponC_R_image: {fileID: 5807852349871635388}
-  weaponD_R_image: {fileID: 5807852348383681062}
-  weaponA_L_ammo: {fileID: 5807852348773344939}
-  weaponB_L_ammo: {fileID: 5807852348985047836}
-  weaponC_L_ammo: {fileID: 5807852350150786643}
-  weaponD_L_ammo: {fileID: 5807852349823704689}
-  weaponA_R_ammo: {fileID: 5807852349260268281}
-  weaponB_R_ammo: {fileID: 5807852350071189238}
-  weaponC_R_ammo: {fileID: 5807852348733272728}
-  weaponD_R_ammo: {fileID: 5807852350195068631}
-  weaponA_L_select: {fileID: 5807852348588805278}
-  weaponB_L_select: {fileID: 5807852349923357765}
-  weaponC_L_select: {fileID: 5807852349073461574}
-  weaponD_L_select: {fileID: 5807852350346361813}
-  weaponA_R_select: {fileID: 5807852350384615354}
-  weaponB_R_select: {fileID: 5807852349743495871}
-  weaponC_R_select: {fileID: 5807852348593947630}
-  weaponD_R_select: {fileID: 5807852349797104965}
-  healthBar_bar: {fileID: 2563691730703075830}
+  ui_Players:
+  - {fileID: 3358012508820436045}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   matchClock: {fileID: 7632354338226750609}
   p1_KDR: {fileID: 9112390347584149883}
   p2_KDR: {fileID: 985728617540417948}
@@ -1954,6 +1935,43 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3358012508820436045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5807852348766420316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8100282224811f94fb40524acbb35c0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponA_L_image: {fileID: 5807852349644029214}
+  weaponB_L_image: {fileID: 5807852349871915951}
+  weaponC_L_image: {fileID: 5807852348653647608}
+  weaponD_L_image: {fileID: 5807852350202883800}
+  weaponA_R_image: {fileID: 5807852349234846880}
+  weaponB_R_image: {fileID: 5807852349089060655}
+  weaponC_R_image: {fileID: 5807852349871635388}
+  weaponD_R_image: {fileID: 5807852348383681062}
+  weaponA_L_ammo: {fileID: 5807852348773344939}
+  weaponB_L_ammo: {fileID: 5807852348985047836}
+  weaponC_L_ammo: {fileID: 5807852350150786643}
+  weaponD_L_ammo: {fileID: 5807852349823704689}
+  weaponA_R_ammo: {fileID: 5807852349260268281}
+  weaponB_R_ammo: {fileID: 5807852350071189238}
+  weaponC_R_ammo: {fileID: 5807852348733272728}
+  weaponD_R_ammo: {fileID: 5807852350195068631}
+  weaponA_L_select: {fileID: 5807852348588805278}
+  weaponB_L_select: {fileID: 5807852349923357765}
+  weaponC_L_select: {fileID: 5807852349073461574}
+  weaponD_L_select: {fileID: 5807852350346361813}
+  weaponA_R_select: {fileID: 5807852350384615354}
+  weaponB_R_select: {fileID: 5807852349743495871}
+  weaponC_R_select: {fileID: 5807852348593947630}
+  weaponD_R_select: {fileID: 5807852349797104965}
+  healthBar_bar: {fileID: 2563691730703075830}
 --- !u!1 &5807852348773344937
 GameObject:
   m_ObjectHideFlags: 0

@@ -60,7 +60,7 @@ public class AI_Controller : MonoBehaviour
     public void Activate()
     {
         // Debug.LogError("Setting AI Enemy");
-        enemy = GameManager.Instance().localPlayer;
+        enemy = GameManager.Instance().localPlayers[0];
     }
 
     // Update is called once per frame

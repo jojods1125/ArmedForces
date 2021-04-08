@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
         // Increases health and prevents invalid values
         currHealth = Mathf.Max(Mathf.Min(currHealth + health, maxHealth), 0);
 
-        //if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+        if (uiManager) uiManager.ui_Players[playerID].UpdateHealthBar(currHealth / maxHealth);
 
         // If you die by healing for some ungodly reason, you played yourself
         if (currHealth <= 0 && matchType != MatchType.Online)
@@ -87,7 +87,7 @@ public class Player : MonoBehaviour
             lastAttackedType = weaponType;
         }
 
-        //if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+        if (uiManager) uiManager.ui_Players[playerID].UpdateHealthBar(currHealth / maxHealth);
 
         // If the Player runs out of health, kill them
         if (currHealth <= 0 && matchType != MatchType.Online)
@@ -132,7 +132,7 @@ public class Player : MonoBehaviour
             if (currHealth != 0)
             {
                 currHealth = 0;
-                if (uiManager) uiManager.ui_Players[0].UpdateHealthBar(currHealth / maxHealth);
+                if (uiManager) uiManager.ui_Players[playerID].UpdateHealthBar(currHealth / maxHealth);
             }
 
             // Activate the GameManager's respawn process
@@ -199,9 +199,11 @@ public class Player : MonoBehaviour
     /// </summary>
     public void PlayerConnected()
     {
+        Debug.Log("Player Connected executed");
+
         // Retrieves an ID from GameManager
         int newID = GameManager.Instance().ClientConnected();
-        GameManager.Instance().localPlayers[newID - 1] = this;
+        GameManager.Instance().localPlayers[newID] = this;
 
         this.playerID = newID;
         lastAttackedID = this.playerID;
@@ -217,12 +219,12 @@ public class Player : MonoBehaviour
             PlayerConnected();
 
             // If UI exists (only local player), connect health bar and weapon UI
-            if (uiManager && matchType != MatchType.Local)
-            {
-                GameManager.Instance().localPlayer = this;
-                uiManager.ui_Players[0].UpdateHealthBar(currHealth / maxHealth);
-                uiManager.ui_Players[0].UpdateWeaponIcons();
-            }
+            //if (uiManager && matchType != MatchType.Local)
+            //{
+            //    GameManager.Instance().localPlayer = this;
+            //    uiManager.ui_Players[0].UpdateHealthBar(currHealth / maxHealth);
+            //    uiManager.ui_Players[0].UpdateWeaponIcons();
+            //}
         }
     }
 
@@ -245,9 +247,9 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (matchType != MatchType.Online)
+        //if (matchType != MatchType.Online)
             // Constantly update health bar (kinda nasty but works better than event-based)
-            if (uiManager) uiManager.ui_Players[0].UpdateHealthBar(currHealth / maxHealth);
+            //if (uiManager) uiManager.ui_Players[playerID].UpdateHealthBar(currHealth / maxHealth);
     }
 
 

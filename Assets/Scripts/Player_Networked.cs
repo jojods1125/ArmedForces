@@ -213,7 +213,7 @@ public class Player_Networked : NetworkBehaviour
     protected void Start()
     {
         if (isLocalPlayer)
-            GameManager_Networked.Instance().gameManager.localPlayer = player;
+            GameManager_Networked.Instance().gameManager.localPlayers[0] = player;
 
         // Tells the server that the Player is connected
         CmdPlayerConnected();
