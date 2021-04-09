@@ -561,15 +561,15 @@ MonoBehaviour:
   maxWalkSpeed: 5
   jumpForce: 100
   backArmWeapons:
-  - {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
+  - {fileID: 11400000, guid: 2b8ba738eff094e48aa48610dccaefe9, type: 2}
+  - {fileID: 11400000, guid: 5f52171bbeb1e0d468fd9a9d71f32caf, type: 2}
+  - {fileID: 11400000, guid: f741e2da789e8b144be295c24790d82a, type: 2}
   - {fileID: 11400000, guid: c0654668b0796c84eba8c7d930987956, type: 2}
-  - {fileID: 11400000, guid: 84b23d62f01cc61479f769c5030d7804, type: 2}
-  - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
   frontArmWeapons:
+  - {fileID: 11400000, guid: d4299c02449543148b47b10278f55347, type: 2}
+  - {fileID: 11400000, guid: 88bb61f48a16e874b819e936eeac2530, type: 2}
+  - {fileID: 11400000, guid: 4c6ea9e773df7e640bd701b25caf3850, type: 2}
   - {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
-  - {fileID: 11400000, guid: 23ff3fae40bdea64fba3218142df8ea6, type: 2}
-  - {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
-  - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
   playerID: 0
 --- !u!114 &4965220567905829241
 MonoBehaviour:
