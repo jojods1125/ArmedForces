@@ -99,7 +99,7 @@ public class UIManager : MonoBehaviour
 
     internal void UpdateAmmoUI(ArmSide armSide, char index, int currAmmo, int maxAmmo, int playerID)
     {
-        ui_Players[playerID].UpdateAmmoUI(armSide, index, currAmmo, maxAmmo);
+        if (ui_Players[playerID] != null) ui_Players[playerID].UpdateAmmoUI(armSide, index, currAmmo, maxAmmo);
     }
 
     /*public IEnumerator DisplayPopUp( Achievement a )

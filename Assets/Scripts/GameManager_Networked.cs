@@ -14,28 +14,11 @@ public class GameManager_Networked : NetworkBehaviour
     [SyncVar]
     private float currentGameTime = 0;
 
-    /// <summary> Dictionary of player IDs to kills </summary>
-    private SyncDictionary<int, int> kills = new SyncDictionary<int, int>();
-    /// <summary> Dictionary of player IDs to deaths </summary>
-    private SyncDictionary<int, int> deaths = new SyncDictionary<int, int>();
-
 
 
     // ===========================================================
     //                           START-UP
     // ===========================================================
-
-    //Returns the closest spawn point to a position
-    public Vector3 getCloseRespawnPoint(Vector3 pos)
-    {
-        return gameManager.getCloseRespawnPoint(pos);
-    }
-
-
-    public Vector3 getRandomRespawnPoint()
-    {
-        return gameManager.getRandomRespawnPoint();
-    }
 
     /// <summary> Singleton instance </summary>
     private static GameManager_Networked instance;
@@ -60,6 +43,19 @@ public class GameManager_Networked : NetworkBehaviour
             instance = this;
     }
 
+    private void Start()
+    {
+        // Increase game time every serverGameTimeStep
+        InvokeRepeating(nameof(IncrementTime), 0, gameManager.serverGameTimeStep);
+    }
+
+    //private void Update()
+    //{
+    //    foreach (int death in deaths)
+    //    {
+    //        gameManager.Set
+    //    }
+    //}
 
     // ===========================================================
     //                      CLIENT CONNECTIONS
@@ -76,13 +72,24 @@ public class GameManager_Networked : NetworkBehaviour
             return -1;
 
         // Gives ID to Player
-        return gameManager.ClientConnected();
-    }
+        int newID = gameManager.ClientConnected();
 
-    public int AIConnected()
-    {
-        // Gives ID to Player
-        return gameManager.AIConnected();
+        int[] killsArray = new int[gameManager.GetKills().Keys.Count];
+        for (int i = 0; i < killsArray.Length; i++)
+        {
+            killsArray[i] = gameManager.GetKills()[i];
+        }
+
+        int[] deathsArray = new int[gameManager.GetDeaths().Keys.Count];
+        for (int i = 0; i < deathsArray.Length; i++)
+        {
+            deathsArray[i] = gameManager.GetDeaths()[i];
+        }
+
+        RpcUpdateKills(killsArray);
+        RpcUpdateDeaths(deathsArray);
+
+        return newID;
     }
 
 
@@ -91,28 +98,35 @@ public class GameManager_Networked : NetworkBehaviour
     /// </summary>
     /// <param name="newID"> ID of the new player </param>
     [ClientRpc]
-    public void RpcClientConnected(int newID)
+    public void RpcUpdateKills(int[] killsArray)
     {
-        gameManager.RpcClientConnected(newID);
+        if (isServer)
+            return;
+
+        Dictionary<int, int> newKills = new Dictionary<int, int>();
+
+        for (int i = 0; i < killsArray.Length; i++)
+        {
+            newKills.Add(i, killsArray[i]);
+        }
+
+        gameManager.SetKills(newKills);
     }
 
-
-    /// <summary>
-    /// Updates playerCount on the server and retrieves it as the ID
-    /// </summary>
-    /// <returns> New ID for the player </returns>
-    int getID()
+    [ClientRpc]
+    public void RpcUpdateDeaths(int[] deathsArray)
     {
-        // THIS RUNS ON SERVER
-        if (!isServer)
-            return -1;
+        if (isServer)
+            return;
 
-        return gameManager.getID();
-    }
+        Dictionary<int, int> newDeaths = new Dictionary<int, int>();
 
-    int getAIID()
-    {
-        return gameManager.getAIID();
+        for (int i = 0; i < deathsArray.Length; i++)
+        {
+            newDeaths.Add(i, deathsArray[i]);
+        }
+
+        gameManager.SetDeaths(newDeaths);
     }
 
 
@@ -130,6 +144,8 @@ public class GameManager_Networked : NetworkBehaviour
         {
             currentGameTime += gameManager.serverGameTimeStep;
         }
+
+        gameManager.SetCurrentGameTime(currentGameTime);
 
         gameManager.IncrementTime();
     }
@@ -152,17 +168,15 @@ public class GameManager_Networked : NetworkBehaviour
         if (!isServer)
             return;
 
-        gameManager.TrackDeath(killer, deceased, weaponType);
+        //gameManager.TrackDeath(killer, deceased, weaponType);
+
+        RpcTrackDeath(killer, deceased, weaponType);
     }
-
-
-    /// <summary>
-    /// Respawn the specified GameObject
-    /// </summary>
-    /// <param name="obj"> GameObject to respawn </param>
-    public void Respawn(GameObject obj)
+    
+    [ClientRpc]
+    public void RpcTrackDeath(int killer, int deceased, WeaponType weaponType)
     {
-        gameManager.Respawn(obj);
+        gameManager.TrackDeath(killer, deceased, weaponType);
     }
 
 

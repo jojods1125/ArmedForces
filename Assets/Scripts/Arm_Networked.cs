@@ -2,7 +2,6 @@
 using UnityEngine;
 using Mirror;
 
-[RequireComponent(typeof(Arm))]
 public class Arm_Networked : NetworkBehaviour
 {
 
@@ -12,40 +11,15 @@ public class Arm_Networked : NetworkBehaviour
 
     public Arm arm;
 
+    private void Awake()
+    {
+        arm.onlineArm = this;
+    }
 
 
     // ===========================================================
     //                      ATTACKS AND DAMAGE
     // ===========================================================
-
-    /// <summary>
-    /// Fires an AutoGun Weapon
-    /// </summary>
-    /// <param name="auto">Equipped W_AutoGun</param>
-    void FireAuto(W_AutoGun auto)
-    {
-        arm.FireAuto(auto);
-    }
-
-
-    /// <summary>
-    /// Fires a SemiGun Weapon
-    /// </summary>
-    /// <param name="semi">Equipped W_SemiGun</param>
-    void FireSemi(W_SemiGun semi)
-    {
-        arm.FireSemi(semi);
-    }
-
-
-    /// <summary>
-    /// Fires a Launcher Weapon
-    /// </summary>
-    /// <param name="launcher">Equipped W_Launcher</param>
-    void FireLauncher(W_Launcher launcher)
-    {
-        arm.FireLauncher(launcher);
-    }
 
     /// <summary>
     /// Instantiates a projectile prefab on the server and tells the clients to spawn it
@@ -72,16 +46,6 @@ public class Arm_Networked : NetworkBehaviour
         // Initializes the projectile with the appropriate launcher values across all clients
         projectile.GetComponent<Projectile_Networked>().RpcInitialize(arm.barrel.transform.up, projectilePower, explosionRadius,
                                 coreDamage, corePushback, rocketPowered, arm.player.GetPlayerID());
-    }
-
-
-    /// <summary>
-    /// Fires an Sprayer Weapon
-    /// </summary>
-    /// <param name="sprayer">Equipped W_AutoGun</param>
-    void FireSprayer(W_Sprayer sprayer)
-    {
-        arm.FireSprayer(sprayer);
     }
 
 
@@ -146,14 +110,6 @@ public class Arm_Networked : NetworkBehaviour
     // ===========================================================
 
 
-    // Aims the arm based on joystick angle
-    public void Aim(Vector3 aimVal)
-    {
-        arm.Aim(aimVal);
-    }
-
-
-
     // Switches the arm's currently equipped weapon
     public void Switch(Weapon weapon)
     {
@@ -195,102 +151,6 @@ public class Arm_Networked : NetworkBehaviour
     {
         arm.arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);
         arm.arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
-    }
-
-
-    /// <summary>
-    /// Gets the equippedWeapon
-    /// </summary>
-    /// <returns> Weapon currently equipped </returns>
-    public Weapon GetEquippedWeapon()
-    {
-        return arm.GetEquippedWeapon();
-    }
-
-
-    // Initializes the loadout of the arm based on it being the front arm
-    protected void FrontArmInitialize()
-    {
-        arm.FrontArmInitialize();
-    }
-
-
-    // Initializes the loadout of the arm based on it being the back arm
-    protected void BackArmInitialize()
-    {
-        arm.BackArmInitialize();
-    }
-
-    //Get weaponA
-    public Weapon getWeaponA()
-    {
-        return arm.getWeaponA();
-    }
-    //Get weaponB
-    public Weapon getWeaponB()
-    {
-        return arm.getWeaponB();
-    }
-    //Get weaponC
-    public Weapon getWeaponC()
-    {
-        return arm.getWeaponC();
-    }
-    //Get weaponD
-    public Weapon getWeaponD()
-    {
-        return arm.getWeaponD();
-    }
-    public int getAmmo(Weapon weapon)
-    {
-        return arm.getAmmo(weapon);
-    }
-    //Set firing
-    public void SetFiring(bool firing)
-    {
-        arm.SetFiring(firing);
-    }
-    public bool getFiring()
-    {
-        return arm.getFiring();
-    }
-    //A way for the AI to "release trigger" and reset shooting
-    public void releaseTrigger()
-    {
-        arm.releaseTrigger();
-    }
-
-    // ===========================================================
-    //                       ALL THINGS AMMO
-    // ===========================================================
-
-
-    /// <summary>
-    /// Reduces the ammo of the equipped weapon by a specified amount
-    /// </summary>
-    /// <param name="count"> Amount to reduce ammo by </param>
-    public void ReduceAmmo(int count)
-    {
-        arm.ReduceAmmo(count);
-    }
-
-
-    /// <summary>
-    /// Increases the ammo of the equipped weapon by a specified amount
-    /// </summary>
-    /// <param name="count"> Amount to increase ammo by </param>
-    public void RegainAmmo(int count)
-    {
-        arm.RegainAmmo(count);
-    }
-
-
-    /// <summary>
-    /// Fully reloads all weapons if they have ammo
-    /// </summary>
-    public void FullReload()
-    {
-        arm.FullReload();
     }
 
 }

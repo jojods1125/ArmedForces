@@ -31,10 +31,7 @@ public class GameManager : MonoBehaviour
     public GameObject spawnPointContainer;
     [Tooltip("UI Manager within the scene")]
     public UIManager uiManager;
-    //[Tooltip("Local player within the scene [DO NOT SET IN EDITOR IN ONLINE SCENES]")]
-    //[SerializeField]
-    //public Player localPlayer;
-    [Tooltip("Local players within the scene [ONLY SET IN LOCAL MULTIPLAYER]")]
+    [Tooltip("Local players within the scene")]
     public Player[] localPlayers = new Player[4];
 
     public Player ai;
@@ -115,11 +112,11 @@ public class GameManager : MonoBehaviour
         // Increase game time every serverGameTimeStep
         InvokeRepeating(nameof(IncrementTime), 0, serverGameTimeStep);
 
-        if (matchType == MatchType.Training)
-        {
-            ai.Activate();
-            aiC = ai.GetComponent<AI_Controller>();
-        }
+        //if (matchType == MatchType.Training)
+        //{
+        //    ai.Activate();
+        //    aiC = ai.GetComponent<AI_Controller>();
+        //}
         
     }
 
@@ -148,7 +145,8 @@ public class GameManager : MonoBehaviour
         kills.Add(newID, 0);
         deaths.Add(newID, 0);
 
-        uiManager.ui_Players[newID].gameObject.SetActive(true);
+        if (matchType == MatchType.Local)
+            uiManager.ui_Players[newID].gameObject.SetActive(true);
 
         // Gives ID to Player
         return newID;
@@ -233,6 +231,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetCurrentGameTime(float time)
+    {
+        currentGameTime = time;
+    }
 
     private void Update()
     {
@@ -318,6 +320,25 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public Dictionary<int, int> GetKills()
+    {
+        return kills;
+    }
+
+    public Dictionary<int, int> GetDeaths()
+    {
+        return deaths;
+    }
+
+    public void SetKills(Dictionary<int, int> newKills)
+    {
+        kills = newKills;
+    }
+
+    public void SetDeaths(Dictionary<int, int> newDeaths)
+    {
+        deaths = newDeaths;
+    }
 
     // ===========================================================
     //                       SERVER MESSAGING

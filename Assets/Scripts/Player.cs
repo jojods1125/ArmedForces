@@ -121,7 +121,7 @@ public class Player : MonoBehaviour
     /// </summary>
     /// <param name="killerID"> ID of the Player that killed them </param>
     /// <param name="weaponType"> Type of weapon that killed them </param>
-    public void Kill(int killerID, WeaponType weaponType)
+    public bool Kill(int killerID, WeaponType weaponType)
     {
         // Prevent double kill
         if (!dying)
@@ -150,7 +150,10 @@ public class Player : MonoBehaviour
             
             // Deactivates the GameObject
             gameObject.SetActive(false);
+
+            return true;
         }
+        return false;
     }
 
 
@@ -187,7 +190,6 @@ public class Player : MonoBehaviour
 
         dying = false;
     }
-
 
 
     // ===========================================================

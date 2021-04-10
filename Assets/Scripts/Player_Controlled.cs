@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 
 public class Player_Controlled : Player
 {
-    public Player_Networked player;
     private float currWalkMomentum = 0;
     private bool movingL = false;
     private bool movingR = false;
@@ -21,7 +20,7 @@ public class Player_Controlled : Player
     /// <param name="pressed"> Whether the player is pressing the movement button or not </param>
     public void OnMoveLeft(InputAction.CallbackContext context)
     {
-        if (!Application.isFocused)
+        if (!Application.isFocused || (matchType == MatchType.Online && !onlinePlayer.isLocalPlayer))
             return;
 
         if (context.performed)
@@ -42,7 +41,7 @@ public class Player_Controlled : Player
     /// <param name="pressed"> Whether the player is pressing the movement button or not </param>
     public void OnMoveRight(InputAction.CallbackContext context)
     {
-        if (!Application.isFocused)
+        if (!Application.isFocused || (matchType == MatchType.Online && !onlinePlayer.isLocalPlayer))
             return;
 
         if (context.performed)
@@ -60,7 +59,7 @@ public class Player_Controlled : Player
 
     new void Start()
     {
-        if ((matchType == MatchType.Online && player.isLocalPlayer) || matchType != MatchType.Online)
+        if ((matchType == MatchType.Online && onlinePlayer.isLocalPlayer) || matchType != MatchType.Online)
         {
             uiManager = GameManager.Instance().uiManager;
         }
@@ -72,7 +71,7 @@ public class Player_Controlled : Player
     // Called every fixed tic
     void FixedUpdate()
     {
-        if (!Application.isFocused)
+        if (!Application.isFocused || (matchType == MatchType.Online && !onlinePlayer.isLocalPlayer))
             return;
 
         if (rb.velocity.magnitude < maxWalkSpeed)

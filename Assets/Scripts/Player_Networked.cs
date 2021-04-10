@@ -14,7 +14,7 @@ public class Player_Networked : NetworkBehaviour
 
     [SyncVar]
     private float currHealth = 100;
-    [SyncVar]// [HideInInspector]
+    [SyncVar]
     private int playerID;
     [SyncVar]
     private int lastAttackedID;
@@ -66,18 +66,6 @@ public class Player_Networked : NetworkBehaviour
     }
 
 
-    [Command]
-    void CmdDecreaseHealthFromAI(float health, int attackerID, WeaponType weaponType)
-    {
-        DecreaseHealth(health, attackerID, weaponType);
-    }
-
-    public void DecreaseHealthFromAI(float health, int attackerID, WeaponType weaponType)
-    {
-        CmdDecreaseHealthFromAI(health, attackerID, weaponType);
-    }
-
-
     /// <summary>
     /// Retrieves the player's current health
     /// </summary>
@@ -116,17 +104,18 @@ public class Player_Networked : NetworkBehaviour
     [ClientRpc]
     public void RpcKill(int killerID, WeaponType weaponType)
     {
-        player.Kill(killerID, weaponType);
+        if (player.Kill(killerID, weaponType))
+        {
+            // Updates KDR based on who killed; if a self-kill, gives kill to last attacker
+            if (killerID == -1 || killerID == player.GetPlayerID())
+                TrackDeath(player.GetLastAttackedID(), player.GetPlayerID(), player.GetLastAttackedType());
+            else
+                TrackDeath(killerID, player.GetPlayerID(), weaponType);
 
-        // Updates KDR based on who killed; if a self-kill, gives kill to last attacker
-        if (killerID == -1 || killerID == player.GetPlayerID())
-            TrackDeath(player.GetLastAttackedID(), player.GetPlayerID(), player.GetLastAttackedType());
-        else
-            TrackDeath(killerID, player.GetPlayerID(), weaponType);
-
-        // if local player, call achievement event
-        if (isLocalPlayer)
-            AchievementManager.Instance().OnEvent(AchievementType.deaths);
+            // if local player, call achievement event
+            if (isLocalPlayer)
+                AchievementManager.Instance().OnEvent(AchievementType.deaths);
+        }
     }
 
 
@@ -202,11 +191,11 @@ public class Player_Networked : NetworkBehaviour
     [ClientRpc]
     void RpcPlayerConnected(int playerID)
     {
+        this.playerID = playerID;
+
         // Sets the Player's ID and the last attacked ID
         player.SetPlayerID(playerID);
         player.SetLastAttackedID(player.GetPlayerID());
-
-        this.playerID = playerID;
     }
 
 
@@ -236,6 +225,10 @@ public class Player_Networked : NetworkBehaviour
     {
         if (!isLocalPlayer)
             return;
+
+        player.SetPlayerID(playerID);
+        player.SetLastAttackedID(lastAttackedID);
+        player.SetLastAttackedType(lastAttackedType);
 
         //currHealth = player.GetCurrHealth();
         //playerID = player.GetPlayerID();
