@@ -8546,8 +8546,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   achievements:
-  - {fileID: 11400000, guid: 42b5b7609a5b519469deca61386f07d5, type: 2}
-  - {fileID: 11400000, guid: 815067fb76094394b83bdf8de62ddd30, type: 2}
+  - {fileID: 11400000, guid: 5f31498540a47944c95ceff3620885a7, type: 2}
+  - {fileID: 11400000, guid: 49f99dbc4aad0af4bb9356772d54f515, type: 2}
   - {fileID: 11400000, guid: b902b85e473381347ad17ea0a446de15, type: 2}
   - {fileID: 11400000, guid: ab084b3ca5c07094e93a72dd84b8b70e, type: 2}
   - {fileID: 11400000, guid: 6febab79b14c99a45b92a62e8ed6c2fd, type: 2}
@@ -9729,7 +9729,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1179617424}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: OfflineMode
+        m_MethodName: ReturnToMain
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

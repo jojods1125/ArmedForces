@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
 /// <summary>
 /// Which side of the player the arm is on; determines weapon loadout
 /// </summary>
-public enum ArmType
+public enum ArmSide
 {
     /// <summary> Closer to camera </summary>
     Front,
@@ -14,10 +13,16 @@ public enum ArmType
 }
 
 
-public class Arm : NetworkBehaviour
+public class Arm : MonoBehaviour
 {
+
+    // ===========================================================
+    //                          VARIABLES
+    // ===========================================================
+
     [Header("Local References")]
 
+    public MatchType matchType;
     [Tooltip("The arm GameObject")]
     public GameObject arm;
     [Tooltip("Tip of the arm, where shots emit from")]
@@ -29,7 +34,7 @@ public class Arm : NetworkBehaviour
     [Header("Arm Data")]
 
     [Tooltip("Whether the arm uses the player's Front Arm or Back Arm weapons")]
-    public ArmType armType;
+    public ArmSide armSide;
     [Tooltip("Bullet prefab reference")]
     public LineRenderer bullet;
 
@@ -63,7 +68,7 @@ public class Arm : NetworkBehaviour
     /// <summary> UIManager, as retrieved from GameManager </summary>
     protected UIManager uiManager;
 
-
+    public Arm_Networked onlineArm;
 
     // ===========================================================
     //                      ATTACKS AND DAMAGE
@@ -73,7 +78,7 @@ public class Arm : NetworkBehaviour
     /// Fires an AutoGun Weapon
     /// </summary>
     /// <param name="auto">Equipped W_AutoGun</param>
-    void FireAuto(W_AutoGun auto)
+    public void FireAuto(W_AutoGun auto)
     {
         // Fire rate and ammo check
         if (Time.time > fireRateTimeStamp + auto.fireRate && ammoRemaining[auto] > 0)
@@ -92,15 +97,20 @@ public class Arm : NetworkBehaviour
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
             {
-                CmdDrawBullet(barrel.transform.position, hit.point);
+                if (matchType == MatchType.Online)
+                    onlineArm.CmdDrawBullet(barrel.transform.position, hit.point);
+                else
+                    DrawBullet(barrel.transform.position, hit.point);
 
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    if (hit.collider.gameObject.GetComponent<Player>() != null)
-                        CmdAttack(hit.collider.gameObject.GetComponent<Player>(), auto.bulletDamage, player.playerID, bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
-                    else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
-                        Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), auto.bulletDamage, player.playerID, bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
+                    if (hit.collider.gameObject.GetComponent<Player_Networked>() != null && matchType == MatchType.Online)
+                        onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), auto.bulletDamage, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
+                    else if (hit.collider.gameObject.GetComponent<Player>() != null)
+                        Attack(hit.collider.gameObject.GetComponent<Player>(), auto.bulletDamage, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
+                    //else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
+                    //    Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), auto.bulletDamage, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
                 }
             }
 
@@ -114,7 +124,7 @@ public class Arm : NetworkBehaviour
     /// Fires a SemiGun Weapon
     /// </summary>
     /// <param name="semi">Equipped W_SemiGun</param>
-    void FireSemi(W_SemiGun semi)
+    public void FireSemi(W_SemiGun semi)
     {
         // Trigger and fire rate check
         if (!singleShotFired && Time.time > fireRateTimeStamp + semi.fireRate)
@@ -139,15 +149,20 @@ public class Arm : NetworkBehaviour
                     // Raycasts bullet path
                     if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
                     {
-                        CmdDrawBullet(barrel.transform.position, hit.point);
+                        if (matchType == MatchType.Online)
+                            onlineArm.CmdDrawBullet(barrel.transform.position, hit.point);
+                        else
+                            DrawBullet(barrel.transform.position, hit.point);
 
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
-                            if (hit.collider.gameObject.GetComponent<Player>() != null)
-                                CmdAttack(hit.collider.gameObject.GetComponent<Player>(), semi.bulletDamage, player.playerID, bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
-                            else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
-                                Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), semi.bulletDamage, player.playerID, bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
+                            if (hit.collider.gameObject.GetComponent<Player_Networked>() != null && matchType == MatchType.Online)
+                                onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), semi.bulletDamage, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
+                            else if (hit.collider.gameObject.GetComponent<Player>() != null)
+                                Attack(hit.collider.gameObject.GetComponent<Player>(), semi.bulletDamage, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
+                            //else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
+                            //    Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), semi.bulletDamage, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
                         }
                     }
 
@@ -164,7 +179,7 @@ public class Arm : NetworkBehaviour
     /// Fires a Launcher Weapon
     /// </summary>
     /// <param name="launcher">Equipped W_Launcher</param>
-    void FireLauncher(W_Launcher launcher)
+    public void FireLauncher(W_Launcher launcher)
     {
         // Trigger and fire rate check
         if (!singleShotFired && Time.time > fireRateTimeStamp + launcher.fireRate)
@@ -183,7 +198,10 @@ public class Arm : NetworkBehaviour
                 Vector3 projectilePath = new Vector3(barrel.transform.position.x, barrel.transform.position.y);
 
                 // Spawns the projectile in the server
-                CmdSpawnProjectile(launcher.projectilePrefab.name, projectilePath, launcher.projectilePower, launcher.explosionRadius, launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
+                if (matchType == MatchType.Online)
+                    onlineArm.CmdSpawnProjectile(launcher.projectilePrefab.name, projectilePath, launcher.projectilePower, launcher.explosionRadius, launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
+                else
+                    SpawnProjectile(launcher.projectilePrefab.name, projectilePath, launcher.projectilePower, launcher.explosionRadius, launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
 
                 // Pushes player
                 player.EnactForce(barrel.transform.up.normalized * -launcher.pushback);
@@ -202,21 +220,14 @@ public class Arm : NetworkBehaviour
     /// <param name="coreDamage"> Damage at the impact point </param>
     /// <param name="corePushback"> Pushback at the impact point </param>
     /// <param name="rocketPowered"> Whether to use gravity or not </param>
-    [Command]
-    void CmdSpawnProjectile(string projectilePrefabName, Vector3 projectilePath, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered)
+    void SpawnProjectile(string projectilePrefabName, Vector3 projectilePath, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered)
     {
-        if (!isServer)
-            return;
-
         // Instantiates a projectile prefab from the Resources/Projectiles folder
         GameObject projectile = (GameObject)Instantiate(Resources.Load("Projectiles/" + projectilePrefabName), projectilePath + (barrel.transform.up * 0.5f), Quaternion.identity);
 
-        // Spawns projectile across all clients
-        NetworkServer.Spawn(projectile);
-
         // Initializes the projectile with the appropriate launcher values across all clients
-        projectile.GetComponent<Projectile>().RpcInitialize(barrel.transform.up, projectilePower, explosionRadius,
-                                coreDamage, corePushback, rocketPowered, player.playerID);
+        projectile.GetComponent<Projectile>().Initialize(barrel.transform.up, projectilePower, explosionRadius,
+                                coreDamage, corePushback, rocketPowered, player.GetPlayerID());
     }
 
 
@@ -224,7 +235,7 @@ public class Arm : NetworkBehaviour
     /// Fires an Sprayer Weapon
     /// </summary>
     /// <param name="sprayer">Equipped W_AutoGun</param>
-    void FireSprayer(W_Sprayer sprayer)
+    public void FireSprayer(W_Sprayer sprayer)
     {
         // Fire rate and ammo check
         if (Time.time > fireRateTimeStamp + sprayer.fireRate && ammoRemaining[sprayer] > 0)
@@ -238,7 +249,10 @@ public class Arm : NetworkBehaviour
             // Calculates bullet path and draws ray
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-sprayer.spreadRange, sprayer.spreadRange), Random.Range(-sprayer.spreadRange, sprayer.spreadRange));
             ///Debug.DrawRay(barrel.transform.position, bulletPath * sprayer.sprayDistance, Color.yellow, 1);
-            CmdDrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
+            if (matchType == MatchType.Online)
+                onlineArm.CmdDrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
+            else
+                DrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
 
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit, sprayer.sprayDistance))
@@ -246,10 +260,12 @@ public class Arm : NetworkBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    if (hit.collider.gameObject.GetComponent<Player>() != null)
-                        CmdAttack(hit.collider.gameObject.GetComponent<Player>(), sprayer.bulletDamage, player.playerID, bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
-                    else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
-                        Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), sprayer.bulletDamage, player.playerID, bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
+                    if (hit.collider.gameObject.GetComponent<Player_Networked>() != null && matchType == MatchType.Online)
+                        onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), sprayer.bulletDamage, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
+                    else if (hit.collider.gameObject.GetComponent<Player>() != null)
+                        Attack(hit.collider.gameObject.GetComponent<Player>(), sprayer.bulletDamage, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
+                    //else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
+                    //    Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), sprayer.bulletDamage, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
                 }
             }
 
@@ -267,36 +283,22 @@ public class Arm : NetworkBehaviour
     /// <param name="attackerID"> Player ID dealing the damage </param>
     /// <param name="pushback"> Pushback force </param>
     /// <param name="weaponType"> Type of weapon </param>
-    [Command]
-    void CmdAttack(Player recipient, float damage, int attackerID, Vector3 pushback, WeaponType weaponType)
-    {
-        if (!isServer)
-            return;
-
-        recipient.DecreaseHealth(damage, attackerID, weaponType);
-        recipient.RpcEnactForce(pushback);
-    }
-
-
-    void Attack_AI(Player_AI recipient, float damage, int attackerID, Vector3 pushback, WeaponType weaponType)
+    void Attack(Player recipient, float damage, int attackerID, Vector3 pushback, WeaponType weaponType)
     {
         recipient.DecreaseHealth(damage, attackerID, weaponType);
-        recipient.RpcEnactForce(pushback);
+
+        if (recipient.matchType != MatchType.Online)
+            recipient.EnactForce(pushback);
+        else
+            recipient.gameObject.GetComponent<Player_Networked>().RpcEnactForce(pushback);
     }
 
-    /// <summary>
-    /// Tells the server where to draw a bullet path
-    /// </summary>
-    /// <param name="start"> Start point of path </param>
-    /// <param name="end"> End point of path </param>
-    [Command]
-    void CmdDrawBullet(Vector3 start, Vector3 end)
-    {
-        if (!isServer)
-            return;
 
-        RpcDrawBullet(start, end);
-    }
+    //void Attack_AI(Player_AI recipient, float damage, int attackerID, Vector3 pushback, WeaponType weaponType)
+    //{
+    //    recipient.DecreaseHealth(damage, attackerID, weaponType);
+    //    recipient.RpcEnactForce(pushback);
+    //}
 
 
     /// <summary>
@@ -304,8 +306,7 @@ public class Arm : NetworkBehaviour
     /// </summary>
     /// <param name="start"> Start point of path </param>
     /// <param name="end"> End point of path </param>
-    [ClientRpc]
-    void RpcDrawBullet(Vector3 start, Vector3 end)
+    void DrawBullet(Vector3 start, Vector3 end)
     {
         LineRenderer path = Instantiate(bullet);
         Destroy(path.gameObject, 0.2f);
@@ -370,24 +371,21 @@ public class Arm : NetworkBehaviour
     //                  ARM CONTROLS  AND VISUALS
     // ===========================================================
 
+    private void Awake()
+    {
+        // Set up arm loadouts
+        if (armSide == ArmSide.Front) FrontArmInitialize();
+        else BackArmInitialize();
+    }
+
     // Start is called before the first frame update
     protected void Start()
     {
-        // Set up arm loadouts
-        if (armType == ArmType.Front) FrontArmInitialize();
-        else BackArmInitialize();
-
         // Fills in the dictionary of weapons to letters for checking which they are
         weaponLetters[weaponA] = 'A';
         weaponLetters[weaponB] = 'B';
         weaponLetters[weaponC] = 'C';
         weaponLetters[weaponD] = 'D';
-
-        // Initialize equippedWeapon
-        if (weaponA) Switch(weaponA);
-        else if (weaponB) Switch(weaponB);
-        else if (weaponC) Switch(weaponC);
-        else Switch(weaponD);
 
         // Initializes ammoRemaining dictionary for each weapon
         if (!ammoRemaining.ContainsKey(weaponA))
@@ -401,6 +399,12 @@ public class Arm : NetworkBehaviour
         
         // Starts the match with full ammo in each weapon
         FullReload();
+
+        // Initialize equippedWeapon
+        if (weaponA) Switch(weaponA);
+        else if (weaponB) Switch(weaponB);
+        else if (weaponC) Switch(weaponC);
+        else Switch(weaponD);
     }
 
 
@@ -431,27 +435,12 @@ public class Arm : NetworkBehaviour
             // Change currently equipped weapon
             equippedWeapon = weapon;
 
-            // Change equipped weapon visuals
-            CmdSwitchAppearance(weapon.mesh.name, weapon.material.name);
+            if (matchType != MatchType.Online)
+                SwitchAppearance(weapon.mesh.name, weapon.material.name);
 
             // Update UI
-            if (uiManager) uiManager.UpdateSelectedUI(armType, weaponLetters[weapon]);
+            if (uiManager) uiManager.ui_Players[player.GetPlayerID()].UpdateSelectedUI(armSide, weaponLetters[weapon]);
         }
-    }
-
-
-    /// <summary>
-    /// Tells the server to refresh the appearance of the Arm
-    /// </summary>
-    /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
-    /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
-    [Command]
-    public void CmdSwitchAppearance(string meshName, string materialName)
-    {
-        if (!isServer)
-            return;
-
-        RpcSwitchAppearance(meshName, materialName);
     }
 
 
@@ -460,8 +449,7 @@ public class Arm : NetworkBehaviour
     /// </summary>
     /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
     /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
-    [ClientRpc]
-    private void RpcSwitchAppearance(string meshName, string materialName)
+    public void SwitchAppearance(string meshName, string materialName)
     {
         arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);
         arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
@@ -479,22 +467,34 @@ public class Arm : NetworkBehaviour
 
 
     // Initializes the loadout of the arm based on it being the front arm
-    protected void FrontArmInitialize()
+    public void FrontArmInitialize()
     {
         weaponA = player.frontArmWeapons[0];
         weaponB = player.frontArmWeapons[1];
         weaponC = player.frontArmWeapons[2];
         weaponD = player.frontArmWeapons[3];
+
+        // Initialize equippedWeapon
+        if (weaponA) Switch(weaponA);
+        else if (weaponB) Switch(weaponB);
+        else if (weaponC) Switch(weaponC);
+        else Switch(weaponD);
     }
 
 
     // Initializes the loadout of the arm based on it being the back arm
-    protected void BackArmInitialize()
+    public void BackArmInitialize()
     {
         weaponA = player.backArmWeapons[0];
         weaponB = player.backArmWeapons[1];
         weaponC = player.backArmWeapons[2];
         weaponD = player.backArmWeapons[3];
+
+        // Initialize equippedWeapon
+        if (weaponA) Switch(weaponA);
+        else if (weaponB) Switch(weaponB);
+        else if (weaponC) Switch(weaponC);
+        else Switch(weaponD);
     }
 
     //Get weaponA
@@ -549,25 +549,25 @@ public class Arm : NetworkBehaviour
             if (equippedWeapon.Equals(weaponA))
             {
                 ammoRemaining[weaponA] = Mathf.Max(ammoRemaining[weaponA] - count, 0);
-                if (uiManager) uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armSide, 'A', ammoRemaining[weaponA], weapon.ammoCapacity, player.GetPlayerID());
             }
 
             else if (equippedWeapon.Equals(weaponB))
             {
                 ammoRemaining[weaponB] = Mathf.Max(ammoRemaining[weaponB] - count, 0);
-                if (uiManager) uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armSide, 'B', ammoRemaining[weaponB], weapon.ammoCapacity, player.GetPlayerID());
             }
 
             else if (equippedWeapon.Equals(weaponC))
             {
                 ammoRemaining[weaponC] = Mathf.Max(ammoRemaining[weaponC] - count, 0);
-                if (uiManager) uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armSide, 'C', ammoRemaining[weaponC], weapon.ammoCapacity, player.GetPlayerID());
             }
 
             else if (equippedWeapon.Equals(weaponD))
             {
                 ammoRemaining[weaponD] = Mathf.Max(ammoRemaining[weaponD] - count, 0);
-                if (uiManager) uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armSide, 'D', ammoRemaining[weaponD], weapon.ammoCapacity, player.GetPlayerID());
             }
 
         }
@@ -590,25 +590,25 @@ public class Arm : NetworkBehaviour
             if (equippedWeapon.Equals(weaponA))
             {
                 ammoRemaining[weaponA] = Mathf.Min(ammoRemaining[weaponA] + count, weapon.ammoCapacity);
-                if (uiManager) uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armSide, 'A', ammoRemaining[weaponA], weapon.ammoCapacity, player.GetPlayerID());
             }
 
             else if (equippedWeapon.Equals(weaponB))
             {
                 ammoRemaining[weaponB] = Mathf.Min(ammoRemaining[weaponB] + count, weapon.ammoCapacity);
-                if (uiManager) uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armSide, 'B', ammoRemaining[weaponB], weapon.ammoCapacity, player.GetPlayerID());
             }
 
             else if (equippedWeapon.Equals(weaponC))
             {
                 ammoRemaining[weaponC] = Mathf.Min(ammoRemaining[weaponC] + count, weapon.ammoCapacity);
-                if (uiManager) uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armSide, 'C', ammoRemaining[weaponC], weapon.ammoCapacity, player.GetPlayerID());
             }
 
             else if (equippedWeapon.Equals(weaponD))
             {
                 ammoRemaining[weaponD] = Mathf.Min(ammoRemaining[weaponD] + count, weapon.ammoCapacity);
-                if (uiManager) uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], weapon.ammoCapacity);
+                if (uiManager) uiManager.UpdateAmmoUI(armSide, 'D', ammoRemaining[weaponD], weapon.ammoCapacity, player.GetPlayerID());
             }
 
         }
@@ -627,25 +627,25 @@ public class Arm : NetworkBehaviour
         if (weaponA is W_Shootable gunA)
         {
             ammoRemaining[weaponA] = gunA.ammoCapacity;
-            if (uiManager) uiManager.UpdateAmmoUI(armType, 'A', ammoRemaining[weaponA], gunA.ammoCapacity);
+            if (uiManager) uiManager.UpdateAmmoUI(armSide, 'A', ammoRemaining[weaponA], gunA.ammoCapacity, player.GetPlayerID());
         }
 
         if (weaponB is W_Shootable gunB)
         {
             ammoRemaining[weaponB] = gunB.ammoCapacity;
-            if (uiManager) uiManager.UpdateAmmoUI(armType, 'B', ammoRemaining[weaponB], gunB.ammoCapacity);
+            if (uiManager) uiManager.UpdateAmmoUI(armSide, 'B', ammoRemaining[weaponB], gunB.ammoCapacity, player.GetPlayerID());
         }
             
         if (weaponC is W_Shootable gunC)
         {
             ammoRemaining[weaponC] = gunC.ammoCapacity;
-            if (uiManager) uiManager.UpdateAmmoUI(armType, 'C', ammoRemaining[weaponC], gunC.ammoCapacity);
+            if (uiManager) uiManager.UpdateAmmoUI(armSide, 'C', ammoRemaining[weaponC], gunC.ammoCapacity, player.GetPlayerID());
         }
             
         if (weaponD is W_Shootable gunD)
         {
             ammoRemaining[weaponD] = gunD.ammoCapacity;
-            if (uiManager) uiManager.UpdateAmmoUI(armType, 'D', ammoRemaining[weaponD], gunD.ammoCapacity);
+            if (uiManager) uiManager.UpdateAmmoUI(armSide, 'D', ammoRemaining[weaponD], gunD.ammoCapacity, player.GetPlayerID());
         }
             
     }

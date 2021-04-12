@@ -141,44 +141,48 @@ public class MenuManager : MonoBehaviour
             // Get Progress Bars for Display
             Transform progressBars = curr.Find("Progress Bars");
 
-            // Update progress bars
-            int currentValue = a.currentValue;
-            for (int j = 0; j < a.activationValues.Length; j++)
+            // Update progress bars if tiered
+            if (a is A_Tiered)
             {
-                // Current working bar
-                Transform bar = progressBars.GetChild(j);
+                // cast 
+                A_Tiered at = (A_Tiered)a;
+                int currentValue = a.currentValue;
+                for (int j = 0; j < at.activationValues.Length; j++)
+                {
+                    // Current working bar
+                    Transform bar = progressBars.GetChild(j);
 
-                // This tiers max
-                int max = a.activationValues[j];
+                    // This tiers max
+                    int max = at.activationValues[j];
 
-                // Check if this bar needs scaled at all -> Zero the scale
-                if (j > 0 && currentValue < a.activationValues[j - 1])
-                {
-                    bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
-                }
-                // Check if this bar has been met/exceeded -> Max the scale
-                else if (currentValue >= max)
-                {
-                    bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
-                }
-                // Set the bar scale
-                else
-                {
-                    float percent = 0f;
-                    if (j > 0)
+                    // Check if this bar needs scaled at all -> Zero the scale
+                    if (j > 0 && currentValue < at.activationValues[j - 1])
                     {
-                        int delta = a.activationValues[j - 1];
-                        percent = (currentValue - delta) / ((float)max - delta);
+                        bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
                     }
+                    // Check if this bar has been met/exceeded -> Max the scale
+                    else if (currentValue >= max)
+                    {
+                        bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+                    }
+                    // Set the bar scale
                     else
                     {
-                        percent = currentValue / (float)max;
+                        float percent = 0f;
+                        if (j > 0)
+                        {
+                            int delta = at.activationValues[j - 1];
+                            percent = (currentValue - delta) / ((float)max - delta);
+                        }
+                        else
+                        {
+                            percent = currentValue / (float)max;
+                        }
+                        /*float percent = currentValue / (float)max;*/
+                        bar.localScale = new Vector3(percent, bar.localScale.y, bar.localScale.z);
                     }
-                    /*float percent = currentValue / (float)max;*/
-                    bar.localScale = new Vector3(percent, bar.localScale.y, bar.localScale.z);
                 }
             }
-
             /** Set fields in display */
             // Name
             curr.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
@@ -187,15 +191,19 @@ public class MenuManager : MonoBehaviour
             // Current Count
             curr.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
             // Next Count & set finished
-            if (!a.IsComplete() && a.nextTier < a.activationValues.Length)
+            if (a is A_Tiered)
             {
-                curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + a.activationValues[a.nextTier].ToString();
-                curr.transform.Find("Finished").gameObject.SetActive(false);
-            }
-            else
-            {
-                curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
-                curr.transform.Find("Finished").gameObject.SetActive(true);
+                A_Tiered at = (A_Tiered)a;
+                if (!at.IsComplete() && at.nextTier < at.activationValues.Length)
+                {
+                    curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + at.activationValues[at.nextTier].ToString();
+                    curr.transform.Find("Finished").gameObject.SetActive(false);
+                }
+                else
+                {
+                    curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
+                    curr.transform.Find("Finished").gameObject.SetActive(true);
+                }
             }
         }
 
@@ -360,43 +368,47 @@ public class MenuManager : MonoBehaviour
         Transform progressBars = curr.transform.Find("Progress Bars");
 
         // Create a tier for every activation value
-        for (int i = 0; i < a.activationValues.Length; i++)
+        if (a is A_Tiered)
         {
-            Instantiate(tierPrefab, tiers);
-            Instantiate(progressBarPrefab, progressBars);
-        }
-
-        // Set size of tier
-        GridLayoutGroup tglg = tiers.GetComponent<GridLayoutGroup>();
-        tglg.cellSize = new Vector2(tglg.cellSize.x / a.activationValues.Length, tglg.cellSize.y);
-        // Set size of progress bars
-        GridLayoutGroup pbglg = progressBars.GetComponent<GridLayoutGroup>();
-        pbglg.cellSize = new Vector2(pbglg.cellSize.x / a.activationValues.Length, pbglg.cellSize.y);
-
-        // Set progress bars
-        int currentValue = a.currentValue;
-        for (int i = 0; i < a.activationValues.Length; i++)
-        {
-            // Current working bar
-            Transform bar = progressBars.GetChild(i);
-
-            // This tiers max
-            int max = a.activationValues[i];
-
-            // Check if this bar needs scaled at all, break if not
-            if (i > 0 && currentValue < a.activationValues[i - 1])
+            A_Tiered at = (A_Tiered)a;
+            for (int i = 0; i < at.activationValues.Length; i++)
             {
-                break;
+                Instantiate(tierPrefab, tiers);
+                Instantiate(progressBarPrefab, progressBars);
             }
-            // Check if this bar has been met/exceeded
-            else if (currentValue >= max)
+
+            // Set size of tier
+            GridLayoutGroup tglg = tiers.GetComponent<GridLayoutGroup>();
+            tglg.cellSize = new Vector2(tglg.cellSize.x / at.activationValues.Length, tglg.cellSize.y);
+            // Set size of progress bars
+            GridLayoutGroup pbglg = progressBars.GetComponent<GridLayoutGroup>();
+            pbglg.cellSize = new Vector2(pbglg.cellSize.x / at.activationValues.Length, pbglg.cellSize.y);
+
+            // Set progress bars
+            int currentValue = at.currentValue;
+            for (int i = 0; i < at.activationValues.Length; i++)
             {
-                bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
-            }
-            // Set the bar scale
-            else
-            {
-                bar.localScale = new Vector3(currentValue / max, bar.localScale.y, bar.localScale.z);
+                // Current working bar
+                Transform bar = progressBars.GetChild(i);
+
+                // This tiers max
+                int max = at.activationValues[i];
+
+                // Check if this bar needs scaled at all, break if not
+                if (i > 0 && currentValue < at.activationValues[i - 1])
+                {
+                    break;
+                }
+                // Check if this bar has been met/exceeded
+                else if (currentValue >= max)
+                {
+                    bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+                }
+                // Set the bar scale
+                else
+                {
+                    bar.localScale = new Vector3(currentValue / max, bar.localScale.y, bar.localScale.z);
+                }
             }
         }
 
@@ -408,15 +420,19 @@ public class MenuManager : MonoBehaviour
         // Current Count
         curr.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
         // Next Count & set finished
-        if (!a.IsComplete())
+        if (a is A_Tiered)
         {
-            curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + a.activationValues[a.nextTier].ToString();
-            curr.transform.Find("Finished").gameObject.SetActive(false);
-        }
-        else
-        {
-            curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
-            curr.transform.Find("Finished").gameObject.SetActive(true);
+            A_Tiered at = (A_Tiered)a;
+            if (!at.IsComplete())
+            {
+                curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + at.activationValues[at.nextTier].ToString();
+                curr.transform.Find("Finished").gameObject.SetActive(false);
+            }
+            else
+            {
+                curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
+                curr.transform.Find("Finished").gameObject.SetActive(true);
+            }
         }
     }
 }

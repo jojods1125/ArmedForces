@@ -758,7 +758,7 @@ GameObject:
   - component: {fileID: 1146438363030574230}
   - component: {fileID: 1146438363030574229}
   m_Layer: 5
-  m_Name: Achievement Base Display
+  m_Name: Achievement Menu Display
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

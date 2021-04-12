@@ -440,8 +440,8 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 300, y: 100}
-  m_Spacing: {x: 0, y: 12.5}
+  m_CellSize: {x: 168, y: 40}
+  m_Spacing: {x: 0, y: 5}
   m_Constraint: 1
   m_ConstraintCount: 1
 --- !u!1 &2326991568035671984
@@ -1861,8 +1861,9 @@ GameObject:
   - component: {fileID: 5807852348766420319}
   - component: {fileID: 5807852348766420318}
   - component: {fileID: 3346563356395482303}
+  - component: {fileID: 3358012508820436045}
   m_Layer: 0
-  m_Name: UI
+  m_Name: UI_Single
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1900,6 +1901,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3358771af40214da2a591aaa4a14d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ui_Players:
+  - {fileID: 3358012508820436045}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  matchClock: {fileID: 7632354338226750609}
+  p1_KDR: {fileID: 9112390347584149883}
+  p2_KDR: {fileID: 985728617540417948}
+  p3_KDR: {fileID: 1579122998303327716}
+  p4_KDR: {fileID: 2326991568035671984}
+  achievementPopUpPrefab: {fileID: 1146438363030574227, guid: a38ea3b907dcea34895e32c3467c712e, type: 3}
+  tierPrefab: {fileID: 7591037569370411143, guid: d6b93c12015de8545a5cd8e7a8232131, type: 3}
+  progressBarPrefab: {fileID: 1612258747238857711, guid: c665b40e31f0a714e815694f60b1386d, type: 3}
+  panel: {fileID: 2057535479131402653}
+  rac: {fileID: 9100000, guid: fca9c79ca08f2484bb33953d4c985401, type: 2}
+--- !u!95 &3346563356395482303
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5807852348766420316}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fca9c79ca08f2484bb33953d4c985401, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3358012508820436045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5807852348766420316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8100282224811f94fb40524acbb35c0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   weaponA_L_image: {fileID: 5807852349644029214}
   weaponB_L_image: {fileID: 5807852349871915951}
   weaponC_L_image: {fileID: 5807852348653647608}
@@ -1925,35 +1972,6 @@ MonoBehaviour:
   weaponC_R_select: {fileID: 5807852348593947630}
   weaponD_R_select: {fileID: 5807852349797104965}
   healthBar_bar: {fileID: 2563691730703075830}
-  matchClock: {fileID: 7632354338226750609}
-  p1_KDR: {fileID: 9112390347584149883}
-  p2_KDR: {fileID: 985728617540417948}
-  p3_KDR: {fileID: 1579122998303327716}
-  p4_KDR: {fileID: 2326991568035671984}
-  achievementPrefab: {fileID: 1146438363030574227, guid: e3f1bcc76b9597d4db623f09322274db, type: 3}
-  tierPrefab: {fileID: 7591037569370411143, guid: d6b93c12015de8545a5cd8e7a8232131, type: 3}
-  progressBarPrefab: {fileID: 1612258747238857711, guid: c665b40e31f0a714e815694f60b1386d, type: 3}
-  panel: {fileID: 2057535479131402653}
-  rac: {fileID: 9100000, guid: fca9c79ca08f2484bb33953d4c985401, type: 2}
---- !u!95 &3346563356395482303
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5807852348766420316}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fca9c79ca08f2484bb33953d4c985401, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5807852348773344937
 GameObject:
   m_ObjectHideFlags: 0
