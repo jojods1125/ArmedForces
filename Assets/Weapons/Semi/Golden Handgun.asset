@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6148bcc569955e848aa4436ee58d46ac, type: 3}
-  m_Name: Golden Pistol
+  m_Name: Golden Handgun
   m_EditorClassIdentifier: 
-  weaponName: Golden Pistol
+  weaponName: Golden Handgun
   description: Insane damage, insane knockback
   mesh: {fileID: 4300000, guid: 87d91dfbadc3fc340936a420a1707ffa, type: 2}
   material: {fileID: 2100000, guid: 038d265cf9316054798da520d0468d0b, type: 2}

@@ -27,4 +27,4 @@ MonoBehaviour:
   rocketPowered: 1
   explosionRadius: 0
   coreDamage: 15
-  corePushback: 100
+  corePushback: 0
