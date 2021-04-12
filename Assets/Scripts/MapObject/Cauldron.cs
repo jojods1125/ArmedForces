@@ -1,8 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
+using System;
+using Mirror;
 
-public class Cauldron : MonoBehaviour
+public class Cauldron : NetworkBehaviour
 {
     // Start is called before the first frame update
 
@@ -12,12 +13,21 @@ public class Cauldron : MonoBehaviour
     void Start()
     {
         gameObject.SetActive(false);
-        InvokeRepeating("Pour", pourStart, pourInterval);
+        if(isServer){
+            InvokeRepeating("Pour", pourStart, pourInterval);
+        }
+        
     }
 
     // Update is called once per frame
+    [Command]
     void Pour(){
-        if(gameObject.activeSelf){
+        RPCpour();
+    }
+
+    [ClientRpc]
+    void RPCpour(){
+if(gameObject.activeSelf){
             gameObject.SetActive(false);
         }else{
             gameObject.SetActive(true);
