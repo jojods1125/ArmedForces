@@ -220,6 +220,7 @@ public class Player : MonoBehaviour
             // Tells the server that the Player is connected
             PlayerConnected();
 
+            uiManager.ui_Players[playerID].UpdateWeaponIcons(playerID);
             // If UI exists (only local player), connect health bar and weapon UI
             //if (uiManager && matchType != MatchType.Local)
             //{

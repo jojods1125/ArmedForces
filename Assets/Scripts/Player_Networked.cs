@@ -217,7 +217,7 @@ public class Player_Networked : NetworkBehaviour
         if (player.GetUIManager())
         {
             player.GetUIManager().ui_Players[0].UpdateHealthBar(player.GetCurrHealth() / player.maxHealth);
-            player.GetUIManager().ui_Players[0].UpdateWeaponIcons();
+            player.GetUIManager().ui_Players[0].UpdateWeaponIcons(playerID);
         }
     }
 

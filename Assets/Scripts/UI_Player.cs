@@ -49,26 +49,29 @@ public class UI_Player : MonoBehaviour
     /// <summary>
     /// Update the UI to show which weapons are in the loadout
     /// </summary>
-    public void UpdateWeaponIcons()
+    public void UpdateWeaponIcons(int playerID)
     {
         // Gather all the image references
         Image[] weapons_L_images = new Image[] { weaponA_L_image, weaponB_L_image, weaponC_L_image, weaponD_L_image };
         Image[] weapons_R_images = new Image[] { weaponA_R_image, weaponB_R_image, weaponC_R_image, weaponD_R_image };
 
         // Update back arm images
-        if (GameManager.Instance().localPlayers[0])
+        for (int i = 0; i < GameManager.Instance().localPlayers[playerID].backArmWeapons.Length; i++)
         {
-            for (int i = 0; i < GameManager.Instance().localPlayers[0].backArmWeapons.Length; i++)
-            {
-                weapons_L_images[i].sprite = GameManager.Instance().localPlayers[0].backArmWeapons[i].icon;
-            }
-
-            // Update front arm images
-            for (int i = 0; i < GameManager.Instance().localPlayers[0].frontArmWeapons.Length; i++)
-            {
-                weapons_R_images[i].sprite = GameManager.Instance().localPlayers[0].frontArmWeapons[i].icon;
-            }
+            weapons_L_images[i].sprite = GameManager.Instance().localPlayers[playerID].backArmWeapons[i].icon;
         }
+
+        // Update front arm images
+        for (int i = 0; i < GameManager.Instance().localPlayers[playerID].frontArmWeapons.Length; i++)
+        {
+            weapons_R_images[i].sprite = GameManager.Instance().localPlayers[playerID].frontArmWeapons[i].icon;
+        }
+
+
+        //if (GameManager.Instance().localPlayers[0])
+        //{
+
+        //}
     }
 
 
