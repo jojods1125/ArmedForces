@@ -10,6 +10,27 @@ using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
+    // ===========================================================
+    //                    SINGLETON PATTERN
+    // ===========================================================
+    private static MenuManager instance;
+    public static MenuManager Instance()
+    {
+        return instance;
+    }
+
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+    }
 
     [Header("Menus to link to")]
     [Tooltip("Main Menu link")]
@@ -79,6 +100,10 @@ public class MenuManager : MonoBehaviour
     // List of Weapon Buttons
     private List<GameObject> weaponButtons = new List<GameObject>();
 
+    [Header("Local Multiplayer Loadout Info")]
+    [Tooltip("Number of Connected Players")]
+    public int numPlayers = 0;
+
     [Header("Max Bar Values")]
     [Tooltip("Max Damage")]
     public float maxDamage;
@@ -117,6 +142,9 @@ public class MenuManager : MonoBehaviour
     // Arm Selected - String
     private string currentArm;
 
+    // Ordered listing of weapons
+    public Dictionary<string, Dictionary<WeaponRarity, List<Weapon>>> order;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -142,7 +170,7 @@ public class MenuManager : MonoBehaviour
         }
 
         // Set up Weapon loadout
-        Dictionary<string, Dictionary<WeaponRarity, List<Weapon>>> order = new Dictionary<string, Dictionary<WeaponRarity, List<Weapon>>>();
+        order = new Dictionary<string, Dictionary<WeaponRarity, List<Weapon>>>();
         // Dictionary 1 - Type { Auto = 0, Semi = 1, Launcher = 2, Sprayer = 3, ... }
         for (int i = 0; i < System.Enum.GetValues(typeof(WeaponType)).Length - 1; i++)  // - 1 gets rid of "none" from enum
         {
@@ -624,6 +652,7 @@ public class MenuManager : MonoBehaviour
         if (PregameMenu.activeSelf)
 		{
             PregameMenu.SetActive( false );
+            MainMenu.SetActive(true);
 		}
 
         TrainingMenu.SetActive( true );
@@ -684,10 +713,10 @@ public class MenuManager : MonoBehaviour
         Transform front = LoadoutMenu.transform.Find("Front Arm Loadout");
         
         // Loadouts
-        for (int i = 0; i < WeaponManager.Instance().back.Length; i++)
+        for (int i = 0; i < WeaponManager.Instance().playerLoadouts[0][0].Length; i++)
 		{
-            back.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().back[i].icon;
-            front.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().front[i].icon;
+            back.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[0][0][i].icon;
+            front.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[0][1][i].icon;
 		}
 
         LoadoutMenu.SetActive( true );
@@ -728,7 +757,10 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(selectionFirstButton);
     }
 
-
+    /// <summary>
+    /// Selects the given weapon for the loadout based on currently selected
+    /// </summary>
+    /// <param name="weapon"> Weapon selected </param>
     public void ChooseWeapon( Weapon weapon )
 	{
         Debug.Log("In ChooseWeapon for " + currentArm + "\'s weapon " + currentWeapon + " to have weapon " + weapon.name);
@@ -737,11 +769,11 @@ public class MenuManager : MonoBehaviour
         int index = currentWeapon - 65;
         if (currentArm.Equals("Back"))
 		{
-            WeaponManager.Instance().back[index] = weapon;
+            WeaponManager.Instance().playerLoadouts[0][0][index] = weapon;
 		}
         else if (currentArm.Equals("Front"))
 		{
-            WeaponManager.Instance().front[index] = weapon;
+            WeaponManager.Instance().playerLoadouts[0][1][index] = weapon;
 		}
 
         descriptionBox.SetActive(false);
@@ -761,6 +793,8 @@ public class MenuManager : MonoBehaviour
     public void Pregame( string mapName )
 	{
         PregameMenu.SetActive( true );
+        MainMenu.SetActive(false);
+        TrainingMenu.SetActive(false);
         //setActiveMenu( PregameMenu );
         currentMenu = PregameMenu;
 
