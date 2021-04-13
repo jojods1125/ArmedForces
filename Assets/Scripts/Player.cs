@@ -147,9 +147,15 @@ public class Player : MonoBehaviour
                 else
                     TrackDeath(killerID, playerID, weaponType);
             }
-            
-            // Deactivates the GameObject
-            gameObject.SetActive(false);
+
+            // Deactivates the GameObject's children and rigidbody
+            rb.isKinematic = true;
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+
+            //gameObject.SetActive(false);
 
             return true;
         }

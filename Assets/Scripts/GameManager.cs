@@ -310,7 +310,15 @@ public class GameManager : MonoBehaviour
     public IEnumerator RespawnPlayer(GameObject obj)
     {
         yield return new WaitForSeconds(playerRespawnTime);
-        obj.SetActive(true);
+
+        // Reactivates the player's children and rigidbody
+        obj.GetComponent<Rigidbody>().isKinematic = false;
+        foreach (Transform child in obj.transform)
+        {
+            child.gameObject.SetActive(true);
+        }
+
+        // Calls respawn in player
         if (obj.GetComponent<Player_Networked>() != null)
             obj.GetComponent<Player_Networked>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
         else if (obj.GetComponent<Player>() != null)

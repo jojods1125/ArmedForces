@@ -105,17 +105,21 @@ public class Arm : MonoBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
+                    float dropoffDmg = auto.bulletDamage * ( Mathf.Pow (auto.dropoffMod, (hit.distance / auto.dropoffDist)) );
+
+                    Debug.Log("DMG: " + dropoffDmg + "  DIST: " + hit.distance);
+
                     if (hit.collider.gameObject.GetComponent<Player_Networked>() != null && matchType == MatchType.Online)
-                        onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), auto.bulletDamage, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
+                        onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
                     else if (hit.collider.gameObject.GetComponent<Player>() != null)
-                        Attack(hit.collider.gameObject.GetComponent<Player>(), auto.bulletDamage, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
+                        Attack(hit.collider.gameObject.GetComponent<Player>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
                     //else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
                     //    Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), auto.bulletDamage, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
                 }
             }
 
             // Pushes player
-            player.EnactForce(bulletPath.normalized * -auto.pushback);
+            player.EnactForce(bulletPath.normalized * -auto.recoil);
         }
     }
 
@@ -157,17 +161,21 @@ public class Arm : MonoBehaviour
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
+                            float dropoffDmg = semi.bulletDamage * ( Mathf.Pow(semi.dropoffMod, (hit.distance / semi.dropoffDist)) );
+
+                            Debug.Log("DMG: " + dropoffDmg + "  DIST: " + hit.distance);
+
                             if (hit.collider.gameObject.GetComponent<Player_Networked>() != null && matchType == MatchType.Online)
-                                onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), semi.bulletDamage, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
+                                onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
                             else if (hit.collider.gameObject.GetComponent<Player>() != null)
-                                Attack(hit.collider.gameObject.GetComponent<Player>(), semi.bulletDamage, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
+                                Attack(hit.collider.gameObject.GetComponent<Player>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
                             //else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
                             //    Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), semi.bulletDamage, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
                         }
                     }
 
                     // Pushes player
-                    player.EnactForce(bulletPath.normalized * -semi.pushback);
+                    player.EnactForce(bulletPath.normalized * -semi.recoil);
                 }
             }
         }
@@ -204,7 +212,7 @@ public class Arm : MonoBehaviour
                     SpawnProjectile(launcher.projectilePrefab.name, projectilePath, launcher.projectilePower, launcher.explosionRadius, launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
 
                 // Pushes player
-                player.EnactForce(barrel.transform.up.normalized * -launcher.pushback);
+                player.EnactForce(barrel.transform.up.normalized * -launcher.recoil);
             }
         }
 
@@ -260,17 +268,19 @@ public class Arm : MonoBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
+                    float dropoffDmg = sprayer.bulletDamage * ( Mathf.Pow(sprayer.dropoffMod, (hit.distance / sprayer.dropoffDist)) );
+
                     if (hit.collider.gameObject.GetComponent<Player_Networked>() != null && matchType == MatchType.Online)
-                        onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), sprayer.bulletDamage, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
+                        onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
                     else if (hit.collider.gameObject.GetComponent<Player>() != null)
-                        Attack(hit.collider.gameObject.GetComponent<Player>(), sprayer.bulletDamage, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
+                        Attack(hit.collider.gameObject.GetComponent<Player>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
                     //else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
                     //    Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), sprayer.bulletDamage, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
                 }
             }
 
             // Pushes player
-            player.EnactForce(bulletPath.normalized * -sprayer.pushback);
+            player.EnactForce(bulletPath.normalized * -sprayer.recoil);
         }
     }
 

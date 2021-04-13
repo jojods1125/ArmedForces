@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 66341aea53f06de46ae171e61a5d1acb, type: 3}
-  m_Name: Rocket Launcher
+  m_Name: L_Blaster
   m_EditorClassIdentifier: 
-  weaponName: Rocket Launcher
-  description: No gravity, big explosion
+  weaponName: Blaster
+  description: No explosion, fast shot
   mesh: {fileID: 4300000, guid: 87d91dfbadc3fc340936a420a1707ffa, type: 2}
   material: {fileID: 2100000, guid: 0d92a5f9bd3338b4197fd15b9f0c0884, type: 2}
-  icon: {fileID: 21300000, guid: b71f1c3fb10840840a48d88f8eb5112d, type: 3}
+  icon: {fileID: 21300000, guid: 6753c00b67edd7d42864ca4f29ea501c, type: 3}
   rarity: 0
-  fireRate: 0.5
-  ammoCapacity: 3
-  pushback: 2
-  reloadRate: 2
-  projectilePower: 750
+  fireRate: 0.1
+  ammoCapacity: 30
+  recoil: 2
+  reloadRate: 0.5
+  projectilePower: 1500
   projectilePrefab: {fileID: 7159978887230406093, guid: ea690a9212f478b4b9c70c2c0ba17e2f, type: 3}
   rocketPowered: 1
-  explosionRadius: 3
-  coreDamage: 100
-  corePushback: 1000
+  explosionRadius: 0
+  coreDamage: 15
+  corePushback: 0

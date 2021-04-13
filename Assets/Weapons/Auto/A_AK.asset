@@ -10,18 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf80db299a61ac248aa944117fab5e02, type: 3}
-  m_Name: Magnet
+  m_Name: A_AK
   m_EditorClassIdentifier: 
-  weaponName: Magnet
-  description: No damage, but sucks you towards where you point
+  weaponName: AK
+  description: Basic gun with well rounded stats
   mesh: {fileID: 4300000, guid: 87d91dfbadc3fc340936a420a1707ffa, type: 2}
   material: {fileID: 2100000, guid: 4a4d2b787eb393a469ae9860f5de4031, type: 2}
-  icon: {fileID: 21300000, guid: 113bdc64338b5be409f9ba847890ffef, type: 3}
+  icon: {fileID: 21300000, guid: 89a5cca590e5f6e4bb4553b1a3de8737, type: 3}
   rarity: 0
-  fireRate: 0.001
-  ammoCapacity: 300
-  pushback: -30
-  reloadRate: 0.01
-  spreadRange: 0
-  bulletDamage: 0
-  bulletPushback: 0
+  fireRate: 0.075
+  ammoCapacity: 60
+  recoil: 25
+  reloadRate: 0.05
+  dropoffDist: 5
+  dropoffMod: 0.75
+  spreadRange: 0.15
+  bulletDamage: 10
+  bulletPushback: 5

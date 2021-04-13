@@ -10,18 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf80db299a61ac248aa944117fab5e02, type: 3}
-  m_Name: Machine Gun 1
+  m_Name: A_MG
   m_EditorClassIdentifier: 
   weaponName: Machine Gun
   description: More damage, but more recoil and bullet spread
   mesh: {fileID: 4300000, guid: 87d91dfbadc3fc340936a420a1707ffa, type: 2}
   material: {fileID: 2100000, guid: 4a4d2b787eb393a469ae9860f5de4031, type: 2}
-  icon: {fileID: 21300000, guid: 113bdc64338b5be409f9ba847890ffef, type: 3}
+  icon: {fileID: 21300000, guid: 98623227386b5e64c844b9031c0d6334, type: 3}
   rarity: 0
   fireRate: 0.075
   ammoCapacity: 40
-  pushback: 25
+  recoil: 25
   reloadRate: 0.05
+  dropoffDist: 5
+  dropoffMod: 0.75
   spreadRange: 0.3
   bulletDamage: 15
   bulletPushback: 6

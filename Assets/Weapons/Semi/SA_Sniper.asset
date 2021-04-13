@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6148bcc569955e848aa4436ee58d46ac, type: 3}
-  m_Name: Sniper
+  m_Name: SA_Sniper
   m_EditorClassIdentifier: 
   weaponName: Sniper
   description: DESCRIPTION
@@ -20,8 +20,10 @@ MonoBehaviour:
   rarity: 0
   fireRate: 0.1
   ammoCapacity: 15
-  pushback: 200
+  recoil: 200
   reloadRate: 0.25
+  dropoffDist: 5
+  dropoffMod: 0.75
   spreadRange: 0.05
   bulletDamage: 25
   burstCount: 1
