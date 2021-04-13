@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 
@@ -228,6 +229,10 @@ public class GameManager : MonoBehaviour
         if (currentGameTime >= totalGameTime)
         {
             ServerMessage("ROUND ENDED");
+
+            // Temporary for now
+            AchievementManager.Instance().OnEvent(AchievementType.games);
+            SceneManager.LoadScene("L_MainMenu");
         }
     }
 

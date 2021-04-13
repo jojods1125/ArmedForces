@@ -10,16 +10,14 @@ using System.Collections;
 /// 
 /// Automatically Scroll through the Dropdown list based on Selected object
 /// </summary>
-public class ScrollRectPosition : MonoBehaviour
+public class ScrollRectHorizontal : MonoBehaviour
 {
 
     // Top Value of the items for calculations
-    public int topValue;
+    int topValue = 525;
     RectTransform scrollRectTransform;
     RectTransform contentPanel;
     RectTransform selectedRectTransform;
-    RectTransform parentWeaponsRectTransform;
-    RectTransform parentWeaponGroupRectTransform;
     GameObject lastSelected;
     void Start()
     {
@@ -36,8 +34,7 @@ public class ScrollRectPosition : MonoBehaviour
             return;
         }
         // Return if the selected game object is not inside the scroll rect.
-        // Content -> Weapon Group # -> Weapons -> Selected
-        if (selected.transform.parent.parent.parent != contentPanel.transform)
+        if (selected.transform.parent != contentPanel.transform)
         {
             return;
         }
@@ -49,27 +46,24 @@ public class ScrollRectPosition : MonoBehaviour
         }
         // Get the rect tranform for the selected game object.
         selectedRectTransform = selected.GetComponent<RectTransform>();
-        parentWeaponsRectTransform = selected.transform.parent.GetComponent<RectTransform>();
-        parentWeaponGroupRectTransform = selected.transform.parent.parent.GetComponent<RectTransform>();
-
         // The position of the selected UI element is the absolute anchor position,
         // ie. the local position within the scroll rect + its height if we're
         // scrolling down. If we're scrolling up it's just the absolute anchor position.
-        float selectedPositionY = Mathf.Abs(selectedRectTransform.anchoredPosition.y + parentWeaponsRectTransform.anchoredPosition.y + parentWeaponGroupRectTransform.anchoredPosition.y) + selectedRectTransform.rect.height;
+        float selectedPositionX = Mathf.Abs(selectedRectTransform.anchoredPosition.x - topValue) + selectedRectTransform.rect.width;
         // The upper bound of the scroll view is the anchor position of the content we're scrolling.
-        float scrollViewMinY = contentPanel.anchoredPosition.y;
+        float scrollViewMinX = contentPanel.anchoredPosition.x;
         // The lower bound is the anchor position + the height of the scroll rect.
-        float scrollViewMaxY = contentPanel.anchoredPosition.y + scrollRectTransform.rect.height;
+        float scrollViewMaxX = contentPanel.anchoredPosition.x + scrollRectTransform.rect.width;
         // If the selected position is below the current lower bound of the scroll view we scroll down.
-        if (selectedPositionY > scrollViewMaxY)
+        if (selectedPositionX > scrollViewMaxX)
         {
-            float newY = selectedPositionY - scrollRectTransform.rect.height;
-            contentPanel.anchoredPosition = new Vector2(contentPanel.anchoredPosition.x, newY);
+            float newX = selectedPositionX - scrollRectTransform.rect.width;
+            contentPanel.anchoredPosition = new Vector2(newX, contentPanel.anchoredPosition.y);
         }
         // If the selected position is above the current upper bound of the scroll view we scroll up.
-        else if (Mathf.Abs(selectedRectTransform.anchoredPosition.y + parentWeaponsRectTransform.anchoredPosition.y + parentWeaponGroupRectTransform.anchoredPosition.y) < scrollViewMinY)
+        else if (Mathf.Abs(selectedRectTransform.anchoredPosition.x - topValue) < scrollViewMinX)
         {
-            contentPanel.anchoredPosition = new Vector2(contentPanel.anchoredPosition.x, Mathf.Abs(selectedRectTransform.anchoredPosition.y + parentWeaponsRectTransform.anchoredPosition.y + parentWeaponGroupRectTransform.anchoredPosition.y + 100));
+            contentPanel.anchoredPosition = new Vector2(Mathf.Abs(selectedRectTransform.anchoredPosition.x - topValue), contentPanel.anchoredPosition.y);
         }
         lastSelected = selected;
     }

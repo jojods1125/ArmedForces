@@ -46,12 +46,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.05
+  matchType: 0
   playerRespawnTime: 3
   totalGameTime: 600
   serverGameTimeStep: 0.25
   spawnPointContainer: {fileID: 0}
   uiManager: {fileID: 0}
   localPlayer: {fileID: 0}
+  ai: {fileID: 0}
+  aiC: {fileID: 0}
 --- !u!114 &8708037613350168955
 MonoBehaviour:
   m_ObjectHideFlags: 0
