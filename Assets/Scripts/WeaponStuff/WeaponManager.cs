@@ -31,10 +31,11 @@ public class WeaponManager : MonoBehaviour
     // ===========================================================
 
     public List<Weapon> weapons;
-    public Weapon[] back = new Weapon[4];
-    public Weapon[] front = new Weapon[4];
+    public Weapon[] defaultBack = new Weapon[4];
+    public Weapon[] defaultFront = new Weapon[4];
 
     // Dictionary of playerId to loadout?
+    public Dictionary<int, Weapon[][]> playerLoadouts = new Dictionary<int, Weapon[][]>();
 
 
     /// <summary>
@@ -62,19 +63,27 @@ public class WeaponManager : MonoBehaviour
         // Weapon slot
         char slot = 'A';
 
-        // Go through back loadout
-        foreach (Weapon w in back)
-		{
-            PlayerPrefs.SetString("Back" + slot++, w.weaponName);
-		}
-
-        // Reset slot
-        slot = 'A';
-
-        // Go through front loadout
-        foreach (Weapon w in front)
+        for (int playerId = 0; playerId < playerLoadouts.Count; playerId++)
         {
-            PlayerPrefs.SetString("Front" + slot++, w.weaponName);
+            // Rest slot
+            slot = 'A';
+
+            Weapon[] currBack = playerLoadouts[playerId][0];
+            // Go through back loadout
+            foreach (Weapon w in currBack)
+            {
+                PlayerPrefs.SetString(playerId + "Back" + slot++, w.weaponName);
+            }
+
+            // Reset slot
+            slot = 'A';
+
+            Weapon[] currFront = playerLoadouts[playerId][1];
+            // Go through front loadout
+            foreach (Weapon w in currFront)
+            {
+                PlayerPrefs.SetString(playerId + "Front" + slot++, w.weaponName);
+            }
         }
     }
 
@@ -86,25 +95,30 @@ public class WeaponManager : MonoBehaviour
         // Weapon slot
         char slot = 'A';
 
-        // Go through back loadout
-        for (int i = 0; i < back.Length; i++)
-		{
-            string file = "Back" + (char)(slot + i);
-            if (PlayerPrefs.HasKey(file))
-			{
-                string data = PlayerPrefs.GetString("Back" + (char)(slot + i));
-                back[i] = getByName(data);
-			}
-		}
-
-        // Go through front loadout
-        for (int i = 0; i < front.Length; i++)
+        for (int playerId = 0; playerId < playerLoadouts.Count; playerId++)
         {
-            string file = "Front" + (char)(slot + i);
-            if (PlayerPrefs.HasKey(file))
+            Weapon[] currBack = playerLoadouts[playerId][0];
+            // Go through back loadout
+            for (int i = 0; i < currBack.Length; i++)
             {
-                string data = PlayerPrefs.GetString("Front" + (char)(slot + i));
-                front[i] = getByName(data);
+                string file = playerId + "Back" + (char)(slot + i);
+                if (PlayerPrefs.HasKey(file))
+                {
+                    string data = PlayerPrefs.GetString(playerId + "Back" + (char)(slot + i));
+                    currBack[i] = getByName(data);
+                }
+            }
+
+            Weapon[] currFront = playerLoadouts[playerId][1];
+            // Go through front loadout
+            for (int i = 0; i < currFront.Length; i++)
+            {
+                string file = playerId + "Front" + (char)(slot + i);
+                if (PlayerPrefs.HasKey(file))
+                {
+                    string data = PlayerPrefs.GetString(playerId + "Front" + (char)(slot + i));
+                    currFront[i] = getByName(data);
+                }
             }
         }
     }
@@ -112,7 +126,34 @@ public class WeaponManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        /*// Create 4 players with base loadout
+        Weapon[][] loadout = { (Weapon[])defaultBack.Clone(), (Weapon[])defaultFront.Clone() };
+        playerLoadouts = new Dictionary<int, Weapon[][]>();
+        // Player 1
+        playerLoadouts.Add(0, (Weapon[][])loadout.Clone());
+        // Player 2
+        playerLoadouts.Add(1, (Weapon[][])loadout.Clone());
+        // Player 3
+        playerLoadouts.Add(2, (Weapon[][])loadout.Clone());
+        // Player 4
+        playerLoadouts.Add(3, (Weapon[][])loadout.Clone());*/
         
+        // for all 4 possible players...
+        for (int i = 0; i < 4; i++)
+        {
+            playerLoadouts.Add(i, new Weapon[2][]);
+            // for back and front loadouts
+            for (int j = 0; j < 2; j++)
+            {
+                playerLoadouts[i][j] = new Weapon[4];
+                // for each of the 4 weapons
+                for (int k = 0; k < 4; k++)
+                {
+                    playerLoadouts[i][j][k] = getByName("Machine Gun");
+                }
+            }
+        }
+
     }
 
     // Update is called once per frame

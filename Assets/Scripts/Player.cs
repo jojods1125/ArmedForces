@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-using Mirror;
+
 
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-public class Player : NetworkBehaviour
+public class Player : MonoBehaviour
 {
     // ===========================================================
     //                          VARIABLES
     // ===========================================================
 
     [Header("Player Data")]
+
+    public MatchType matchType;
     [Min(0)]
     public float maxHealth = 100;
     public float walkMomentum = 10;
@@ -18,31 +20,32 @@ public class Player : NetworkBehaviour
     [Min(0)]
     public int jumpForce = 100;
 
+
     [Header("Weapon Loadouts")]
+
     public Weapon[] backArmWeapons = new Weapon[4];
     public Weapon[] frontArmWeapons = new Weapon[4];
 
-    protected Rigidbody rb;
+    [HideInInspector]
+    public Rigidbody rb;
     private Arm[] arms;
-    [SyncVar]
     private float currHealth = 100;
     private bool dying = false;
 
     //Used for differentiating each player in GameManager
-    [SyncVar]// [HideInInspector]
-    public int playerID;
+    [SerializeField]
+    private int playerID;
 
     // Last player ID to have attacked, reset on death
-    [SyncVar]
     private int lastAttackedID;
 
     // Last weapon to have attacked, reset to none on death
-    [SyncVar]
     private WeaponType lastAttackedType;
 
     // UI Manager
     protected UIManager uiManager;
 
+    public Player_Networked onlinePlayer;
 
 
     // ===========================================================
@@ -58,9 +61,11 @@ public class Player : NetworkBehaviour
         // Increases health and prevents invalid values
         currHealth = Mathf.Max(Mathf.Min(currHealth + health, maxHealth), 0);
 
+        if (uiManager) uiManager.ui_Players[playerID].UpdateHealthBar(currHealth / maxHealth);
+
         // If you die by healing for some ungodly reason, you played yourself
-        if (currHealth == 0)
-            RpcKill(playerID, WeaponType.none);
+        if (currHealth <= 0 && matchType != MatchType.Online)
+            Kill(playerID, WeaponType.none);
     }
 
 
@@ -72,10 +77,6 @@ public class Player : NetworkBehaviour
     /// <param name="weaponType"> Type of weapon that attacked </param>
     public void DecreaseHealth(float health, int attackerID, WeaponType weaponType)
     {
-        // Only calculate damage on the server
-        if (!isServer)
-            return;
-
         // Decreases health and prevents invalid values
         currHealth = Mathf.Min(Mathf.Max(currHealth - health, 0), maxHealth);
 
@@ -85,25 +86,19 @@ public class Player : NetworkBehaviour
             lastAttackedID = attackerID;
             lastAttackedType = weaponType;
         }
-            
+
+        if (uiManager) uiManager.ui_Players[playerID].UpdateHealthBar(currHealth / maxHealth);
 
         // If the Player runs out of health, kill them
-        if (currHealth == 0)
-            RpcKill(attackerID, weaponType);
+        if (currHealth <= 0 && matchType != MatchType.Online)
+            Kill(attackerID, weaponType);
     }
 
 
-    [Command]
-    void CmdDecreaseHealthFromAI(float health, int attackerID, WeaponType weaponType)
+    public void SetCurrHealth(float newHealth)
     {
-        DecreaseHealth(health, attackerID, weaponType);
+        currHealth = newHealth;
     }
-
-    public void DecreaseHealthFromAI(float health, int attackerID, WeaponType weaponType)
-    {
-        CmdDecreaseHealthFromAI(health, attackerID, weaponType);
-    }
-
 
     /// <summary>
     /// Retrieves the player's current health
@@ -120,25 +115,13 @@ public class Player : NetworkBehaviour
     //                      DEATH AND REBIRTH
     // ===========================================================
 
-    /// <summary>
-    /// Tells the server to kill this Player
-    /// </summary>
-    /// <param name="killerID"> ID of the Player that killed them </param>
-    /// <param name="weaponType"> Type of weapon that killed them </param>
-    [Command]
-    public void CmdKill(int killerID, WeaponType weaponType)
-    {
-        RpcKill(killerID, weaponType);
-    }
-
 
     /// <summary>
     /// Kills this instance of Player on every client
     /// </summary>
     /// <param name="killerID"> ID of the Player that killed them </param>
-    /// /// <param name="weaponType"> Type of weapon that killed them </param>
-    [ClientRpc]
-    public void RpcKill(int killerID, WeaponType weaponType)
+    /// <param name="weaponType"> Type of weapon that killed them </param>
+    public bool Kill(int killerID, WeaponType weaponType)
     {
         // Prevent double kill
         if (!dying)
@@ -149,25 +132,34 @@ public class Player : NetworkBehaviour
             if (currHealth != 0)
             {
                 currHealth = 0;
-                if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+                if (uiManager) uiManager.ui_Players[playerID].UpdateHealthBar(currHealth / maxHealth);
             }
 
             // Activate the GameManager's respawn process
             GameManager.Instance().Respawn(gameObject);
 
-            // Updates KDR based on who killed; if a self-kill, gives kill to last attacker
-            if (killerID == -1 || killerID == playerID)
-                CmdTrackDeath(lastAttackedID, playerID, lastAttackedType);
-            else
-                CmdTrackDeath(killerID, playerID, weaponType);
+            // If the player isn't online, track the death locally
+            if (matchType != MatchType.Online)
+            {
+                // Updates KDR based on who killed; if a self-kill, gives kill to last attacker
+                if (killerID == -1 || killerID == playerID)
+                    TrackDeath(lastAttackedID, playerID, lastAttackedType);
+                else
+                    TrackDeath(killerID, playerID, weaponType);
+            }
 
-            // Deactivates the GameObject
-            gameObject.SetActive(false);
+            // Deactivates the GameObject's children and rigidbody
+            rb.isKinematic = true;
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+
+            //gameObject.SetActive(false);
+
+            return true;
         }
-
-        // if local player, call achievement event
-        if (isLocalPlayer)
-            AchievementManager.Instance().OnEvent(AchievementType.deaths);
+        return false;
     }
 
 
@@ -177,8 +169,7 @@ public class Player : NetworkBehaviour
     /// <param name="killerID"> ID of the killer </param>
     /// <param name="playerID"> ID of the killed </param>
     /// /// <param name="weaponType"> Type of weapon that killed them </param>
-    [Command]
-    void CmdTrackDeath(int killerID, int playerID, WeaponType weaponType)
+    void TrackDeath(int killerID, int playerID, WeaponType weaponType)
     {
         GameManager.Instance().TrackDeath(killerID, playerID, weaponType);
 
@@ -196,7 +187,7 @@ public class Player : NetworkBehaviour
     {
         IncreaseHealth(maxHealth);
         rb.velocity = Vector3.zero;
-        gameObject.transform.position = spawnLocation;
+        transform.position = spawnLocation;
 
         foreach (Arm arm in arms)
         {
@@ -207,7 +198,6 @@ public class Player : NetworkBehaviour
     }
 
 
-
     // ===========================================================
     //                   START-UP AND CONNECTING
     // ===========================================================
@@ -215,52 +205,43 @@ public class Player : NetworkBehaviour
     /// <summary>
     /// Tells the server that the Player is connected
     /// </summary>
-    [Command]
-    void CmdPlayerConnected()
+    public void PlayerConnected()
     {
-        // Exits if not the server
-        if (!isServer)
-            return;
+        Debug.Log("Player Connected executed");
 
         // Retrieves an ID from GameManager
         int newID = GameManager.Instance().ClientConnected();
+        GameManager.Instance().localPlayers[newID] = this;
 
-        // Updates all instances of this Player across clients
-        RpcPlayerConnected(newID);
-    }
-
-
-    /// <summary>
-    /// Gets info from the server for this Player on every client
-    /// </summary>
-    /// <param name="playerID"> ID being given to this Player </param>
-    [ClientRpc]
-    void RpcPlayerConnected(int playerID)
-    {
-        // Sets the Player's ID and the last attacked ID
-        this.playerID = playerID;
+        this.playerID = newID;
         lastAttackedID = this.playerID;
     }
 
 
     protected void Start()
     {
+        // If not an online player
+        if (matchType != MatchType.Online)
+        {
+            // Tells the server that the Player is connected
+            PlayerConnected();
+
+            uiManager.ui_Players[playerID].UpdateWeaponIcons(playerID);
+            // If UI exists (only local player), connect health bar and weapon UI
+            //if (uiManager && matchType != MatchType.Local)
+            //{
+            //    GameManager.Instance().localPlayer = this;
+            //    uiManager.ui_Players[0].UpdateHealthBar(currHealth / maxHealth);
+            //    uiManager.ui_Players[0].UpdateWeaponIcons();
+            //}
+        }
+    }
+
+    public void Activate()
+    {
         // Tells the server that the Player is connected
-        CmdPlayerConnected();
-
-        // If a copy of the Player on a client, freeze
-        if (!isLocalPlayer)
-        {
-            rb.constraints = RigidbodyConstraints.FreezeAll;
-        }
-
-        // If UI exists (only local player), connect health bar and weapon UI
-        if (uiManager)
-        {
-            GameManager.Instance().localPlayer = this;
-            uiManager.UpdateHealthBar(currHealth / maxHealth);
-            uiManager.UpdateWeaponIcons();
-        }
+        // Debug.LogError("STARTING AI");
+        PlayerConnected();
     }
 
     protected void Awake()
@@ -275,8 +256,9 @@ public class Player : NetworkBehaviour
 
     void Update()
     {
-        // Constantly update health bar (kinda nasty but works better than event-based)
-        if (uiManager) uiManager.UpdateHealthBar(currHealth / maxHealth);
+        //if (matchType != MatchType.Online)
+            // Constantly update health bar (kinda nasty but works better than event-based)
+            //if (uiManager) uiManager.ui_Players[playerID].UpdateHealthBar(currHealth / maxHealth);
     }
 
 
@@ -285,8 +267,19 @@ public class Player : NetworkBehaviour
     /// </summary>
     public void UpdateAppearance()
     {
-        arms[0].CmdSwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
-        arms[1].CmdSwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+        if (matchType == MatchType.Online)
+        {
+            arms[0].onlineArm.CmdSwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
+            arms[1].onlineArm.CmdSwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+        }
+        else
+        {
+            if (arms != null)
+            {
+                arms[0].SwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
+                arms[1].SwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+            }
+        }
     }
 
 
@@ -300,6 +293,41 @@ public class Player : NetworkBehaviour
     }
 
 
+    public void SetPlayerID(int newID)
+    {
+        playerID = newID;
+    }
+
+    public int GetPlayerID()
+    {
+        return playerID;
+    }
+
+    public void SetLastAttackedID(int newID)
+    {
+        lastAttackedID = newID;
+    }
+
+    public int GetLastAttackedID()
+    {
+        return lastAttackedID;
+    }
+
+    public void SetLastAttackedType(WeaponType type)
+    {
+        lastAttackedType = type;
+    }
+
+    public WeaponType GetLastAttackedType()
+    {
+        return lastAttackedType;
+    }
+
+    public UIManager GetUIManager()
+    {
+        return uiManager;
+    }
+
 
     // ===========================================================
     //                           MOVEMENT
@@ -312,7 +340,7 @@ public class Player : NetworkBehaviour
     public bool IsGrounded()
     {
         float capsuleHeight = gameObject.GetComponent<CapsuleCollider>().bounds.extents.y;
-        return Physics.Raycast(transform.position, -Vector3.up, capsuleHeight + 0.05f);
+        return Physics.Raycast(gameObject.transform.position, -Vector3.up, capsuleHeight + 0.05f);
     }
 
 
@@ -326,17 +354,10 @@ public class Player : NetworkBehaviour
     }
 
 
-    /// <summary>
-    /// Enacts force on this player on every client (used from server calls)
-    /// </summary>
-    /// <param name="force"> Amount of force to enact </param>
-    [ClientRpc]
-    public void RpcEnactForce(Vector3 force)
+    public void FreezeConstraints()
     {
-        if (!isLocalPlayer)
-            return;
-
-        rb.AddForce(force);
+        rb.constraints = RigidbodyConstraints.FreezeAll;
     }
+
 
 }
