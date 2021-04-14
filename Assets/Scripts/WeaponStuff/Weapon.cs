@@ -10,11 +10,8 @@ public class Weapon : ScriptableObject
     [Tooltip("Description of the weapon as it appears in-game")]
     public string description;
 
-    [Tooltip("Mesh of the weapon as it appears in-game")]
-    public Mesh mesh;
-
-    [Tooltip("Material of the weapon as it appears in-game")]
-    public Material material;
+    [Tooltip("Prefab of the weapon as it appears in-game")]
+    public GameObject prefab;
 
     [Tooltip("Icon to represent the weapon in UI")]
     public Sprite icon;

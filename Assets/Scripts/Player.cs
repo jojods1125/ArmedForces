@@ -150,6 +150,7 @@ public class Player : MonoBehaviour
 
             // Deactivates the GameObject's children and rigidbody
             rb.isKinematic = true;
+            gameObject.GetComponent<Collider>().enabled = false;
             foreach (Transform child in transform)
             {
                 child.gameObject.SetActive(false);
@@ -269,15 +270,15 @@ public class Player : MonoBehaviour
     {
         if (matchType == MatchType.Online)
         {
-            arms[0].onlineArm.CmdSwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
-            arms[1].onlineArm.CmdSwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+            arms[0].onlineArm.CmdSwitchAppearance(arms[0].GetEquippedWeapon().prefab.name);
+            arms[1].onlineArm.CmdSwitchAppearance(arms[1].GetEquippedWeapon().prefab.name);
         }
         else
         {
             if (arms != null)
             {
-                arms[0].SwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
-                arms[1].SwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+                arms[0].SwitchAppearance(arms[0].GetEquippedWeapon().prefab.name);
+                arms[1].SwitchAppearance(arms[1].GetEquippedWeapon().prefab.name);
             }
         }
     }

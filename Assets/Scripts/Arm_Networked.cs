@@ -121,7 +121,7 @@ public class Arm_Networked : NetworkBehaviour
         if (weapon)
         {
             // Change equipped weapon visuals
-            CmdSwitchAppearance(weapon.mesh.name, weapon.material.name);
+            CmdSwitchAppearance(weapon.prefab.name);
         }
     }
 
@@ -132,12 +132,12 @@ public class Arm_Networked : NetworkBehaviour
     /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
     /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
     [Command]
-    public void CmdSwitchAppearance(string meshName, string materialName)
+    public void CmdSwitchAppearance(string prefabName)
     {
         if (!isServer)
             return;
 
-        RpcSwitchAppearance(meshName, materialName);
+        RpcSwitchAppearance(prefabName);
     }
 
 
@@ -147,10 +147,12 @@ public class Arm_Networked : NetworkBehaviour
     /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
     /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
     [ClientRpc]
-    private void RpcSwitchAppearance(string meshName, string materialName)
+    private void RpcSwitchAppearance(string prefabName)
     {
-        arm.arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);
-        arm.arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
+        arm.SwitchAppearance(prefabName);
+
+        //arm.arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);
+        //arm.arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
     }
 
 }

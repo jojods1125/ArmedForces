@@ -318,6 +318,7 @@ public class GameManager : MonoBehaviour
 
         // Reactivates the player's children and rigidbody
         obj.GetComponent<Rigidbody>().isKinematic = false;
+        obj.GetComponent<Collider>().enabled = true;
         foreach (Transform child in obj.transform)
         {
             child.gameObject.SetActive(true);

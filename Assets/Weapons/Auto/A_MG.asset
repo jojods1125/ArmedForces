@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Machine Gun
   description: More damage, but more recoil and bullet spread
-  mesh: {fileID: 4300000, guid: 87d91dfbadc3fc340936a420a1707ffa, type: 2}
-  material: {fileID: 2100000, guid: 4a4d2b787eb393a469ae9860f5de4031, type: 2}
+  prefab: {fileID: 5775568051499200765, guid: ceda8341158c9bd48a1d995bae55a506, type: 3}
   icon: {fileID: 21300000, guid: 98623227386b5e64c844b9031c0d6334, type: 3}
   rarity: 0
   fireRate: 0.075
