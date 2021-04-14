@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     public Rigidbody rb;
     private Arm[] arms;
     private float currHealth = 100;
-    private bool dying = false;
+    public bool dying = false;
 
     //Used for differentiating each player in GameManager
     [SerializeField]

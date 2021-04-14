@@ -1068,7 +1068,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1151577964800567072, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
   m_PrefabInstance: {fileID: 645604713}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2004755871}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e087b23b62cf29846a9d9a301bb4330f, type: 3}
@@ -1222,13 +1222,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targets:
-  - {fileID: 1428900371}
-  - {fileID: 2060460398}
-  offset: {x: 0, y: 10, z: -50}
-  smoothTime: 0.5
+  - {fileID: 1455985268}
+  - {fileID: 2004755871}
+  offset: {x: 0, y: 10, z: -60}
+  smoothTime: 0.1
   minZoom: 40
-  maxZoom: 10
-  zoomLimiter: 50
+  maxZoom: 12
+  zoomLimiter: 70
+  mapX: 16
+  mapY: 8
 --- !u!1 &920174014
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,7 +1526,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -141906719412523213, guid: 4b074cca172cbed4caf2f6e1957e8947, type: 3}
   m_PrefabInstance: {fileID: 329314498}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1455985268}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 910a1d2a7ae3f5e4db393c1a8a0d5ed6, type: 3}
@@ -1685,9 +1687,9 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1428900371 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8282234077870317105, guid: 4b074cca172cbed4caf2f6e1957e8947, type: 3}
+--- !u!1 &1455985268 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8282234077870317098, guid: 4b074cca172cbed4caf2f6e1957e8947, type: 3}
   m_PrefabInstance: {fileID: 329314498}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1527487070
@@ -2077,6 +2079,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9b8dcbfbfcbebf443a92f175d1129881, type: 3}
   m_PrefabInstance: {fileID: 1814339010}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2004755871 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5830838116616120380, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
+  m_PrefabInstance: {fileID: 645604713}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2028393251
 GameObject:
   m_ObjectHideFlags: 0
@@ -2169,11 +2176,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 15.03, y: -3.39, z: 0}
---- !u!4 &2060460398 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5830838116616120359, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
-  m_PrefabInstance: {fileID: 645604713}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &364321983396067088
 PrefabInstance:
   m_ObjectHideFlags: 0

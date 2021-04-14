@@ -6,15 +6,20 @@ public class Main_Camera : MonoBehaviour
 {
 
 
-public List<Transform> targets;
+public List<GameObject> targets;
 public Vector3 offset;
 private Vector3 velocity;
 private Camera cam;
 public float smoothTime = .5f;
 public float minZoom = 40f;
 public float maxZoom = 10f;
-
 public float zoomLimiter = 50f;
+public float mapX;
+public float mapY;
+private float minX;
+private float maxX;
+private float minY;
+private float maxY;
 
 
 private void LateUpdate() {
@@ -27,7 +32,17 @@ private void LateUpdate() {
 
 void Move(){
     Vector3 centerPoint = GetCenterPoint();
+    //TAKEN FROM https://answers.unity.com/questions/501893/calculating-2d-camera-bounds.html
+        var vertExtent = cam.orthographicSize;    
+        var horzExtent = vertExtent * Screen.width / Screen.height;
+        maxX = horzExtent - mapX / 2.0f;
+        minX = mapX / 2.0f - horzExtent;
+        maxY = vertExtent - mapY / 2.0f;
+        minY = mapY / 2.0f - vertExtent;
+    centerPoint.x = Mathf.Clamp(centerPoint.x, minX, maxX);
+    centerPoint.y = Mathf.Clamp(centerPoint.y, minY, maxY);
     Vector3 newPosition = centerPoint + offset;
+    
     transform.position = Vector3.SmoothDamp(transform.position, newPosition, ref velocity, smoothTime);
 }
 
@@ -37,20 +52,49 @@ void Zoom(){
 }
 
 float GetGreatestDistance(){
-    var bounds = new Bounds(targets[0].position, Vector3.zero);
+    int count = 0;
+    for(int i = 0; i < targets.Count; i++){
+        if(!targets[i].GetComponent<Player>().dying){
+            count++;
+        }
+    }
+    if(count == 1){
+        return maxZoom;
+    }
+    var bounds = new Bounds(targets[0].GetComponent<Transform>().position, Vector3.zero);
         for(int i = 0; i < targets.Count; i++){
-            bounds.Encapsulate(targets[i].position);
+            if(targets[i].GetComponent<Player>().dying ){
+                //bounds.Encapsulate(Vector3.zero);
+            }else{
+                bounds.Encapsulate(targets[i].GetComponent<Transform>().position);
+            }
+            
         }
         return bounds.size.x;
 }
 
 Vector3 GetCenterPoint(){
-    if(targets.Count == 1){
-        return targets[0].position;
-    }else{
-        var bounds = new Bounds(targets[0].position, Vector3.zero);
+    int count = 0;
+    for(int i = 0; i < targets.Count; i++){
+        if(!targets[i].GetComponent<Player>().dying){
+            count++;
+        }
+    }
+    if(count == 1){
         for(int i = 0; i < targets.Count; i++){
-            bounds.Encapsulate(targets[i].position);
+            if(!targets[i].GetComponent<Player>().dying){
+                return targets[i].GetComponent<Transform>().position;
+            }
+        }
+        return targets[0].GetComponent<Transform>().position;
+    } else{
+        var bounds = new Bounds(targets[0].GetComponent<Transform>().position, Vector3.zero);
+        for(int i = 0; i < targets.Count; i++){
+            if(targets[i].GetComponent<Player>().dying){
+                //bounds.Encapsulate(Vector3.zero);
+            }else{
+                bounds.Encapsulate(targets[i].GetComponent<Transform>().position);
+            }
         }
         return bounds.center;
     }
@@ -62,6 +106,10 @@ Vector3 GetCenterPoint(){
     void Start () 
     {
         cam = GetComponent<Camera>();
+
+
+        
+
 
         // set the desired aspect ratio (the values in this example are
         // hard-coded for 16:9, but you could make them into public
