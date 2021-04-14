@@ -1029,6 +1029,38 @@ PrefabInstance:
       propertyPath: enemy
       value: 
       objectReference: {fileID: 1191200144}
+    - target: {fileID: 8603684361716463826, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
+      propertyPath: attackRange
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603684361716463826, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
+      propertyPath: stoppingDist
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603684361716463826, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
+      propertyPath: mapWidth
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603684361716463826, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
+      propertyPath: lowSprayerAmmo
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603684361716463826, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
+      propertyPath: lowShotgunAmmo
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603684361716463826, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
+      propertyPath: maxSprayerAmmo
+      value: 700
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603684361716463826, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
+      propertyPath: maxShotgunAmmo
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8603684361716463826, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
+      propertyPath: maxAutoAmmo
+      value: 40
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ac00d5eb3a70efe4aa5661db4aaf1151, type: 3}
 --- !u!114 &804204151 stripped
@@ -1192,7 +1224,7 @@ MonoBehaviour:
   targets:
   - {fileID: 1428900371}
   - {fileID: 2060460398}
-  offset: {x: 0, y: 5, z: -50}
+  offset: {x: 0, y: 10, z: -50}
   smoothTime: 0.5
   minZoom: 40
   maxZoom: 10
