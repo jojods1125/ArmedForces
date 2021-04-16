@@ -149,7 +149,7 @@ public class WeaponManager : MonoBehaviour
                 // for each of the 4 weapons
                 for (int k = 0; k < 4; k++)
                 {
-                    playerLoadouts[i][j][k] = getByName("Machine Gun");
+                    playerLoadouts[i][j][k] = getByName("AK");
                 }
             }
         }

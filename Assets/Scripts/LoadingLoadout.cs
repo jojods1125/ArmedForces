@@ -101,7 +101,7 @@ public class LoadingLoadout : MonoBehaviour
                     {
                         W_AutoGun auto = (W_AutoGun)w;
                         wbc.damage = auto.bulletDamage;
-                        wbc.recoil = auto.pushback;
+                        wbc.recoil = auto.recoil;
                         wbc.pushback = auto.bulletPushback;
                         wbc.variable = 1f / auto.fireRate;
                         wbc.ammoCapacity = auto.ammoCapacity;
@@ -111,7 +111,7 @@ public class LoadingLoadout : MonoBehaviour
                     {
                         W_SemiGun semi = (W_SemiGun)w;
                         wbc.damage = semi.bulletDamage;
-                        wbc.recoil = semi.pushback;
+                        wbc.recoil = semi.recoil;
                         wbc.pushback = semi.bulletPushback;
                         wbc.variable = 1f / semi.burstCount;
                         wbc.ammoCapacity = semi.ammoCapacity;
@@ -121,7 +121,7 @@ public class LoadingLoadout : MonoBehaviour
                     {
                         W_Launcher launcher = (W_Launcher)w;
                         wbc.damage = launcher.coreDamage;
-                        wbc.recoil = launcher.pushback;
+                        wbc.recoil = launcher.recoil;
                         wbc.pushback = launcher.corePushback;
                         wbc.variable = 1f / launcher.projectilePower;
                         wbc.ammoCapacity = launcher.ammoCapacity;
@@ -131,7 +131,7 @@ public class LoadingLoadout : MonoBehaviour
                     {
                         W_Sprayer sprayer = (W_Sprayer)w;
                         wbc.damage = sprayer.bulletDamage;
-                        wbc.recoil = sprayer.pushback;
+                        wbc.recoil = sprayer.recoil;
                         wbc.pushback = sprayer.bulletPushback;
                         wbc.variable = 1f / sprayer.sprayDistance;
                         wbc.ammoCapacity = sprayer.ammoCapacity;

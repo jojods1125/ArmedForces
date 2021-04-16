@@ -1,8 +1,7 @@
-﻿using Mirror;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(MeshRenderer))]
-public class Projectile : NetworkBehaviour
+public class Projectile : MonoBehaviour
 {
     public GameObject prefab_Explosion;
 
@@ -25,8 +24,7 @@ public class Projectile : NetworkBehaviour
     /// <param name="coreDamage"> Damage at the core of the explosion if projectile has explosionRadius </param>
     /// <param name="corePushback"> Pushback at the core of the explosion if projectile has explosionRadius </param>
     /// <param name="rocketPowered"> True if gravity does not affect, false if gravity affects </param>
-    [ClientRpc]
-    public void RpcInitialize(Vector3 direction, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered, int playerID)
+    public void Initialize(Vector3 direction, float projectilePower, float explosionRadius, float coreDamage, float corePushback, bool rocketPowered, int playerID)
     {
         this.explosionRadius = explosionRadius;
         this.coreDamage = coreDamage;
@@ -70,10 +68,13 @@ public class Projectile : NetworkBehaviour
                     {
                         float damageMultiplier = 1 / (explosionRadius / (explosionRadius - Vector3.Distance(exploded[i].ClosestPoint(gameObject.transform.position), gameObject.transform.position)));
                         damageMultiplier = Mathf.Min(Mathf.Max(damageMultiplier, 0), 1);
-                        if (exploded[i].gameObject.GetComponent<Player>() != null)
+
+                        if (exploded[i].gameObject.GetComponent<Player_Networked>() != null)
+                            exploded[i].gameObject.GetComponent<Player_Networked>().DecreaseHealth(coreDamage * damageMultiplier, playerID, WeaponType.launcher);
+                        else if (exploded[i].gameObject.GetComponent<Player>() != null)
                             exploded[i].gameObject.GetComponent<Player>().DecreaseHealth(coreDamage * damageMultiplier, playerID, WeaponType.launcher);
-                        else if (exploded[i].gameObject.GetComponent<Player_AI>() != null)
-                            exploded[i].gameObject.GetComponent<Player_AI>().DecreaseHealth(coreDamage * damageMultiplier, playerID, WeaponType.launcher);
+                        //else if (exploded[i].gameObject.GetComponent<Player_AI>() != null)
+                        //    exploded[i].gameObject.GetComponent<Player_AI>().DecreaseHealth(coreDamage * damageMultiplier, playerID, WeaponType.launcher);
                     }
 
                     // Add explosion force to rigidbody if exists
@@ -101,10 +102,12 @@ public class Projectile : NetworkBehaviour
                 // Player take damage
                 if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    if (other.gameObject.GetComponent<Player>() != null)
+                    if (other.gameObject.GetComponent<Player_Networked>() != null)
+                        other.gameObject.GetComponent<Player_Networked>().DecreaseHealth(coreDamage, playerID, WeaponType.launcher);
+                    else if (other.gameObject.GetComponent<Player>() != null)
                         other.gameObject.GetComponent<Player>().DecreaseHealth(coreDamage, playerID, WeaponType.launcher);
-                    else if (other.gameObject.GetComponent<Player_AI>() != null)
-                        other.gameObject.GetComponent<Player_AI>().DecreaseHealth(coreDamage, playerID, WeaponType.launcher);
+                    //else if (other.gameObject.GetComponent<Player_AI>() != null)
+                    //    other.gameObject.GetComponent<Player_AI>().DecreaseHealth(coreDamage, playerID, WeaponType.launcher);
                 }
 
                 // Give clients 0.5 seconds to catch up to server, then destroy
