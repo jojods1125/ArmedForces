@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: AK
   description: Basic gun with well-rounded stats
-  prefab: {fileID: 5775568051499200765, guid: 95003da1f0dc9bb428744d87c1c0a9c2, type: 3}
+  prefab: {fileID: 5775568051499200765, guid: e708581101f3b9b40843c9abaa2a2f8b, type: 3}
   icon: {fileID: 21300000, guid: 89a5cca590e5f6e4bb4553b1a3de8737, type: 3}
   rarity: 0
   fireRate: 0.075

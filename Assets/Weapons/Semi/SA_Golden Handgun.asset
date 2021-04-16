@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Golden Handgun
   description: Insane damage, insane knockback
-  mesh: {fileID: 4300000, guid: 87d91dfbadc3fc340936a420a1707ffa, type: 2}
-  material: {fileID: 2100000, guid: 038d265cf9316054798da520d0468d0b, type: 2}
+  prefab: {fileID: 3002241038389116776, guid: 6cbab2698530b46468a9c99ec2cb6f6b, type: 3}
   icon: {fileID: 21300000, guid: 44df8894ad4f87c41b53d11a3176ed1e, type: 3}
   rarity: 0
   fireRate: 0.1

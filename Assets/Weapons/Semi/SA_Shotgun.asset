@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Shotgun
   description: DESCRIPTION
-  mesh: {fileID: 4300000, guid: 87d91dfbadc3fc340936a420a1707ffa, type: 2}
-  material: {fileID: 2100000, guid: 9712e2b3862aef7419e65d0d03be0a10, type: 2}
+  prefab: {fileID: 3002241038389116776, guid: 3293a53d9b5151b40a59afe2d2fa76ca, type: 3}
   icon: {fileID: 21300000, guid: 622923c75ecc3ad49bfbeb3a2f3257d1, type: 3}
   rarity: 0
   fireRate: 0.1

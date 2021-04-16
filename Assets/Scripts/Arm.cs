@@ -404,9 +404,13 @@ public class Arm : MonoBehaviour
 
         // Fills in the dictionary of letters to weapon GameObjects
         weaponObjs[weaponA.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponA.prefab.name), transform);
+        weaponObjs[weaponA.prefab.name].SetActive(false);
         weaponObjs[weaponB.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponB.prefab.name), transform);
+        weaponObjs[weaponB.prefab.name].SetActive(false);
         weaponObjs[weaponC.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponC.prefab.name), transform);
+        weaponObjs[weaponC.prefab.name].SetActive(false);
         weaponObjs[weaponD.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponD.prefab.name), transform);
+        weaponObjs[weaponD.prefab.name].SetActive(false);
 
         // Initializes ammoRemaining dictionary for each weapon
         if (!ammoRemaining.ContainsKey(weaponA))
