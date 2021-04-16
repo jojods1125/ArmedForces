@@ -37,12 +37,16 @@ public class MenuManager : MonoBehaviour
     public GameObject MainMenu;
     [Tooltip("Offline Menu link")]
     public GameObject TrainingMenu;
+    [Tooltip("Local Menu link")]
+    public GameObject LocalMenu;
     [Tooltip("Achievements Menu link")]
     public GameObject AchievementsMenu;
     [Tooltip("Loadout Menu link")]
     public GameObject LoadoutMenu;
     [Tooltip("Pregame Menu Link")]
     public GameObject PregameMenu;
+    [Tooltip("Pregame Menu Link")]
+    public GameObject LocalPregameMenu;
     [Tooltip("Weapon Selection Screen Link")]
     public GameObject SelectionMenu;
 
@@ -56,26 +60,34 @@ public class MenuManager : MonoBehaviour
     [Header("First Selected Button for each Menu")]
     [Tooltip("First Selected Button on Main Menu")]
     public GameObject mainFirstButton;
+    [Tooltip("First Selected Button on Training Menu")]
+    public GameObject trainingFirstButton;
+    [Tooltip("First Selected Button on Local Menu")]
+    public GameObject localFirstButton;
     [Tooltip("First Selected Button on Achievements Menu")]
     public GameObject achievementsFirstButton;
     [Tooltip("First Selected Button on Loadout Menu")]
     public GameObject loadoutFirstButton;
-    [Tooltip("First Selected Button on Offline Menu")]
-    public GameObject trainingFirstButton;
     [Tooltip("First Selected Button on Pregame Menu")]
     public GameObject pregameFirstButton;
+    [Tooltip("First Selected Button on Pregame Menu")]
+    public GameObject localPregameFirstButton;
     [Tooltip("First Selected Weapon Selection")]
     public GameObject selectionFirstButton;
 
     [Header("Return to last Menu Button for each Menu")]
+    [Tooltip("Return to Main Button on Training Menu")]
+    public GameObject trainingReturnButton;
+    [Tooltip("Return to Main Button on Local Menu")]
+    public GameObject localReturnButton;
     [Tooltip("Return to Main Button on Achievements Menu")]
     public GameObject achievementsReturnButton;
     [Tooltip("Return to Main Button on Loadout Menu")]
     public GameObject loadoutReturnButton;
-    [Tooltip("Return to Main Button on Offline Menu")]
-    public GameObject trainingReturnButton;
     [Tooltip("Return to Map Selection Button on Pregame Menu")]
     public GameObject pregameReturnButton;
+    [Tooltip("Return to Map Selection Button on Pregame Menu")]
+    public GameObject localPregameReturnButton;
 
     [Header("Achievement Menu Display")]
     [Tooltip("Content of the ScrollView")]
@@ -104,25 +116,59 @@ public class MenuManager : MonoBehaviour
     [Tooltip("Number of Connected Players")]
     public int numPlayers = 0;
 
-    [Header("Max Bar Values")]
-    [Tooltip("Max Damage")]
-    public float maxDamage;
-    [Tooltip("Max Recoil")]
-    public float maxRecoil;
-    [Tooltip("Max Pushback")]
-    public float maxPushback;
-    [Tooltip("Max Ammo")]
-    public float maxAmmo;
-    [Tooltip("Max Reload Speed")]
-    public float maxReloadSpeed;
-
-    [Header("Variable Attributes")]
+    [Header("Max Automatic Bar Values")]
+    [Tooltip("Max Automatic Damage")]
+    public float maxAutoDamage;
+    [Tooltip("Max Automatic Recoil")]
+    public float maxAutoRecoil;
+    [Tooltip("Max Automatic Pushback")]
+    public float maxAutoPushback;
+    [Tooltip("Max Automatic Ammo")]
+    public float maxAutoAmmo;
+    [Tooltip("Max Automatic Reload Speed")]
+    public float maxAutoReloadSpeed;
     [Tooltip("Max Fire rate")]
     public float maxFireRate;
+
+    [Header("Max Semiautomatic Bar Values")]
+    [Tooltip("Max Semiautomatic Damage")]
+    public float maxSemiDamage;
+    [Tooltip("Max Semiautomatic Recoil")]
+    public float maxSemiRecoil;
+    [Tooltip("Max Semiautomatic Pushback")]
+    public float maxSemiPushback;
+    [Tooltip("Max Semiautomatic Ammo")]
+    public float maxSemiAmmo;
+    [Tooltip("Max Semiautomatic Reload Speed")]
+    public float maxSemiReloadSpeed;
     [Tooltip("Max Scatter Count")]
     public float maxScatterCount;
+
+    [Header("Max Launcher Bar Values")]
+    [Tooltip("Max Launcher Damage")]
+    public float maxLauncherDamage;
+    [Tooltip("Max Launcher Recoil")]
+    public float maxLauncherRecoil;
+    [Tooltip("Max Launcher Pushback")]
+    public float maxLauncherPushback;
+    [Tooltip("Max Launcher Ammo")]
+    public float maxLauncherAmmo;
+    [Tooltip("Max Launcher Reload Speed")]
+    public float maxLauncherReloadSpeed;
     [Tooltip("Max Projectile Power")]
     public float maxProjectilePower;
+
+    [Header("Max Sprayer Bar Values")]
+    [Tooltip("Max Sprayer Damage")]
+    public float maxSprayerDamage;
+    [Tooltip("Max Sprayer Recoil")]
+    public float maxSprayerRecoil;
+    [Tooltip("Max Sprayer Pushback")]
+    public float maxSprayerPushback;
+    [Tooltip("Max Sprayer Ammo")]
+    public float maxSprayerAmmo;
+    [Tooltip("Max Sprayer Reload Speed")]
+    public float maxSprayerReloadSpeed;
     [Tooltip("Max Spray Distance")]
     public float maxSprayDistance;
 
@@ -439,206 +485,341 @@ public class MenuManager : MonoBehaviour
 
         }
 
-        // update Achievements Menu
-        if (AchievementsMenu.activeSelf)
+        if (SceneManager.GetSceneByName("L_MainMenu").isLoaded)
         {
-            for (int i = 0; i < AchievementManager.Instance().achievements.Count; i++)
+            // update Achievements Menu
+            if (AchievementsMenu.activeSelf)
             {
-                // Get Achievement
-                Achievement a = AchievementManager.Instance().achievements[i];
-                // Get Achievement Display
-                Transform curr = achievementContent.transform.GetChild(i);
-                // Get Progress Bars for Display
-                Transform progressBars = curr.Find("Progress Bars");
-
-                // Update progress bars if tiered
-                if (a is A_Tiered)
+                for (int i = 0; i < AchievementManager.Instance().achievements.Count; i++)
                 {
-                    // cast 
-                    A_Tiered at = (A_Tiered)a;
-                    int currentValue = at.currentValue;
-                    for (int j = 0; j < at.activationValues.Length; j++)
+                    // Get Achievement
+                    Achievement a = AchievementManager.Instance().achievements[i];
+                    // Get Achievement Display
+                    Transform curr = achievementContent.transform.GetChild(i);
+                    // Get Progress Bars for Display
+                    Transform progressBars = curr.Find("Progress Bars");
+
+                    // Update progress bars if tiered
+                    if (a is A_Tiered)
                     {
-                        // Current working bar
-                        Transform bar = progressBars.GetChild(j);
+                        // cast 
+                        A_Tiered at = (A_Tiered)a;
+                        int currentValue = at.currentValue;
+                        for (int j = 0; j < at.activationValues.Length; j++)
+                        {
+                            // Current working bar
+                            Transform bar = progressBars.GetChild(j);
 
-                        // This tiers max
-                        int max = at.activationValues[j];
+                            // This tiers max
+                            int max = at.activationValues[j];
 
-                        // Check if this bar needs scaled at all -> Zero the scale
-                        if (j > 0 && currentValue < at.activationValues[j - 1])
-                        {
-                            bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
-                        }
-                        // Check if this bar has been met/exceeded -> Max the scale
-                        else if (currentValue >= max)
-                        {
-                            bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
-                        }
-                        // Set the bar scale
-                        else
-                        {
-                            float percent = 0f;
-                            if (j > 0)
+                            // Check if this bar needs scaled at all -> Zero the scale
+                            if (j > 0 && currentValue < at.activationValues[j - 1])
                             {
-                                int delta = at.activationValues[j - 1];
-                                percent = (currentValue - delta) / ((float)max - delta);
+                                bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
+                            }
+                            // Check if this bar has been met/exceeded -> Max the scale
+                            else if (currentValue >= max)
+                            {
+                                bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+                            }
+                            // Set the bar scale
+                            else
+                            {
+                                float percent = 0f;
+                                if (j > 0)
+                                {
+                                    int delta = at.activationValues[j - 1];
+                                    percent = (currentValue - delta) / ((float)max - delta);
+                                }
+                                else
+                                {
+                                    percent = currentValue / (float)max;
+                                }
+                                /*float percent = currentValue / (float)max;*/
+                                bar.localScale = new Vector3(percent, bar.localScale.y, bar.localScale.z);
+                            }
+                        }
+                    }
+                    else if (a is A_Repeatable)
+                    {
+                        A_Repeatable ar = (A_Repeatable)a;
+                        int currentValue = ar.currentValue % ar.repeatValue;
+                        for (int j = 0; j < ar.repeatValue; j++)
+                        {
+                            // Current working bar
+                            Transform bar = progressBars.GetChild(j);
+
+                            // set bar to full if past or at progress
+                            if (j < currentValue)
+                            {
+                                bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
                             }
                             else
                             {
-                                percent = currentValue / (float)max;
+                                bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
                             }
-                            /*float percent = currentValue / (float)max;*/
-                            bar.localScale = new Vector3(percent, bar.localScale.y, bar.localScale.z);
                         }
                     }
-                }
-                else if (a is A_Repeatable)
-                {
-                    A_Repeatable ar = (A_Repeatable)a;
-                    int currentValue = ar.currentValue % ar.repeatValue;
-                    for (int j = 0; j < ar.repeatValue; j++)
+                    /** Set fields in display */
+                    // Name
+                    curr.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
+                    // Description
+                    curr.transform.Find("Description").gameObject.GetComponent<TMP_Text>().text = a.ToString();
+                    // Current Count
+                    curr.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
+                    // Next Count & set finished
+                    if (a is A_Tiered)
                     {
-                        // Current working bar
-                        Transform bar = progressBars.GetChild(j);
-
-                        // set bar to full if past or at progress
-                        if (j < currentValue)
+                        A_Tiered at = (A_Tiered)a;
+                        if (!at.IsComplete() && at.nextTier < at.activationValues.Length)
                         {
-                            bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+                            curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + at.activationValues[at.nextTier].ToString();
+                            curr.transform.Find("Finished").gameObject.SetActive(false);
                         }
                         else
                         {
-                            bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
+                            curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
+                            curr.transform.Find("Finished").gameObject.SetActive(true);
                         }
                     }
                 }
-                /** Set fields in display */
-                // Name
-                curr.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
-                // Description
-                curr.transform.Find("Description").gameObject.GetComponent<TMP_Text>().text = a.ToString();
-                // Current Count
-                curr.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
-                // Next Count & set finished
-                if (a is A_Tiered)
+            }
+
+            // Update Weapon display
+            if (SelectionMenu.activeSelf)
+            {
+                foreach (GameObject button in weaponButtons)
                 {
-                    A_Tiered at = (A_Tiered)a;
-                    if (!at.IsComplete() && at.nextTier < at.activationValues.Length)
+                    if (EventSystem.current.currentSelectedGameObject == button)
                     {
-                        curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + at.activationValues[at.nextTier].ToString();
-                        curr.transform.Find("Finished").gameObject.SetActive(false);
-                    }
-                    else
-                    {
-                        curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
-                        curr.transform.Find("Finished").gameObject.SetActive(true);
+                        WeaponButtonContatiner wbc = button.GetComponent<WeaponButtonContatiner>();
+                        Weapon weapon = wbc.weapon;
+                        descriptionBox.SetActive(true);
+                        Transform nameAndDesc = descriptionBox.transform.Find("Name and Desc");
+                        nameAndDesc.Find("Name").GetComponent<Text>().text = weapon.weaponName;
+                        nameAndDesc.Find("Description").GetComponent<Text>().text = weapon.description;
+
+                        // Get attribute holder
+                        Transform attributes = descriptionBox.transform.Find("Attributes");
+                        Transform dmg = attributes.Find("Damage");
+                        Transform recoil = attributes.Find("Recoil");
+                        Transform pushBack = attributes.Find("PushBack");
+                        Transform variable = attributes.Find("VariableAttribute");
+                        Transform ammoCap = attributes.Find("AmmoCap");
+                        Transform reloadSpeed = attributes.Find("ReloadSpeed");
+
+                        // Zero vector
+                        Vector3 zeroed = new Vector3(0f, 0f, 0f);
+
+                        if (weapon is W_AutoGun)
+                        {
+                            // Set damage bar
+                            Vector3 damageBar = new Vector3(wbc.damage / maxAutoDamage, 1f, 1f);
+                            if (wbc.damage > 0)
+                            {
+                                dmg.Find("BarBack").Find("Positive").localScale = damageBar;
+                                dmg.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.damage < 0)
+                            {
+                                dmg.Find("BarBack").Find("Negative").localScale = damageBar;
+                                dmg.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set recoil bar
+                            Vector3 recoilBar = new Vector3(wbc.recoil / maxAutoRecoil, 1f, 1f);
+                            if (wbc.recoil > 0)
+                            {
+                                recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
+                                recoil.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.recoil < 0)
+                            {
+                                recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
+                                recoil.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set pushback bar
+                            Vector3 pushbackBar = new Vector3(wbc.pushback / maxAutoPushback, 1f, 1f);
+                            if (wbc.pushback > 0)
+                            {
+                                pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
+                                pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.pushback < 0)
+                            {
+                                pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
+                                pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set Variable bar
+                            variable.Find("Text").GetComponent<Text>().text = "Fire Rate";
+                            variable.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.variable / maxFireRate, 1f, 1f);
+
+                            // Set ammo capacity bar
+                            ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.ammoCapacity / maxAutoAmmo, 1f, 1f);
+
+                            // Set reload speed bar
+                            reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.reloadSpeed / maxAutoReloadSpeed, 1f, 1f);
+                        }
+                        else if (weapon is W_SemiGun)
+                        {
+                            // Set damage bar
+                            Vector3 damageBar = new Vector3(wbc.damage / maxSemiDamage, 1f, 1f);
+                            if (wbc.damage > 0)
+                            {
+                                dmg.Find("BarBack").Find("Positive").localScale = damageBar;
+                                dmg.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.damage < 0)
+                            {
+                                dmg.Find("BarBack").Find("Negative").localScale = damageBar;
+                                dmg.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set recoil bar
+                            Vector3 recoilBar = new Vector3(wbc.recoil / maxSemiRecoil, 1f, 1f);
+                            if (wbc.recoil > 0)
+                            {
+                                recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
+                                recoil.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.recoil < 0)
+                            {
+                                recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
+                                recoil.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set pushback bar
+                            Vector3 pushbackBar = new Vector3(wbc.pushback / maxSemiPushback, 1f, 1f);
+                            if (wbc.pushback > 0)
+                            {
+                                pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
+                                pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.pushback < 0)
+                            {
+                                pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
+                                pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set Variable bar
+                            variable.Find("Text").GetComponent<Text>().text = "Scatter Count";
+                            variable.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.variable / maxScatterCount, 1f, 1f);
+
+                            // Set ammo capacity bar
+                            ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.ammoCapacity / maxSemiAmmo, 1f, 1f);
+
+                            // Set reload speed bar
+                            reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.reloadSpeed / maxSemiReloadSpeed, 1f, 1f);
+                        }
+                        else if (weapon is W_Launcher)
+                        {
+                            // Set damage bar
+                            Vector3 damageBar = new Vector3(wbc.damage / maxLauncherDamage, 1f, 1f);
+                            if (wbc.damage > 0)
+                            {
+                                dmg.Find("BarBack").Find("Positive").localScale = damageBar;
+                                dmg.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.damage < 0)
+                            {
+                                dmg.Find("BarBack").Find("Negative").localScale = damageBar;
+                                dmg.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set recoil bar
+                            Vector3 recoilBar = new Vector3(wbc.recoil / maxLauncherRecoil, 1f, 1f);
+                            if (wbc.recoil > 0)
+                            {
+                                recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
+                                recoil.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.recoil < 0)
+                            {
+                                recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
+                                recoil.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set pushback bar
+                            Vector3 pushbackBar = new Vector3(wbc.pushback / maxLauncherPushback, 1f, 1f);
+                            if (wbc.pushback > 0)
+                            {
+                                pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
+                                pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.pushback < 0)
+                            {
+                                pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
+                                pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set Variable bar
+                            variable.Find("Text").GetComponent<Text>().text = "Projectile Power";
+                            variable.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.variable / maxProjectilePower, 1f, 1f);
+
+                            // Set ammo capacity bar
+                            ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.ammoCapacity / maxLauncherAmmo, 1f, 1f);
+
+                            // Set reload speed bar
+                            reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.reloadSpeed / maxLauncherReloadSpeed, 1f, 1f);
+                        }
+                        else if (weapon is W_Sprayer)
+                        {
+                            // Set damage bar
+                            Vector3 damageBar = new Vector3(wbc.damage / maxSprayerDamage, 1f, 1f);
+                            if (wbc.damage > 0)
+                            {
+                                dmg.Find("BarBack").Find("Positive").localScale = damageBar;
+                                dmg.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.damage < 0)
+                            {
+                                dmg.Find("BarBack").Find("Negative").localScale = damageBar;
+                                dmg.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set recoil bar
+                            Vector3 recoilBar = new Vector3(wbc.recoil / maxSprayerRecoil, 1f, 1f);
+                            if (wbc.recoil > 0)
+                            {
+                                recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
+                                recoil.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.recoil < 0)
+                            {
+                                recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
+                                recoil.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set pushback bar
+                            Vector3 pushbackBar = new Vector3(wbc.pushback / maxSprayerPushback, 1f, 1f);
+                            if (wbc.pushback > 0)
+                            {
+                                pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
+                                pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
+                            }
+                            else if (wbc.pushback < 0)
+                            {
+                                pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
+                                pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
+                            }
+
+                            // Set Variable bar
+                            variable.Find("Text").GetComponent<Text>().text = "Sprayer Distance";
+                            variable.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.variable / maxSprayDistance, 1f, 1f);
+
+                            // Set ammo capacity bar
+                            ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.ammoCapacity / maxSprayerAmmo, 1f, 1f);
+
+                            // Set reload speed bar
+                            reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.reloadSpeed / maxSprayerReloadSpeed, 1f, 1f);
+                        }
                     }
                 }
             }
         }
-
-        // Update Weapon display
-        if (SelectionMenu.activeSelf)
-		{
-            foreach (GameObject button in weaponButtons)
-			{
-                if (EventSystem.current.currentSelectedGameObject == button)
-				{
-                    WeaponButtonContatiner  wbc = button.GetComponent<WeaponButtonContatiner>();
-                    Weapon weapon = wbc.weapon;
-                    descriptionBox.SetActive(true);
-                    Transform nameAndDesc = descriptionBox.transform.Find("Name and Desc");
-                    nameAndDesc.Find("Name").GetComponent<Text>().text = weapon.weaponName;
-                    nameAndDesc.Find("Description").GetComponent<Text>().text = weapon.description;
-
-                    // Get attribute holder
-                    Transform attributes = descriptionBox.transform.Find("Attributes");
-                    Transform dmg = attributes.Find("Damage");
-                    Transform recoil = attributes.Find("Recoil");
-                    Transform pushBack = attributes.Find("PushBack");
-                    Transform variable = attributes.Find("VariableAttribute");
-                    Transform ammoCap = attributes.Find("AmmoCap");
-                    Transform reloadSpeed = attributes.Find("ReloadSpeed");
-
-                    // Zero vector
-                    Vector3 zeroed = new Vector3(0f, 0f, 0f);
-
-                    // Set damage bar
-                    Vector3 damageBar = new Vector3(wbc.damage / maxDamage, 1f, 1f);
-                    if (wbc.damage > 0)
-                    {
-                        dmg.Find("BarBack").Find("Positive").localScale = damageBar;
-                        dmg.Find("BarBack").Find("Negative").localScale = zeroed;
-                    }
-                    else if (wbc.damage < 0)
-					{
-                        dmg.Find("BarBack").Find("Negative").localScale = damageBar;
-                        dmg.Find("BarBack").Find("Positive").localScale = zeroed;
-                    }
-
-                    // Set recoil bar
-                    Vector3 recoilBar = new Vector3(wbc.recoil / maxRecoil, 1f, 1f);
-                    if (wbc.recoil > 0)
-                    {
-                        recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
-                        recoil.Find("BarBack").Find("Negative").localScale = zeroed;
-                    }
-                    else if (wbc.recoil < 0)
-                    {
-                        recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
-                        recoil.Find("BarBack").Find("Positive").localScale = zeroed;
-                    }
-
-                    // Set pushback bar
-                    Vector3 pushbackBar = new Vector3(wbc.pushback / maxPushback, 1f, 1f);
-                    if (wbc.pushback > 0)
-                    {
-                        pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
-                        pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
-                    }
-                    else if (wbc.pushback < 0)
-                    {
-                        pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
-                        pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
-                    }
-
-                    // Set variable bar
-                    string variableText = "{{INVALID}}";
-                    float variableMax = 0;
-                    if (weapon is W_AutoGun)
-                    {
-                        variableText = "Fire Rate";
-                        variableMax = maxFireRate;
-                    }
-                    else if (weapon is W_SemiGun)
-                    {
-                        variableText = "Scatter Count";
-                        variableMax = maxScatterCount;
-                    }
-                    else if (weapon is W_Launcher)
-                    {
-                        variableText = "Projectile Power";
-                        variableMax = maxProjectilePower;
-                    }
-                    else if (weapon is W_Sprayer)
-					{
-                        variableText = "Sprayer Distance";
-                        variableMax = maxSprayDistance;
-					}
-
-                    variable.Find("Text").GetComponent<Text>().text = variableText;
-                    variable.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.variable / variableMax, 1f, 1f);
-
-                    // Set ammo capacity bar
-                    ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.ammoCapacity / maxAmmo, 1f, 1f);
-
-                    // Set reload speed bar
-                    reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.reloadSpeed / maxReloadSpeed, 1f, 1f);
-
-                }
-			}
-		}
 
     }
 
@@ -663,6 +844,29 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to OfflineFirst
         EventSystem.current.SetSelectedGameObject(trainingFirstButton);
+    }
+    
+    /// <summary>
+    /// Turns the OfflineMenu active 
+	/// Clears and sets 1st button to active
+    /// </summary>
+    public void LocalMode()
+    {
+        // set inactive if active
+        if (LocalPregameMenu.activeSelf)
+		{
+            LocalPregameMenu.SetActive( false );
+            MainMenu.SetActive(true);
+		}
+
+        LocalMenu.SetActive( true );
+        //setActiveMenu( OfflineMenu );
+        currentMenu = LocalMenu;
+
+        // Clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        // Set button to OfflineFirst
+        EventSystem.current.SetSelectedGameObject(localFirstButton);
     }
 
     /// <summary>
@@ -792,18 +996,32 @@ public class MenuManager : MonoBehaviour
     /// <param name="mapName"> Name of the Map choosen </param>
     public void Pregame( string mapName )
 	{
-        PregameMenu.SetActive( true );
-        MainMenu.SetActive(false);
-        TrainingMenu.SetActive(false);
+        if (TrainingMenu.activeSelf)
+        {
+            PregameMenu.SetActive(true);
+            MainMenu.SetActive(false);
+            TrainingMenu.SetActive(false);
+            // Clear selected object
+            EventSystem.current.SetSelectedGameObject(null);
+            // Set button to LoadoutFirst
+            EventSystem.current.SetSelectedGameObject(pregameFirstButton);
+        }
+        else if (LocalMenu.activeSelf)
+        {
+            LocalPregameMenu.SetActive(true);
+            MainMenu.SetActive(false);
+            LocalMenu.SetActive(false);
+            // Clear selected object
+            EventSystem.current.SetSelectedGameObject(null);
+            // Set button to LoadoutFirst
+            EventSystem.current.SetSelectedGameObject(localPregameFirstButton);
+        }
         //setActiveMenu( PregameMenu );
         currentMenu = PregameMenu;
 
         this.mapName = mapName;
 
-        // Clear selected object
-        EventSystem.current.SetSelectedGameObject(null);
-        // Set button to LoadoutFirst
-        EventSystem.current.SetSelectedGameObject(pregameFirstButton);
+        
     }
 
     /// <summary>
@@ -982,5 +1200,32 @@ public class MenuManager : MonoBehaviour
                 curr.transform.Find("Finished").gameObject.SetActive(true);
             }
         }
+    }
+
+    // Count of readied players
+    private int readyCount = 0;
+
+    /// <summary>
+    /// Readies the player for returning to the main menu
+    /// </summary>
+    /// <param name="button"> Button pressed </param>
+    public void ReadyUp( Button button )
+    {
+        // Increment Count
+        readyCount++;
+
+        // Disable the button
+        button.interactable = false;
+
+        // check to see if all players readied
+        if (readyCount >= GameManager.Instance().localPlayers.Length)
+        {
+            ReturnToMain();
+        }
+    }
+
+    private void AssignMaxes()
+    {
+        /*for (int i = 0; i < order.)*/
     }
 }
