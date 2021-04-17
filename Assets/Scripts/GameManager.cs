@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
     [Tooltip("Local players within the scene")]
     public Player[] localPlayers = new Player[4];
 
+    public Main_Camera dynamicCamera;
+
     public Player ai;
     private AI_Controller aiC;
 

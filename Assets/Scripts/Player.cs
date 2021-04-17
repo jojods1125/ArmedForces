@@ -213,6 +213,7 @@ public class Player : MonoBehaviour
         // Retrieves an ID from GameManager
         int newID = GameManager.Instance().ClientConnected();
         GameManager.Instance().localPlayers[newID] = this;
+        GameManager.Instance().dynamicCamera.targets.Add(gameObject);
 
         this.playerID = newID;
         lastAttackedID = this.playerID;

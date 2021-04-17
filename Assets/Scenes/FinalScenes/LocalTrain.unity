@@ -1204,33 +1204,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 56.708027, y: 4.3703117, z: 40.26562}
   m_Center: {x: 0.21310054, y: 38.32257, z: 0.0913901}
---- !u!1 &898967096 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4426586938317923157, guid: dc4395658a3bfed469f134745a7b206c, type: 3}
-  m_PrefabInstance: {fileID: 4426586938970721828}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &898967097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 898967096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69d48ccf7d50bb24ea465d0a3f46c62c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targets:
-  - {fileID: 1455985268}
-  - {fileID: 2004755871}
-  offset: {x: 0, y: 10, z: -60}
-  smoothTime: 0.1
-  minZoom: 40
-  maxZoom: 12
-  zoomLimiter: 70
-  mapX: 16
-  mapY: 8
 --- !u!1 &920174014
 GameObject:
   m_ObjectHideFlags: 0
@@ -2316,5 +2289,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 5433465853004697065, guid: dc4395658a3bfed469f134745a7b206c, type: 3}
+      propertyPath: targets.Array.data[0]
+      value: 
+      objectReference: {fileID: 1455985268}
+    - target: {fileID: 5433465853004697065, guid: dc4395658a3bfed469f134745a7b206c, type: 3}
+      propertyPath: targets.Array.data[1]
+      value: 
+      objectReference: {fileID: 2004755871}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc4395658a3bfed469f134745a7b206c, type: 3}
