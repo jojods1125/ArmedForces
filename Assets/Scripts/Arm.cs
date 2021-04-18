@@ -504,6 +504,8 @@ public class Arm : MonoBehaviour
     // Initializes the loadout of the arm based on it being the front arm
     public void FrontArmInitialize()
     {
+
+        // player.SetArms();
         weaponA = player.frontArmWeapons[0];
         weaponB = player.frontArmWeapons[1];
         weaponC = player.frontArmWeapons[2];
@@ -520,6 +522,7 @@ public class Arm : MonoBehaviour
     // Initializes the loadout of the arm based on it being the back arm
     public void BackArmInitialize()
     {
+        // player.SetArms();
         weaponA = player.backArmWeapons[0];
         weaponB = player.backArmWeapons[1];
         weaponC = player.backArmWeapons[2];

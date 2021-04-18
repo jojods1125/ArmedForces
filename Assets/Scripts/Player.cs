@@ -228,6 +228,9 @@ public class Player : MonoBehaviour
             // Tells the server that the Player is connected
             PlayerConnected();
 
+            // Assign Weapon Loadouts from Weapon Managaer
+            SetArms();
+
             uiManager.ui_Players[playerID].UpdateWeaponIcons(playerID);
             // If UI exists (only local player), connect health bar and weapon UI
             //if (uiManager && matchType != MatchType.Local)
@@ -238,6 +241,8 @@ public class Player : MonoBehaviour
             //}
         }
     }
+
+
 
     public void Activate()
     {
@@ -263,6 +268,17 @@ public class Player : MonoBehaviour
             //if (uiManager) uiManager.ui_Players[playerID].UpdateHealthBar(currHealth / maxHealth);
     }
 
+    /// <summary>
+    /// Sets the arms based on the loadouts saved
+    /// </summary>
+    public void SetArms()
+    {
+        WeaponManager.Instance().LoadLoadout();
+        backArmWeapons = WeaponManager.Instance().playerLoadouts[playerID][0];
+        arms[1].BackArmInitialize();
+        frontArmWeapons = WeaponManager.Instance().playerLoadouts[playerID][1];
+        arms[0].FrontArmInitialize();
+    }
 
     /// <summary>
     /// Tells the server to update the appearance of both Arms

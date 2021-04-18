@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
-
+using UnityEngine.InputSystem;
 
 public enum MatchType
 {
@@ -120,6 +120,20 @@ public class GameManager : MonoBehaviour
         //    ai.Activate();
         //    aiC = ai.GetComponent<AI_Controller>();
         //}
+
+        if (matchType == MatchType.Local)
+        {
+            PlayerInputManager pim = GetComponent<PlayerInputManager>();
+            for (int i = 0; i < MenuManager.Instance().numPlayers; i++)
+            {
+                PlayerInput pi = pim.JoinPlayer(i, -1, "PlayerControls", InputSystem.devices[i + 2]);
+                // Calls respawn in player
+                if (pi.gameObject.GetComponent<Player_Networked>() != null)
+                    pi.gameObject.GetComponent<Player_Networked>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
+                else if (pi.gameObject.GetComponent<Player>() != null)
+                    pi.gameObject.GetComponent<Player>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
+            }
+        }
         
     }
 
@@ -234,6 +248,11 @@ public class GameManager : MonoBehaviour
 
             // Temporary for now
             AchievementManager.Instance().OnEvent(AchievementType.games);
+            Scene main = SceneManager.GetSceneByName("L_MainMenu");
+            // Get the Children of Scene, Child 6 is "Canvas:, Child 0 is "Menus", Find the postgame screen, set it active
+            if (main.IsValid())
+                main.GetRootGameObjects()[6].transform.GetChild(0).Find("Postgame Results Screen").gameObject.SetActive(true);
+
             SceneManager.LoadScene("L_MainMenu");
         }
     }
