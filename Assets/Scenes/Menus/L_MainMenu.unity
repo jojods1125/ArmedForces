@@ -11253,30 +11253,30 @@ MonoBehaviour:
   weaponPrefab: {fileID: 4970655156858171585, guid: 7802398b723f95e4f9ae03c2641fc202, type: 3}
   descriptionBox: {fileID: 336439949}
   numPlayers: 0
-  maxAutoDamage: 15
-  maxAutoRecoil: 25
-  maxAutoPushback: 6
-  maxAutoAmmo: 300
-  maxAutoReloadSpeed: 100
-  maxFireRate: 25
-  maxSemiDamage: 1000
-  maxSemiRecoil: 3000
+  maxAutoDamage: 0
+  maxAutoRecoil: 0
+  maxAutoPushback: 0
+  maxAutoAmmo: 0
+  maxAutoReloadSpeed: 0
+  maxFireRate: 0
+  maxSemiDamage: 0
+  maxSemiRecoil: 0
   maxSemiPushback: 0
   maxSemiAmmo: 0
   maxSemiReloadSpeed: 0
-  maxScatterCount: 10
+  maxScatterCount: 0
   maxLauncherDamage: 0
   maxLauncherRecoil: 0
   maxLauncherPushback: 0
   maxLauncherAmmo: 0
   maxLauncherReloadSpeed: 0
-  maxProjectilePower: 1000
+  maxProjectilePower: 0
   maxSprayerDamage: 0
   maxSprayerRecoil: 0
   maxSprayerPushback: 0
   maxSprayerAmmo: 0
   maxSprayerReloadSpeed: 0
-  maxSprayDistance: 5
+  maxSprayDistance: 0
   playerScores: {fileID: 0}
 --- !u!4 &1179617425
 Transform:

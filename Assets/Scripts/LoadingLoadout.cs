@@ -258,13 +258,14 @@ public class LoadingLoadout : MonoBehaviour
         startButton.interactable = true;
     }
 
-    private void Update()
+/*    private void Update()
     {
         for (int i = 0; i < MenuManager.Instance().numPlayers; i++)
         {
             // Find Description Box
             GameObject selection = transform.Find("Player Loadout " + i).Find("Selection").gameObject;
             GameObject descriptionBox = selection.transform.Find("Description Box").gameObject;
+            
 
             // Update Weapon display
             if (selection.gameObject.activeSelf)
@@ -502,4 +503,4 @@ public class LoadingLoadout : MonoBehaviour
             }
         }
     }
-}
+*/}

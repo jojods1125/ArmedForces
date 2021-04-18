@@ -366,6 +366,9 @@ public class MenuManager : MonoBehaviour
             }
         }   // Done with Sorting
 
+        // Set the Maxes
+        GetMaxes();
+
         // Construct the display
         foreach (KeyValuePair<string, Dictionary<WeaponRarity, List<Weapon>>> type in order)
         {
@@ -427,7 +430,7 @@ public class MenuManager : MonoBehaviour
                         wbc.damage = semi.bulletDamage;
                         wbc.recoil = semi.recoil;
                         wbc.pushback = semi.bulletPushback;
-                        wbc.variable = 1f / semi.burstCount;
+                        wbc.variable = semi.burstCount;
                         wbc.ammoCapacity = semi.ammoCapacity;
                         wbc.reloadSpeed = 1f / semi.reloadRate;
                     }
@@ -437,7 +440,7 @@ public class MenuManager : MonoBehaviour
                         wbc.damage = launcher.coreDamage;
                         wbc.recoil = launcher.recoil;
                         wbc.pushback = launcher.corePushback;
-                        wbc.variable = 1f / launcher.projectilePower;
+                        wbc.variable = launcher.projectilePower;
                         wbc.ammoCapacity = launcher.ammoCapacity;
                         wbc.reloadSpeed = 1f / launcher.reloadRate;
                     }
@@ -447,7 +450,7 @@ public class MenuManager : MonoBehaviour
                         wbc.damage = sprayer.bulletDamage;
                         wbc.recoil = sprayer.recoil;
                         wbc.pushback = sprayer.bulletPushback;
-                        wbc.variable = 1f / sprayer.sprayDistance;
+                        wbc.variable = sprayer.sprayDistance;
                         wbc.ammoCapacity = sprayer.ammoCapacity;
                         wbc.reloadSpeed = 1f / sprayer.reloadRate;
                     }
@@ -588,240 +591,6 @@ public class MenuManager : MonoBehaviour
                         {
                             curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
                             curr.transform.Find("Finished").gameObject.SetActive(true);
-                        }
-                    }
-                }
-            }
-
-            // Update Weapon display
-            if (SelectionMenu.activeSelf)
-            {
-                foreach (GameObject button in weaponButtons)
-                {
-                    if (EventSystem.current.currentSelectedGameObject == button)
-                    {
-                        WeaponButtonContatiner wbc = button.GetComponent<WeaponButtonContatiner>();
-                        Weapon weapon = wbc.weapon;
-                        descriptionBox.SetActive(true);
-                        Transform nameAndDesc = descriptionBox.transform.Find("Name and Desc");
-                        nameAndDesc.Find("Name").GetComponent<Text>().text = weapon.weaponName;
-                        nameAndDesc.Find("Description").GetComponent<Text>().text = weapon.description;
-
-                        // Get attribute holder
-                        Transform attributes = descriptionBox.transform.Find("Attributes");
-                        Transform dmg = attributes.Find("Damage");
-                        Transform recoil = attributes.Find("Recoil");
-                        Transform pushBack = attributes.Find("PushBack");
-                        Transform variable = attributes.Find("VariableAttribute");
-                        Transform ammoCap = attributes.Find("AmmoCap");
-                        Transform reloadSpeed = attributes.Find("ReloadSpeed");
-
-                        // Zero vector
-                        Vector3 zeroed = new Vector3(0f, 0f, 0f);
-
-                        if (weapon is W_AutoGun)
-                        {
-                            // Set damage bar
-                            Vector3 damageBar = new Vector3(wbc.damage / maxAutoDamage, 1f, 1f);
-                            if (wbc.damage > 0)
-                            {
-                                dmg.Find("BarBack").Find("Positive").localScale = damageBar;
-                                dmg.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.damage < 0)
-                            {
-                                dmg.Find("BarBack").Find("Negative").localScale = damageBar;
-                                dmg.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set recoil bar
-                            Vector3 recoilBar = new Vector3(wbc.recoil / maxAutoRecoil, 1f, 1f);
-                            if (wbc.recoil > 0)
-                            {
-                                recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
-                                recoil.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.recoil < 0)
-                            {
-                                recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
-                                recoil.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set pushback bar
-                            Vector3 pushbackBar = new Vector3(wbc.pushback / maxAutoPushback, 1f, 1f);
-                            if (wbc.pushback > 0)
-                            {
-                                pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
-                                pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.pushback < 0)
-                            {
-                                pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
-                                pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set Variable bar
-                            variable.Find("Text").GetComponent<Text>().text = "Fire Rate";
-                            variable.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.variable / maxFireRate, 1f, 1f);
-
-                            // Set ammo capacity bar
-                            ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.ammoCapacity / maxAutoAmmo, 1f, 1f);
-
-                            // Set reload speed bar
-                            reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.reloadSpeed / maxAutoReloadSpeed, 1f, 1f);
-                        }
-                        else if (weapon is W_SemiGun)
-                        {
-                            // Set damage bar
-                            Vector3 damageBar = new Vector3(wbc.damage / maxSemiDamage, 1f, 1f);
-                            if (wbc.damage > 0)
-                            {
-                                dmg.Find("BarBack").Find("Positive").localScale = damageBar;
-                                dmg.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.damage < 0)
-                            {
-                                dmg.Find("BarBack").Find("Negative").localScale = damageBar;
-                                dmg.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set recoil bar
-                            Vector3 recoilBar = new Vector3(wbc.recoil / maxSemiRecoil, 1f, 1f);
-                            if (wbc.recoil > 0)
-                            {
-                                recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
-                                recoil.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.recoil < 0)
-                            {
-                                recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
-                                recoil.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set pushback bar
-                            Vector3 pushbackBar = new Vector3(wbc.pushback / maxSemiPushback, 1f, 1f);
-                            if (wbc.pushback > 0)
-                            {
-                                pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
-                                pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.pushback < 0)
-                            {
-                                pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
-                                pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set Variable bar
-                            variable.Find("Text").GetComponent<Text>().text = "Scatter Count";
-                            variable.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.variable / maxScatterCount, 1f, 1f);
-
-                            // Set ammo capacity bar
-                            ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.ammoCapacity / maxSemiAmmo, 1f, 1f);
-
-                            // Set reload speed bar
-                            reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.reloadSpeed / maxSemiReloadSpeed, 1f, 1f);
-                        }
-                        else if (weapon is W_Launcher)
-                        {
-                            // Set damage bar
-                            Vector3 damageBar = new Vector3(wbc.damage / maxLauncherDamage, 1f, 1f);
-                            if (wbc.damage > 0)
-                            {
-                                dmg.Find("BarBack").Find("Positive").localScale = damageBar;
-                                dmg.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.damage < 0)
-                            {
-                                dmg.Find("BarBack").Find("Negative").localScale = damageBar;
-                                dmg.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set recoil bar
-                            Vector3 recoilBar = new Vector3(wbc.recoil / maxLauncherRecoil, 1f, 1f);
-                            if (wbc.recoil > 0)
-                            {
-                                recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
-                                recoil.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.recoil < 0)
-                            {
-                                recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
-                                recoil.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set pushback bar
-                            Vector3 pushbackBar = new Vector3(wbc.pushback / maxLauncherPushback, 1f, 1f);
-                            if (wbc.pushback > 0)
-                            {
-                                pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
-                                pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.pushback < 0)
-                            {
-                                pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
-                                pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set Variable bar
-                            variable.Find("Text").GetComponent<Text>().text = "Projectile Power";
-                            variable.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.variable / maxProjectilePower, 1f, 1f);
-
-                            // Set ammo capacity bar
-                            ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.ammoCapacity / maxLauncherAmmo, 1f, 1f);
-
-                            // Set reload speed bar
-                            reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.reloadSpeed / maxLauncherReloadSpeed, 1f, 1f);
-                        }
-                        else if (weapon is W_Sprayer)
-                        {
-                            // Set damage bar
-                            Vector3 damageBar = new Vector3(wbc.damage / maxSprayerDamage, 1f, 1f);
-                            if (wbc.damage > 0)
-                            {
-                                dmg.Find("BarBack").Find("Positive").localScale = damageBar;
-                                dmg.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.damage < 0)
-                            {
-                                dmg.Find("BarBack").Find("Negative").localScale = damageBar;
-                                dmg.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set recoil bar
-                            Vector3 recoilBar = new Vector3(wbc.recoil / maxSprayerRecoil, 1f, 1f);
-                            if (wbc.recoil > 0)
-                            {
-                                recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
-                                recoil.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.recoil < 0)
-                            {
-                                recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
-                                recoil.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set pushback bar
-                            Vector3 pushbackBar = new Vector3(wbc.pushback / maxSprayerPushback, 1f, 1f);
-                            if (wbc.pushback > 0)
-                            {
-                                pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
-                                pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
-                            }
-                            else if (wbc.pushback < 0)
-                            {
-                                pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
-                                pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
-                            }
-
-                            // Set Variable bar
-                            variable.Find("Text").GetComponent<Text>().text = "Sprayer Distance";
-                            variable.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.variable / maxSprayDistance, 1f, 1f);
-
-                            // Set ammo capacity bar
-                            ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.ammoCapacity / maxSprayerAmmo, 1f, 1f);
-
-                            // Set reload speed bar
-                            reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.reloadSpeed / maxSprayerReloadSpeed, 1f, 1f);
                         }
                     }
                 }
@@ -1272,16 +1041,58 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-/*    public Dictionary<string, Dictionary<string, float>> GetMaxes()
+    public void GetMaxes()
     {
-        Dictionary<string, Dictionary<string, float>> maxes = new Dictionary<string, Dictionary<string, float>>();
         foreach (KeyValuePair<string, Dictionary<WeaponRarity, List<Weapon>>> type in order)
         {
-            maxes[type.Key] = new Dictionary<string, float>();
-            Dictionary<WeaponRarity, List<Weapon>> rarity = type.Value;
-            foreach ()
+            foreach (KeyValuePair<WeaponRarity, List<Weapon>> rarity in type.Value)
+            {
+                foreach (Weapon w in rarity.Value)
+                {
+                    switch (type.Key)
+                    {
+                        case "Automatic":
+                            W_AutoGun wag = (W_AutoGun)w;
+                            maxAutoDamage = Mathf.Max(maxAutoDamage, wag.bulletDamage);
+                            maxAutoRecoil = Mathf.Max(maxAutoRecoil, wag.recoil);
+                            maxAutoPushback = Mathf.Max(maxAutoPushback, wag.bulletPushback);
+                            maxFireRate = Mathf.Max(maxFireRate, 1 / wag.fireRate);   // invert to get usable value
+                            maxAutoAmmo = Mathf.Max(maxAutoAmmo, wag.ammoCapacity);
+                            maxAutoReloadSpeed = Mathf.Max(maxAutoReloadSpeed, 1 / wag.reloadRate); // invert to get usable value
+                            break;
+                        case "Semiautomatic":
+                            W_SemiGun sag = (W_SemiGun)w;
+                            maxSemiDamage = Mathf.Max(maxSemiDamage, sag.bulletDamage);
+                            maxSemiRecoil = Mathf.Max(maxSemiRecoil, sag.recoil);
+                            maxSemiPushback = Mathf.Max(maxSemiPushback, sag.bulletPushback);
+                            maxScatterCount = Mathf.Max(maxScatterCount, sag.burstCount);
+                            maxSemiAmmo = Mathf.Max(maxSemiAmmo, sag.ammoCapacity);
+                            maxSemiReloadSpeed = Mathf.Max(maxSemiReloadSpeed, 1 / sag.reloadRate); // invert to get usable value
+                            break;
+                        case "Launcher":
+                            W_Launcher l = (W_Launcher)w;
+                            maxLauncherDamage = Mathf.Max(maxLauncherDamage, l.coreDamage);
+                            maxLauncherRecoil = Mathf.Max(maxLauncherRecoil, l.recoil);
+                            maxLauncherPushback = Mathf.Max(maxLauncherPushback, l.corePushback);
+                            maxProjectilePower = Mathf.Max(maxProjectilePower, l.projectilePower);
+                            maxLauncherAmmo = Mathf.Max(maxLauncherAmmo, l.ammoCapacity);
+                            maxLauncherReloadSpeed = Mathf.Max(maxLauncherReloadSpeed, 1 / l.reloadRate); // invert to get usable value
+                            break;
+                        case "Sprayer":
+                            W_Sprayer s = (W_Sprayer)w;
+                            maxSprayerDamage = Mathf.Max(maxSprayerDamage, s.bulletDamage);
+                            maxSprayerRecoil = Mathf.Max(maxSprayerRecoil, s.recoil);
+                            maxSprayerPushback = Mathf.Max(maxSprayerPushback, s.bulletPushback);
+                            maxSprayDistance = Mathf.Max(maxSprayDistance, s.sprayDistance);
+                            maxSprayerAmmo = Mathf.Max(maxSprayerAmmo, s.ammoCapacity);
+                            maxSprayerReloadSpeed = Mathf.Max(maxSprayerReloadSpeed, 1 / s.reloadRate); // invert to get usable value
+                            break;
+                        default:
+                            Debug.LogError("WEIRD WEAPON TYPE");
+                            break;
+                    }
+                }
+            }
         }
-
-        return maxes;
-    }*/
+    }
 }
