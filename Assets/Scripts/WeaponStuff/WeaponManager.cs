@@ -125,19 +125,7 @@ public class WeaponManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        /*// Create 4 players with base loadout
-        Weapon[][] loadout = { (Weapon[])defaultBack.Clone(), (Weapon[])defaultFront.Clone() };
-        playerLoadouts = new Dictionary<int, Weapon[][]>();
-        // Player 1
-        playerLoadouts.Add(0, (Weapon[][])loadout.Clone());
-        // Player 2
-        playerLoadouts.Add(1, (Weapon[][])loadout.Clone());
-        // Player 3
-        playerLoadouts.Add(2, (Weapon[][])loadout.Clone());
-        // Player 4
-        playerLoadouts.Add(3, (Weapon[][])loadout.Clone());*/
-        
+    {        
         // for all 4 possible players...
         for (int i = 0; i < 4; i++)
         {

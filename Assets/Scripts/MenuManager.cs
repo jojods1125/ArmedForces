@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class MenuManager : MonoBehaviour
 {
@@ -37,14 +38,20 @@ public class MenuManager : MonoBehaviour
     public GameObject MainMenu;
     [Tooltip("Offline Menu link")]
     public GameObject TrainingMenu;
+    [Tooltip("Local Menu link")]
+    public GameObject LocalMenu;
     [Tooltip("Achievements Menu link")]
     public GameObject AchievementsMenu;
     [Tooltip("Loadout Menu link")]
     public GameObject LoadoutMenu;
     [Tooltip("Pregame Menu Link")]
     public GameObject PregameMenu;
+    [Tooltip("Pregame Menu Link")]
+    public GameObject LocalPregameMenu;
     [Tooltip("Weapon Selection Screen Link")]
     public GameObject SelectionMenu;
+    [Tooltip("Postgame Results Screen")]
+    public GameObject postgameResultsMenu;
 
     [Header("Menus")]
     [Tooltip("Group of all Menus")]
@@ -56,26 +63,34 @@ public class MenuManager : MonoBehaviour
     [Header("First Selected Button for each Menu")]
     [Tooltip("First Selected Button on Main Menu")]
     public GameObject mainFirstButton;
+    [Tooltip("First Selected Button on Training Menu")]
+    public GameObject trainingFirstButton;
+    [Tooltip("First Selected Button on Local Menu")]
+    public GameObject localFirstButton;
     [Tooltip("First Selected Button on Achievements Menu")]
     public GameObject achievementsFirstButton;
     [Tooltip("First Selected Button on Loadout Menu")]
     public GameObject loadoutFirstButton;
-    [Tooltip("First Selected Button on Offline Menu")]
-    public GameObject trainingFirstButton;
     [Tooltip("First Selected Button on Pregame Menu")]
     public GameObject pregameFirstButton;
+    [Tooltip("First Selected Button on Pregame Menu")]
+    public GameObject localPregameFirstButton;
     [Tooltip("First Selected Weapon Selection")]
     public GameObject selectionFirstButton;
 
     [Header("Return to last Menu Button for each Menu")]
+    [Tooltip("Return to Main Button on Training Menu")]
+    public GameObject trainingReturnButton;
+    [Tooltip("Return to Main Button on Local Menu")]
+    public GameObject localReturnButton;
     [Tooltip("Return to Main Button on Achievements Menu")]
     public GameObject achievementsReturnButton;
     [Tooltip("Return to Main Button on Loadout Menu")]
     public GameObject loadoutReturnButton;
-    [Tooltip("Return to Main Button on Offline Menu")]
-    public GameObject trainingReturnButton;
     [Tooltip("Return to Map Selection Button on Pregame Menu")]
     public GameObject pregameReturnButton;
+    [Tooltip("Return to Map Selection Button on Pregame Menu")]
+    public GameObject localPregameReturnButton;
 
     [Header("Achievement Menu Display")]
     [Tooltip("Content of the ScrollView")]
@@ -104,27 +119,65 @@ public class MenuManager : MonoBehaviour
     [Tooltip("Number of Connected Players")]
     public int numPlayers = 0;
 
-    [Header("Max Bar Values")]
-    [Tooltip("Max Damage")]
-    public float maxDamage;
-    [Tooltip("Max Recoil")]
-    public float maxRecoil;
-    [Tooltip("Max Pushback")]
-    public float maxPushback;
-    [Tooltip("Max Ammo")]
-    public float maxAmmo;
-    [Tooltip("Max Reload Speed")]
-    public float maxReloadSpeed;
-
-    [Header("Variable Attributes")]
+    [Header("Max Automatic Bar Values")]
+    [Tooltip("Max Automatic Damage")]
+    public float maxAutoDamage;
+    [Tooltip("Max Automatic Recoil")]
+    public float maxAutoRecoil;
+    [Tooltip("Max Automatic Pushback")]
+    public float maxAutoPushback;
+    [Tooltip("Max Automatic Ammo")]
+    public float maxAutoAmmo;
+    [Tooltip("Max Automatic Reload Speed")]
+    public float maxAutoReloadSpeed;
     [Tooltip("Max Fire rate")]
     public float maxFireRate;
+
+    [Header("Max Semiautomatic Bar Values")]
+    [Tooltip("Max Semiautomatic Damage")]
+    public float maxSemiDamage;
+    [Tooltip("Max Semiautomatic Recoil")]
+    public float maxSemiRecoil;
+    [Tooltip("Max Semiautomatic Pushback")]
+    public float maxSemiPushback;
+    [Tooltip("Max Semiautomatic Ammo")]
+    public float maxSemiAmmo;
+    [Tooltip("Max Semiautomatic Reload Speed")]
+    public float maxSemiReloadSpeed;
     [Tooltip("Max Scatter Count")]
     public float maxScatterCount;
+
+    [Header("Max Launcher Bar Values")]
+    [Tooltip("Max Launcher Damage")]
+    public float maxLauncherDamage;
+    [Tooltip("Max Launcher Recoil")]
+    public float maxLauncherRecoil;
+    [Tooltip("Max Launcher Pushback")]
+    public float maxLauncherPushback;
+    [Tooltip("Max Launcher Ammo")]
+    public float maxLauncherAmmo;
+    [Tooltip("Max Launcher Reload Speed")]
+    public float maxLauncherReloadSpeed;
     [Tooltip("Max Projectile Power")]
     public float maxProjectilePower;
+
+    [Header("Max Sprayer Bar Values")]
+    [Tooltip("Max Sprayer Damage")]
+    public float maxSprayerDamage;
+    [Tooltip("Max Sprayer Recoil")]
+    public float maxSprayerRecoil;
+    [Tooltip("Max Sprayer Pushback")]
+    public float maxSprayerPushback;
+    [Tooltip("Max Sprayer Ammo")]
+    public float maxSprayerAmmo;
+    [Tooltip("Max Sprayer Reload Speed")]
+    public float maxSprayerReloadSpeed;
     [Tooltip("Max Spray Distance")]
     public float maxSprayDistance;
+
+    [Header("Result Screen Info")]
+    [Tooltip("Player Scores Container")]
+    public GameObject playerScores;
 
     // Current Menu on
     private GameObject currentMenu;
@@ -313,6 +366,9 @@ public class MenuManager : MonoBehaviour
             }
         }   // Done with Sorting
 
+        // Set the Maxes
+        GetMaxes();
+
         // Construct the display
         foreach (KeyValuePair<string, Dictionary<WeaponRarity, List<Weapon>>> type in order)
         {
@@ -352,6 +408,10 @@ public class MenuManager : MonoBehaviour
                     // Create Weapon Display
                     GameObject weapon = Instantiate(weaponPrefab, weaponList);
                     weapon.GetComponent<Button>().onClick.AddListener(() => ChooseWeapon(w));
+                    if (!w.unlocked)
+                    {
+                        weapon.GetComponent<Button>().interactable = false;
+                    }
                     weaponButtons.Add(weapon);
 
                     // Set Weapon & stats
@@ -374,7 +434,7 @@ public class MenuManager : MonoBehaviour
                         wbc.damage = semi.bulletDamage;
                         wbc.recoil = semi.recoil;
                         wbc.pushback = semi.bulletPushback;
-                        wbc.variable = 1f / semi.burstCount;
+                        wbc.variable = semi.burstCount;
                         wbc.ammoCapacity = semi.ammoCapacity;
                         wbc.reloadSpeed = 1f / semi.reloadRate;
                     }
@@ -384,7 +444,7 @@ public class MenuManager : MonoBehaviour
                         wbc.damage = launcher.coreDamage;
                         wbc.recoil = launcher.recoil;
                         wbc.pushback = launcher.corePushback;
-                        wbc.variable = 1f / launcher.projectilePower;
+                        wbc.variable = launcher.projectilePower;
                         wbc.ammoCapacity = launcher.ammoCapacity;
                         wbc.reloadSpeed = 1f / launcher.reloadRate;
                     }
@@ -394,7 +454,7 @@ public class MenuManager : MonoBehaviour
                         wbc.damage = sprayer.bulletDamage;
                         wbc.recoil = sprayer.recoil;
                         wbc.pushback = sprayer.bulletPushback;
-                        wbc.variable = 1f / sprayer.sprayDistance;
+                        wbc.variable = sprayer.sprayDistance;
                         wbc.ammoCapacity = sprayer.ammoCapacity;
                         wbc.reloadSpeed = 1f / sprayer.reloadRate;
                     }
@@ -439,206 +499,107 @@ public class MenuManager : MonoBehaviour
 
         }
 
-        // update Achievements Menu
-        if (AchievementsMenu.activeSelf)
+        if (SceneManager.GetSceneByName("L_MainMenu").isLoaded)
         {
-            for (int i = 0; i < AchievementManager.Instance().achievements.Count; i++)
+            // update Achievements Menu
+            if (AchievementsMenu.activeSelf)
             {
-                // Get Achievement
-                Achievement a = AchievementManager.Instance().achievements[i];
-                // Get Achievement Display
-                Transform curr = achievementContent.transform.GetChild(i);
-                // Get Progress Bars for Display
-                Transform progressBars = curr.Find("Progress Bars");
-
-                // Update progress bars if tiered
-                if (a is A_Tiered)
+                for (int i = 0; i < AchievementManager.Instance().achievements.Count; i++)
                 {
-                    // cast 
-                    A_Tiered at = (A_Tiered)a;
-                    int currentValue = at.currentValue;
-                    for (int j = 0; j < at.activationValues.Length; j++)
+                    // Get Achievement
+                    Achievement a = AchievementManager.Instance().achievements[i];
+                    // Get Achievement Display
+                    Transform curr = achievementContent.transform.GetChild(i);
+                    // Get Progress Bars for Display
+                    Transform progressBars = curr.Find("Progress Bars");
+
+                    // Update progress bars if tiered
+                    if (a is A_Tiered)
                     {
-                        // Current working bar
-                        Transform bar = progressBars.GetChild(j);
+                        // cast 
+                        A_Tiered at = (A_Tiered)a;
+                        int currentValue = at.currentValue;
+                        for (int j = 0; j < at.activationValues.Length; j++)
+                        {
+                            // Current working bar
+                            Transform bar = progressBars.GetChild(j);
 
-                        // This tiers max
-                        int max = at.activationValues[j];
+                            // This tiers max
+                            int max = at.activationValues[j];
 
-                        // Check if this bar needs scaled at all -> Zero the scale
-                        if (j > 0 && currentValue < at.activationValues[j - 1])
-                        {
-                            bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
-                        }
-                        // Check if this bar has been met/exceeded -> Max the scale
-                        else if (currentValue >= max)
-                        {
-                            bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
-                        }
-                        // Set the bar scale
-                        else
-                        {
-                            float percent = 0f;
-                            if (j > 0)
+                            // Check if this bar needs scaled at all -> Zero the scale
+                            if (j > 0 && currentValue < at.activationValues[j - 1])
                             {
-                                int delta = at.activationValues[j - 1];
-                                percent = (currentValue - delta) / ((float)max - delta);
+                                bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
+                            }
+                            // Check if this bar has been met/exceeded -> Max the scale
+                            else if (currentValue >= max)
+                            {
+                                bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+                            }
+                            // Set the bar scale
+                            else
+                            {
+                                float percent = 0f;
+                                if (j > 0)
+                                {
+                                    int delta = at.activationValues[j - 1];
+                                    percent = (currentValue - delta) / ((float)max - delta);
+                                }
+                                else
+                                {
+                                    percent = currentValue / (float)max;
+                                }
+                                /*float percent = currentValue / (float)max;*/
+                                bar.localScale = new Vector3(percent, bar.localScale.y, bar.localScale.z);
+                            }
+                        }
+                    }
+                    else if (a is A_Repeatable)
+                    {
+                        A_Repeatable ar = (A_Repeatable)a;
+                        int currentValue = ar.currentValue % ar.repeatValue;
+                        for (int j = 0; j < ar.repeatValue; j++)
+                        {
+                            // Current working bar
+                            Transform bar = progressBars.GetChild(j);
+
+                            // set bar to full if past or at progress
+                            if (j < currentValue)
+                            {
+                                bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
                             }
                             else
                             {
-                                percent = currentValue / (float)max;
+                                bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
                             }
-                            /*float percent = currentValue / (float)max;*/
-                            bar.localScale = new Vector3(percent, bar.localScale.y, bar.localScale.z);
                         }
                     }
-                }
-                else if (a is A_Repeatable)
-                {
-                    A_Repeatable ar = (A_Repeatable)a;
-                    int currentValue = ar.currentValue % ar.repeatValue;
-                    for (int j = 0; j < ar.repeatValue; j++)
+                    /** Set fields in display */
+                    // Name
+                    curr.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
+                    // Description
+                    curr.transform.Find("Description").gameObject.GetComponent<TMP_Text>().text = a.ToString();
+                    // Current Count
+                    curr.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
+                    // Next Count & set finished
+                    if (a is A_Tiered)
                     {
-                        // Current working bar
-                        Transform bar = progressBars.GetChild(j);
-
-                        // set bar to full if past or at progress
-                        if (j < currentValue)
+                        A_Tiered at = (A_Tiered)a;
+                        if (!at.IsComplete() && at.nextTier < at.activationValues.Length)
                         {
-                            bar.localScale = new Vector3(1f, bar.localScale.y, bar.localScale.z);
+                            curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + at.activationValues[at.nextTier].ToString();
+                            curr.transform.Find("Finished").gameObject.SetActive(false);
                         }
                         else
                         {
-                            bar.localScale = new Vector3(0f, bar.localScale.y, bar.localScale.z);
+                            curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
+                            curr.transform.Find("Finished").gameObject.SetActive(true);
                         }
-                    }
-                }
-                /** Set fields in display */
-                // Name
-                curr.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
-                // Description
-                curr.transform.Find("Description").gameObject.GetComponent<TMP_Text>().text = a.ToString();
-                // Current Count
-                curr.transform.Find("Current Count").gameObject.GetComponent<TMP_Text>().text = "Current Count: " + a.currentValue.ToString();
-                // Next Count & set finished
-                if (a is A_Tiered)
-                {
-                    A_Tiered at = (A_Tiered)a;
-                    if (!at.IsComplete() && at.nextTier < at.activationValues.Length)
-                    {
-                        curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Next Count: " + at.activationValues[at.nextTier].ToString();
-                        curr.transform.Find("Finished").gameObject.SetActive(false);
-                    }
-                    else
-                    {
-                        curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
-                        curr.transform.Find("Finished").gameObject.SetActive(true);
                     }
                 }
             }
         }
-
-        // Update Weapon display
-        if (SelectionMenu.activeSelf)
-		{
-            foreach (GameObject button in weaponButtons)
-			{
-                if (EventSystem.current.currentSelectedGameObject == button)
-				{
-                    WeaponButtonContatiner  wbc = button.GetComponent<WeaponButtonContatiner>();
-                    Weapon weapon = wbc.weapon;
-                    descriptionBox.SetActive(true);
-                    Transform nameAndDesc = descriptionBox.transform.Find("Name and Desc");
-                    nameAndDesc.Find("Name").GetComponent<Text>().text = weapon.weaponName;
-                    nameAndDesc.Find("Description").GetComponent<Text>().text = weapon.description;
-
-                    // Get attribute holder
-                    Transform attributes = descriptionBox.transform.Find("Attributes");
-                    Transform dmg = attributes.Find("Damage");
-                    Transform recoil = attributes.Find("Recoil");
-                    Transform pushBack = attributes.Find("PushBack");
-                    Transform variable = attributes.Find("VariableAttribute");
-                    Transform ammoCap = attributes.Find("AmmoCap");
-                    Transform reloadSpeed = attributes.Find("ReloadSpeed");
-
-                    // Zero vector
-                    Vector3 zeroed = new Vector3(0f, 0f, 0f);
-
-                    // Set damage bar
-                    Vector3 damageBar = new Vector3(wbc.damage / maxDamage, 1f, 1f);
-                    if (wbc.damage > 0)
-                    {
-                        dmg.Find("BarBack").Find("Positive").localScale = damageBar;
-                        dmg.Find("BarBack").Find("Negative").localScale = zeroed;
-                    }
-                    else if (wbc.damage < 0)
-					{
-                        dmg.Find("BarBack").Find("Negative").localScale = damageBar;
-                        dmg.Find("BarBack").Find("Positive").localScale = zeroed;
-                    }
-
-                    // Set recoil bar
-                    Vector3 recoilBar = new Vector3(wbc.recoil / maxRecoil, 1f, 1f);
-                    if (wbc.recoil > 0)
-                    {
-                        recoil.Find("BarBack").Find("Positive").localScale = recoilBar;
-                        recoil.Find("BarBack").Find("Negative").localScale = zeroed;
-                    }
-                    else if (wbc.recoil < 0)
-                    {
-                        recoil.Find("BarBack").Find("Negative").localScale = recoilBar;
-                        recoil.Find("BarBack").Find("Positive").localScale = zeroed;
-                    }
-
-                    // Set pushback bar
-                    Vector3 pushbackBar = new Vector3(wbc.pushback / maxPushback, 1f, 1f);
-                    if (wbc.pushback > 0)
-                    {
-                        pushBack.Find("BarBack").Find("Positive").localScale = pushbackBar;
-                        pushBack.Find("BarBack").Find("Negative").localScale = zeroed;
-                    }
-                    else if (wbc.pushback < 0)
-                    {
-                        pushBack.Find("BarBack").Find("Negative").localScale = pushbackBar;
-                        pushBack.Find("BarBack").Find("Positive").localScale = zeroed;
-                    }
-
-                    // Set variable bar
-                    string variableText = "{{INVALID}}";
-                    float variableMax = 0;
-                    if (weapon is W_AutoGun)
-                    {
-                        variableText = "Fire Rate";
-                        variableMax = maxFireRate;
-                    }
-                    else if (weapon is W_SemiGun)
-                    {
-                        variableText = "Scatter Count";
-                        variableMax = maxScatterCount;
-                    }
-                    else if (weapon is W_Launcher)
-                    {
-                        variableText = "Projectile Power";
-                        variableMax = maxProjectilePower;
-                    }
-                    else if (weapon is W_Sprayer)
-					{
-                        variableText = "Sprayer Distance";
-                        variableMax = maxSprayDistance;
-					}
-
-                    variable.Find("Text").GetComponent<Text>().text = variableText;
-                    variable.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.variable / variableMax, 1f, 1f);
-
-                    // Set ammo capacity bar
-                    ammoCap.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.ammoCapacity / maxAmmo, 1f, 1f);
-
-                    // Set reload speed bar
-                    reloadSpeed.Find("BarBack").Find("Positive").localScale = new Vector3(wbc.reloadSpeed / maxReloadSpeed, 1f, 1f);
-
-                }
-			}
-		}
 
     }
 
@@ -663,6 +624,29 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to OfflineFirst
         EventSystem.current.SetSelectedGameObject(trainingFirstButton);
+    }
+    
+    /// <summary>
+    /// Turns the OfflineMenu active 
+	/// Clears and sets 1st button to active
+    /// </summary>
+    public void LocalMode()
+    {
+        // set inactive if active
+        if (LocalPregameMenu.activeSelf)
+		{
+            LocalPregameMenu.SetActive( false );
+            MainMenu.SetActive(true);
+		}
+
+        LocalMenu.SetActive( true );
+        //setActiveMenu( OfflineMenu );
+        currentMenu = LocalMenu;
+
+        // Clear selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        // Set button to OfflineFirst
+        EventSystem.current.SetSelectedGameObject(localFirstButton);
     }
 
     /// <summary>
@@ -792,18 +776,32 @@ public class MenuManager : MonoBehaviour
     /// <param name="mapName"> Name of the Map choosen </param>
     public void Pregame( string mapName )
 	{
-        PregameMenu.SetActive( true );
-        MainMenu.SetActive(false);
-        TrainingMenu.SetActive(false);
+        if (TrainingMenu.activeSelf)
+        {
+            PregameMenu.SetActive(true);
+            MainMenu.SetActive(false);
+            TrainingMenu.SetActive(false);
+            // Clear selected object
+            EventSystem.current.SetSelectedGameObject(null);
+            // Set button to LoadoutFirst
+            EventSystem.current.SetSelectedGameObject(pregameFirstButton);
+        }
+        else if (LocalMenu.activeSelf)
+        {
+            LocalPregameMenu.SetActive(true);
+            MainMenu.SetActive(false);
+            LocalMenu.SetActive(false);
+            // Clear selected object
+            EventSystem.current.SetSelectedGameObject(null);
+            // Set button to LoadoutFirst
+            EventSystem.current.SetSelectedGameObject(localPregameFirstButton);
+        }
         //setActiveMenu( PregameMenu );
         currentMenu = PregameMenu;
 
         this.mapName = mapName;
 
-        // Clear selected object
-        EventSystem.current.SetSelectedGameObject(null);
-        // Set button to LoadoutFirst
-        EventSystem.current.SetSelectedGameObject(pregameFirstButton);
+        
     }
 
     /// <summary>
@@ -980,6 +978,124 @@ public class MenuManager : MonoBehaviour
             {
                 curr.transform.Find("Next Count").gameObject.GetComponent<TMP_Text>().text = "Achieved";
                 curr.transform.Find("Finished").gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void LoadResults(Dictionary<int, int> kills, Dictionary<int, int> deaths)
+    {
+        // Get Parent of Manager, Find "Canvas:, Child 0 is "Menus", Find Postgame screen, set active
+        postgameResultsMenu.SetActive(true);
+
+        Dictionary<int, int> placements = new Dictionary<int, int>();
+        foreach (KeyValuePair<int, int> playerKills in kills.OrderBy(key => key.Value))
+        {
+            placements.Add(playerKills.Key, playerKills.Value);
+        }
+
+        // Get PlayerInputManager
+        PlayerInputManager pim = playerScores.GetComponent<PlayerInputManager>();
+        for (int id = 0; id < MenuManager.Instance().numPlayers; id++)
+        {
+            // Make player per connected
+            PlayerInput pi = pim.JoinPlayer(id, -1, "MenuControls", InputSystem.devices[id + 2]);
+
+            // Set loadout Icons
+            Transform loadouts = pi.transform.Find("Loadout");
+            Transform back = loadouts.Find("Back Arm Loadout");
+            Transform front = loadouts.Find("Front Arm Loadout");
+            for (int arm = 0; arm < 4; arm++)
+            {
+                back.GetChild(arm + 1).GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[id][0][arm].icon;
+                front.GetChild(arm + 1).GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[id][1][arm].icon;
+            }
+
+            // Set Player
+            pi.transform.Find("Player number").GetComponent<Text>().text = "Player " + id;
+            // Set placement
+            pi.transform.Find("Placement").GetComponent<Text>().text = placements[id].ToString();
+            // Set kills
+            pi.transform.Find("Kills").GetComponent<Text>().text = "Kills: " + kills[id];
+            // Set deaths
+            pi.transform.Find("Deaths").GetComponent<Text>().text = "Deaths: " + deaths[id];
+        }
+
+        SceneManager.LoadScene("L_MainMenu");
+    }
+
+    // Count of readied players
+    private int readyCount = 0;
+
+    /// <summary>
+    /// Readies the player for returning to the main menu
+    /// </summary>
+    /// <param name="button"> Button pressed </param>
+    public void ReadyUp( Button button )
+    {
+        // Increment Count
+        readyCount++;
+
+        // Disable the button
+        button.interactable = false;
+
+        // check to see if all players readied
+        if (readyCount >= numPlayers)
+        {
+            ReturnToMain();
+        }
+    }
+
+    public void GetMaxes()
+    {
+        foreach (KeyValuePair<string, Dictionary<WeaponRarity, List<Weapon>>> type in order)
+        {
+            foreach (KeyValuePair<WeaponRarity, List<Weapon>> rarity in type.Value)
+            {
+                foreach (Weapon w in rarity.Value)
+                {
+                    switch (type.Key)
+                    {
+                        case "Automatic":
+                            W_AutoGun wag = (W_AutoGun)w;
+                            maxAutoDamage = Mathf.Max(maxAutoDamage, wag.bulletDamage);
+                            maxAutoRecoil = Mathf.Max(maxAutoRecoil, wag.recoil);
+                            maxAutoPushback = Mathf.Max(maxAutoPushback, wag.bulletPushback);
+                            maxFireRate = Mathf.Max(maxFireRate, 1 / wag.fireRate);   // invert to get usable value
+                            maxAutoAmmo = Mathf.Max(maxAutoAmmo, wag.ammoCapacity);
+                            maxAutoReloadSpeed = Mathf.Max(maxAutoReloadSpeed, 1 / wag.reloadRate); // invert to get usable value
+                            break;
+                        case "Semiautomatic":
+                            W_SemiGun sag = (W_SemiGun)w;
+                            maxSemiDamage = Mathf.Max(maxSemiDamage, sag.bulletDamage);
+                            maxSemiRecoil = Mathf.Max(maxSemiRecoil, sag.recoil);
+                            maxSemiPushback = Mathf.Max(maxSemiPushback, sag.bulletPushback);
+                            maxScatterCount = Mathf.Max(maxScatterCount, sag.burstCount);
+                            maxSemiAmmo = Mathf.Max(maxSemiAmmo, sag.ammoCapacity);
+                            maxSemiReloadSpeed = Mathf.Max(maxSemiReloadSpeed, 1 / sag.reloadRate); // invert to get usable value
+                            break;
+                        case "Launcher":
+                            W_Launcher l = (W_Launcher)w;
+                            maxLauncherDamage = Mathf.Max(maxLauncherDamage, l.coreDamage);
+                            maxLauncherRecoil = Mathf.Max(maxLauncherRecoil, l.recoil);
+                            maxLauncherPushback = Mathf.Max(maxLauncherPushback, l.corePushback);
+                            maxProjectilePower = Mathf.Max(maxProjectilePower, l.projectilePower);
+                            maxLauncherAmmo = Mathf.Max(maxLauncherAmmo, l.ammoCapacity);
+                            maxLauncherReloadSpeed = Mathf.Max(maxLauncherReloadSpeed, 1 / l.reloadRate); // invert to get usable value
+                            break;
+                        case "Sprayer":
+                            W_Sprayer s = (W_Sprayer)w;
+                            maxSprayerDamage = Mathf.Max(maxSprayerDamage, s.bulletDamage);
+                            maxSprayerRecoil = Mathf.Max(maxSprayerRecoil, s.recoil);
+                            maxSprayerPushback = Mathf.Max(maxSprayerPushback, s.bulletPushback);
+                            maxSprayDistance = Mathf.Max(maxSprayDistance, s.sprayDistance);
+                            maxSprayerAmmo = Mathf.Max(maxSprayerAmmo, s.ammoCapacity);
+                            maxSprayerReloadSpeed = Mathf.Max(maxSprayerReloadSpeed, 1 / s.reloadRate); // invert to get usable value
+                            break;
+                        default:
+                            Debug.LogError("WEIRD WEAPON TYPE");
+                            break;
+                    }
+                }
             }
         }
     }

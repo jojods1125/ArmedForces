@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /**
@@ -41,6 +42,8 @@ public class Achievement : ScriptableObject
      * CREATE DICTIONARY<INT, WEAPON> FOR UNLOCKABLES
      * CREATE METHOD TO CHECK FOR UNLOCKABLES
      */
+    [Tooltip("List of Unlockables")]
+    public List<Unlockable> unlockables;
 
 
     /// <summary>
@@ -50,14 +53,6 @@ public class Achievement : ScriptableObject
     public void AddValue(int amount)
     {
         currentValue += amount;
-    }
-
-    /// <summary>
-    /// Unlocks the corresponding reward if its point is reached
-    /// </summary>
-    public void unlockReward ()
-    {
-        
     }
 
     /// <summary>

@@ -26,10 +26,25 @@ public class A_Repeatable : Achievement
             timesAchieved += currentValue / repeatValue;
             // better than setting to 0; in case over achieved
             currentValue %= repeatValue;
+            unlockReward(timesAchieved);
             Debug.Log(achievementMessage + "Achieved " + timesAchieved + " times");
             return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Unlocks the corresponding reward if its point is reached
+    /// </summary>
+    public void unlockReward(int repNum)
+    {
+        foreach (Unlockable u in unlockables)
+        {
+            if (u.value <= repNum)
+            {
+                u.Unlock();
+            }
+        }
     }
 
     /// <summary>

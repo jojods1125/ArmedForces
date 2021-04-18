@@ -188,6 +188,12 @@ public class AchievementManager : MonoBehaviour
                 {
                     ((A_Tiered)ach).nextTier = 0;
                 }
+                // reset unlocks
+                foreach (Unlockable u in ach.unlockables)
+                {
+                    u.unlocked = false;
+                    u.reward.unlocked = false;
+                }
             }
             SavePrefs();
         }

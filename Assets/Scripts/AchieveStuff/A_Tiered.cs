@@ -36,6 +36,7 @@ public class A_Tiered : Achievement
         if (nextTier < activationValues.Length && CheckValue(nextTier))
         {
             nextTier++;
+            unlockReward(nextTier);
             Debug.Log(achievementMessage + " Achieved: " + activationValues[nextTier - 1] + "\n Total: " + currentValue);
             return CheckNext() || true;
         }
@@ -64,6 +65,20 @@ public class A_Tiered : Achievement
         }
         achieved = false;
         return false;
+    }
+
+    /// <summary>
+    /// Unlocks the corresponding reward if its point is reached
+    /// </summary>
+    public void unlockReward(int tierReached)
+    {
+        foreach (Unlockable u in unlockables)
+        {
+            if (u.value <= tierReached)
+            {
+                u.Unlock();
+            }
+        }
     }
 
     /// <summary>
