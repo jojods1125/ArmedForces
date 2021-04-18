@@ -19,7 +19,7 @@ MonoBehaviour:
   rarity: 0
   fireRate: 0.001
   ammoCapacity: 200
-  recoil: 8
+  recoil: 12
   reloadRate: 0.035
   dropoffDist: 1
   dropoffMod: 0.75

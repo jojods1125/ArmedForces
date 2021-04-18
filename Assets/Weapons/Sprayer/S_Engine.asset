@@ -25,5 +25,5 @@ MonoBehaviour:
   dropoffMod: 1
   spreadRange: 0.7
   sprayDistance: 1
-  bulletDamage: 0.75
+  bulletDamage: 1
   bulletPushback: 6

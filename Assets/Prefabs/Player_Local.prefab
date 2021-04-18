@@ -743,9 +743,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   matchType: 2
   maxHealth: 100
-  walkMomentum: 10
-  maxWalkSpeed: 5
-  jumpForce: 100
+  walkMomentum: 15
+  maxWalkSpeed: 7.5
+  jumpForce: 300
   backArmWeapons:
   - {fileID: 11400000, guid: 1003ffeff5d255f47b1645768584e42c, type: 2}
   - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
@@ -757,6 +757,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4c6ea9e773df7e640bd701b25caf3850, type: 2}
   - {fileID: 11400000, guid: 1b8abfcb36d99c84d9701b01c936fd17, type: 2}
   rb: {fileID: 0}
+  dying: 0
   playerID: 0
   onlinePlayer: {fileID: 0}
 --- !u!114 &1713244061807243800
