@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class MenuManager : MonoBehaviour
 {
@@ -49,6 +50,8 @@ public class MenuManager : MonoBehaviour
     public GameObject LocalPregameMenu;
     [Tooltip("Weapon Selection Screen Link")]
     public GameObject SelectionMenu;
+    [Tooltip("Postgame Results Screen")]
+    public GameObject postgameResultsMenu;
 
     [Header("Menus")]
     [Tooltip("Group of all Menus")]
@@ -171,6 +174,10 @@ public class MenuManager : MonoBehaviour
     public float maxSprayerReloadSpeed;
     [Tooltip("Max Spray Distance")]
     public float maxSprayDistance;
+
+    [Header("Result Screen Info")]
+    [Tooltip("Player Scores Container")]
+    public GameObject playerScores;
 
     // Current Menu on
     private GameObject currentMenu;
@@ -1202,6 +1209,47 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    public void LoadResults(Dictionary<int, int> kills, Dictionary<int, int> deaths)
+    {
+        // Get Parent of Manager, Find "Canvas:, Child 0 is "Menus", Find Postgame screen, set active
+        postgameResultsMenu.SetActive(true);
+
+        Dictionary<int, int> placements = new Dictionary<int, int>();
+        foreach (KeyValuePair<int, int> playerKills in kills.OrderBy(key => key.Value))
+        {
+            placements.Add(playerKills.Key, playerKills.Value);
+        }
+
+        // Get PlayerInputManager
+        PlayerInputManager pim = playerScores.GetComponent<PlayerInputManager>();
+        for (int id = 0; id < MenuManager.Instance().numPlayers; id++)
+        {
+            // Make player per connected
+            PlayerInput pi = pim.JoinPlayer(id, -1, "MenuControls", InputSystem.devices[id + 2]);
+
+            // Set loadout Icons
+            Transform loadouts = pi.transform.Find("Loadout");
+            Transform back = loadouts.Find("Back Arm Loadout");
+            Transform front = loadouts.Find("Front Arm Loadout");
+            for (int arm = 0; arm < 4; arm++)
+            {
+                back.GetChild(arm + 1).GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[id][0][arm].icon;
+                front.GetChild(arm + 1).GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[id][1][arm].icon;
+            }
+
+            // Set Player
+            pi.transform.Find("Player number").GetComponent<Text>().text = "Player " + id;
+            // Set placement
+            pi.transform.Find("Placement").GetComponent<Text>().text = placements[id].ToString();
+            // Set kills
+            pi.transform.Find("Kills").GetComponent<Text>().text = "Kills: " + kills[id];
+            // Set deaths
+            pi.transform.Find("Deaths").GetComponent<Text>().text = "Deaths: " + deaths[id];
+        }
+
+        SceneManager.LoadScene("L_MainMenu");
+    }
+
     // Count of readied players
     private int readyCount = 0;
 
@@ -1218,14 +1266,22 @@ public class MenuManager : MonoBehaviour
         button.interactable = false;
 
         // check to see if all players readied
-        if (readyCount >= GameManager.Instance().localPlayers.Length)
+        if (readyCount >= numPlayers)
         {
             ReturnToMain();
         }
     }
 
-    private void AssignMaxes()
+/*    public Dictionary<string, Dictionary<string, float>> GetMaxes()
     {
-        /*for (int i = 0; i < order.)*/
-    }
+        Dictionary<string, Dictionary<string, float>> maxes = new Dictionary<string, Dictionary<string, float>>();
+        foreach (KeyValuePair<string, Dictionary<WeaponRarity, List<Weapon>>> type in order)
+        {
+            maxes[type.Key] = new Dictionary<string, float>();
+            Dictionary<WeaponRarity, List<Weapon>> rarity = type.Value;
+            foreach ()
+        }
+
+        return maxes;
+    }*/
 }

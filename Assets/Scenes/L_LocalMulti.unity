@@ -2147,7 +2147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   matchType: 2
   playerRespawnTime: 3
-  totalGameTime: 600
+  totalGameTime: 10
   serverGameTimeStep: 0.25
   spawnPointContainer: {fileID: 1066990613}
   uiManager: {fileID: 126081587}

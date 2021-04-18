@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public enum MatchType
 {
@@ -246,10 +247,10 @@ public class GameManager : MonoBehaviour
 
             // Temporary for now
             AchievementManager.Instance().OnEvent(AchievementType.games);
-            Scene main = SceneManager.GetSceneByName("L_MainMenu");
-            // Get the Children of Scene, Child 6 is "Canvas:, Child 0 is "Menus", Find the postgame screen, set it active
-            main.GetRootGameObjects()[6].transform.GetChild(0).Find("Postgame Results Screen").gameObject.SetActive(true);
-            SceneManager.LoadScene("L_MainMenu");
+
+            MenuManager.Instance().LoadResults(kills, deaths);
+            
+
         }
     }
 
