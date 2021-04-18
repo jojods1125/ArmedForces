@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ using UnityEngine;
 /// Type of weapons (currently just base types)
 /// none used as base type for checking in Manager
 /// </summary>
+[Serializable]
 public enum WeaponType
 {
     none, auto, semi, launcher, sprayer
@@ -16,6 +18,7 @@ public enum WeaponType
 /// More properties for the Kill Achievement
 /// inlcuding specifying type of kills
 /// </summary>
+[Serializable]
 public class A_Typed : A_Tiered
 {
 
