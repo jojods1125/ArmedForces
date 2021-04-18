@@ -408,6 +408,10 @@ public class MenuManager : MonoBehaviour
                     // Create Weapon Display
                     GameObject weapon = Instantiate(weaponPrefab, weaponList);
                     weapon.GetComponent<Button>().onClick.AddListener(() => ChooseWeapon(w));
+                    if (!w.unlocked)
+                    {
+                        weapon.GetComponent<Button>().interactable = false;
+                    }
                     weaponButtons.Add(weapon);
 
                     // Set Weapon & stats

@@ -15,7 +15,9 @@ MonoBehaviour:
   achievementMessage: Take Aim!
   achieved: 0
   type: 3
-  currentValue: 0
-  nextTier: 0
+  currentValue: 1
+  unlockables:
+  - {fileID: 11400000, guid: 8a285de560414734181f81e94b880444, type: 2}
+  nextTier: 1
   activationValues: 01000000050000000a00000019000000320000004b0000007d000000
   weaponType: 2
