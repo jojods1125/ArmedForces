@@ -18,4 +18,9 @@ public class Unlockable : ScriptableObject
         unlocked = true;
         reward.unlocked = true;
     }
+
+    public override string ToString()
+    {
+        return value + "<" + reward.weaponName + "<" + unlocked;
+    }
 }

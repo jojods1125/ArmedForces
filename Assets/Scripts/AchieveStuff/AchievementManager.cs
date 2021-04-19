@@ -38,7 +38,10 @@ public class AchievementManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
+    }
 
+    private void Start()
+    {
         // PlayerPrefs
         LoadPrefs();
     }
