@@ -741,9 +741,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 910a1d2a7ae3f5e4db393c1a8a0d5ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchType: 2
+  matchType: 1
   maxHealth: 100
-  walkMomentum: 15
+  walkMomentum: 10
   maxWalkSpeed: 7.5
   jumpForce: 300
   backArmWeapons:
@@ -1141,7 +1141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54acc96f0ff77e468d2978d938539bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchType: 2
+  matchType: 1
   arm: {fileID: 9093051126470135228}
   barrel: {fileID: 8282234078560122467}
   player: {fileID: -141906719412523213}
@@ -1258,7 +1258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54acc96f0ff77e468d2978d938539bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchType: 2
+  matchType: 1
   arm: {fileID: 9093051127276069410}
   barrel: {fileID: 8282234077263579433}
   player: {fileID: -141906719412523213}

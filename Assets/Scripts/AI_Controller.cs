@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class AI_Controller : MonoBehaviour
 {
-
-
     private Vector3 targetPos; //Current place AI is trying to go
     private Vector3 previousPos; //Where the AI was a second ago, used to check if stuck
     private float previousTime; //Used to check if a second has passed
@@ -20,6 +18,8 @@ public class AI_Controller : MonoBehaviour
     public Arm frontArm; //Reference to front arm
     public Arm backArm; //Reference to back arm
 
+    public int enemyTargetTime = 20; // How long the AI should target a player before switching targets
+
     public float attackRange; //How close the AI follows
     public float stoppingDist; //What range the AI should stop following
     public float stuckDist; //Distance AI must move in a second before decided its stuck
@@ -33,8 +33,11 @@ public class AI_Controller : MonoBehaviour
     public int maxSprayerAmmo;
     public int maxShotgunAmmo;
     public int maxAutoAmmo;
-    
-    
+
+
+    //private Weapon[] backArmWeapons;
+    //private Weapon[] frontArmWeapons;
+
     enum State{
         follow,
         reload,
@@ -42,6 +45,13 @@ public class AI_Controller : MonoBehaviour
         rest,
         test
     }
+
+    private void Awake()
+    {
+        //backArmWeapons = self.backArmWeapons;
+        //frontArmWeapons = self.frontArmWeapons;
+    }
+
 
 
     private State state;
@@ -54,14 +64,27 @@ public class AI_Controller : MonoBehaviour
         previousTime = Time.time;
         enemyRespawn = false;
         reloadTime = 6;
+
+        InvokeRepeating(nameof(Activate), 0, enemyTargetTime);
+
+        //Activate(0);
     }
 
     // Activate the Controller - set the enemy
     public void Activate()
     {
+        int target = Random.Range(0, GameManager.Instance().localPlayers.Length - 1);
+
+        while (target == self.GetPlayerID() || GameManager.Instance().localPlayers[target] == null)
+        {
+            target = Random.Range(0, GameManager.Instance().localPlayers.Length - 1);
+        }
+
         // Debug.LogError("Setting AI Enemy");
-        enemy = GameManager.Instance().localPlayers[0];
+        enemy = GameManager.Instance().localPlayers[target];
     }
+
+
 
     // Update is called once per frame
     void Update()

@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     [Min(0)]
     public int jumpForce = 100;
 
+    public bool isAI = false;
+
 
     [Header("Weapon Loadouts")]
 
@@ -217,7 +219,7 @@ public class Player : MonoBehaviour
         GameManager.Instance().dynamicCamera.targets.Add(gameObject);
         
         GameObject playerIndicator = Instantiate(GameManager.Instance().Indicator);
-        playerIndicator.GetComponent<Indicator>().player = gameObject;
+        playerIndicator.GetComponent<Indicator>().SetPlayer(newID, gameObject);
 
         this.playerID = newID;
         lastAttackedID = this.playerID;
@@ -226,6 +228,11 @@ public class Player : MonoBehaviour
 
     protected void Start()
     {
+        if ((matchType == MatchType.Online && onlinePlayer.isLocalPlayer) || matchType != MatchType.Online)
+        {
+            uiManager = GameManager.Instance().uiManager;
+        }
+
         // If not an online player
         if (matchType != MatchType.Online)
         {
@@ -277,11 +284,19 @@ public class Player : MonoBehaviour
     /// </summary>
     public void SetArms()
     {
-        WeaponManager.Instance().LoadLoadout();
-        backArmWeapons = WeaponManager.Instance().playerLoadouts[playerID][0];
-        arms[1].BackArmInitialize();
-        frontArmWeapons = WeaponManager.Instance().playerLoadouts[playerID][1];
-        arms[0].FrontArmInitialize();
+        if (!isAI)
+        {
+            WeaponManager.Instance().LoadLoadout();
+            backArmWeapons = WeaponManager.Instance().playerLoadouts[playerID][0];
+            arms[1].BackArmInitialize();
+            frontArmWeapons = WeaponManager.Instance().playerLoadouts[playerID][1];
+            arms[0].FrontArmInitialize();
+        }
+        else
+        {
+            arms[1].BackArmInitialize();
+            arms[0].FrontArmInitialize();
+        }
     }
 
     /// <summary>

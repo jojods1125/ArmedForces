@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 
 public enum MatchType
 {
-    Training,
     Online,
     Local
 }
@@ -197,9 +196,6 @@ public class GameManager : MonoBehaviour
     {
         // Refreshes arms so new player sees them
         //localPlayer.UpdateAppearance();
-
-        if (matchType == MatchType.Training)
-            aiC.Activate();
     }
 
 

@@ -4,8 +4,19 @@ using UnityEngine;
 
 public class Indicator : MonoBehaviour
 {
+    public Material[] materials;
+    public GameObject child;
 
-public GameObject player;
+    private int playerID;
+    private GameObject player;
+
+    public void SetPlayer(int playerID, GameObject player)
+    {
+        this.player = player;
+        this.playerID = playerID;
+        gameObject.GetComponent<MeshRenderer>().material = materials[playerID];
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -13,9 +24,11 @@ public GameObject player;
         Vector3 targetPosOnScreen = Camera.main.WorldToScreenPoint (player.GetComponent<Transform>().position);
         if (onScreen (targetPosOnScreen) || player.GetComponent<Player>().dying) {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
+            child.SetActive(false);
             return;
         } else{
             gameObject.GetComponent<MeshRenderer>().enabled = true;
+            child.SetActive(true);
         }
 
         Vector3 center = new Vector3 (Screen.width / 2f, Screen.height / 2f, 0);

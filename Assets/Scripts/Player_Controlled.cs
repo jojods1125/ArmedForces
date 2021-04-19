@@ -57,15 +57,12 @@ public class Player_Controlled : Player
     }
 
 
-    new void Start()
-    {
-        if ((matchType == MatchType.Online && onlinePlayer.isLocalPlayer) || matchType != MatchType.Online)
-        {
-            uiManager = GameManager.Instance().uiManager;
-        }
+    //new void Start()
+    //{
+        
 
-        base.Start();
-    }
+    //    base.Start();
+    //}
 
 
     // Called every fixed tic
