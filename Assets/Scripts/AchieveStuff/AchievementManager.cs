@@ -38,7 +38,10 @@ public class AchievementManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
+    }
 
+    private void Start()
+    {
         // PlayerPrefs
         LoadPrefs();
     }
@@ -187,6 +190,12 @@ public class AchievementManager : MonoBehaviour
                 if (ach is A_Tiered)
                 {
                     ((A_Tiered)ach).nextTier = 0;
+                }
+                // reset unlocks
+                foreach (Unlockable u in ach.unlockables)
+                {
+                    u.unlocked = false;
+                    u.reward.unlocked = false;
                 }
             }
             SavePrefs();

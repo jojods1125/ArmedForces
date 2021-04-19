@@ -18,6 +18,7 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: 4a4d2b787eb393a469ae9860f5de4031, type: 2}
   icon: {fileID: 21300000, guid: 89a5cca590e5f6e4bb4553b1a3de8737, type: 3}
   rarity: 0
+  unlocked: 1
   fireRate: 0.075
   ammoCapacity: 60
   recoil: 25
