@@ -65,6 +65,11 @@ public class Arm : MonoBehaviour
     private readonly Dictionary<Weapon, int> ammoRemaining = new Dictionary<Weapon, int>();
     /// <summary> Dictionary used for knowing which weapons are in which slots </summary>
     private readonly Dictionary<Weapon, char> weaponLetters = new Dictionary<Weapon, char>();
+    /// <summary> Dictionary used for knowing which weapons objects belong to which prefab name </summary>
+    private readonly Dictionary<string, GameObject> weaponObjs = new Dictionary<string, GameObject>();
+
+    private string previousWeapon;
+
     /// <summary> UIManager, as retrieved from GameManager </summary>
     protected UIManager uiManager;
 
@@ -105,17 +110,21 @@ public class Arm : MonoBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
+                    float dropoffDmg = auto.bulletDamage * ( Mathf.Pow (auto.dropoffMod, (hit.distance / auto.dropoffDist)) );
+
+                    Debug.Log("DMG: " + dropoffDmg + "  DIST: " + hit.distance);
+
                     if (hit.collider.gameObject.GetComponent<Player_Networked>() != null && matchType == MatchType.Online)
-                        onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), auto.bulletDamage, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
+                        onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
                     else if (hit.collider.gameObject.GetComponent<Player>() != null)
-                        Attack(hit.collider.gameObject.GetComponent<Player>(), auto.bulletDamage, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
+                        Attack(hit.collider.gameObject.GetComponent<Player>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
                     //else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
                     //    Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), auto.bulletDamage, player.GetPlayerID(), bulletPath.normalized * auto.bulletPushback, WeaponType.auto);
                 }
             }
 
             // Pushes player
-            player.EnactForce(bulletPath.normalized * -auto.pushback);
+            player.EnactForce(bulletPath.normalized * -auto.recoil);
         }
     }
 
@@ -157,17 +166,21 @@ public class Arm : MonoBehaviour
                         ///Debug.Log("HIT " + hit.collider.gameObject.name);
                         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                         {
+                            float dropoffDmg = semi.bulletDamage * ( Mathf.Pow(semi.dropoffMod, (hit.distance / semi.dropoffDist)) );
+
+                            Debug.Log("DMG: " + dropoffDmg + "  DIST: " + hit.distance);
+
                             if (hit.collider.gameObject.GetComponent<Player_Networked>() != null && matchType == MatchType.Online)
-                                onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), semi.bulletDamage, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
+                                onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
                             else if (hit.collider.gameObject.GetComponent<Player>() != null)
-                                Attack(hit.collider.gameObject.GetComponent<Player>(), semi.bulletDamage, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
+                                Attack(hit.collider.gameObject.GetComponent<Player>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
                             //else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
                             //    Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), semi.bulletDamage, player.GetPlayerID(), bulletPath.normalized * semi.bulletPushback, WeaponType.semi);
                         }
                     }
 
                     // Pushes player
-                    player.EnactForce(bulletPath.normalized * -semi.pushback);
+                    player.EnactForce(bulletPath.normalized * -semi.recoil);
                 }
             }
         }
@@ -204,7 +217,7 @@ public class Arm : MonoBehaviour
                     SpawnProjectile(launcher.projectilePrefab.name, projectilePath, launcher.projectilePower, launcher.explosionRadius, launcher.coreDamage, launcher.corePushback, launcher.rocketPowered);
 
                 // Pushes player
-                player.EnactForce(barrel.transform.up.normalized * -launcher.pushback);
+                player.EnactForce(barrel.transform.up.normalized * -launcher.recoil);
             }
         }
 
@@ -260,17 +273,19 @@ public class Arm : MonoBehaviour
                 ///Debug.Log("HIT " + hit.collider.gameObject.name);
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
+                    float dropoffDmg = sprayer.bulletDamage * ( Mathf.Pow(sprayer.dropoffMod, (hit.distance / sprayer.dropoffDist)) );
+
                     if (hit.collider.gameObject.GetComponent<Player_Networked>() != null && matchType == MatchType.Online)
-                        onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), sprayer.bulletDamage, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
+                        onlineArm.CmdAttack(hit.collider.gameObject.GetComponent<Player_Networked>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
                     else if (hit.collider.gameObject.GetComponent<Player>() != null)
-                        Attack(hit.collider.gameObject.GetComponent<Player>(), sprayer.bulletDamage, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
+                        Attack(hit.collider.gameObject.GetComponent<Player>(), dropoffDmg, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
                     //else if (hit.collider.gameObject.GetComponent<Player_AI>() != null)
                     //    Attack_AI(hit.collider.gameObject.GetComponent<Player_AI>(), sprayer.bulletDamage, player.GetPlayerID(), bulletPath.normalized * sprayer.bulletPushback, WeaponType.sprayer);
                 }
             }
 
             // Pushes player
-            player.EnactForce(bulletPath.normalized * -sprayer.pushback);
+            player.EnactForce(bulletPath.normalized * -sprayer.recoil);
         }
     }
 
@@ -387,6 +402,16 @@ public class Arm : MonoBehaviour
         weaponLetters[weaponC] = 'C';
         weaponLetters[weaponD] = 'D';
 
+        // Fills in the dictionary of letters to weapon GameObjects
+        weaponObjs[weaponA.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponA.prefab.name), transform);
+        weaponObjs[weaponA.prefab.name].SetActive(false);
+        weaponObjs[weaponB.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponB.prefab.name), transform);
+        weaponObjs[weaponB.prefab.name].SetActive(false);
+        weaponObjs[weaponC.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponC.prefab.name), transform);
+        weaponObjs[weaponC.prefab.name].SetActive(false);
+        weaponObjs[weaponD.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponD.prefab.name), transform);
+        weaponObjs[weaponD.prefab.name].SetActive(false);
+
         // Initializes ammoRemaining dictionary for each weapon
         if (!ammoRemaining.ContainsKey(weaponA))
             if (weaponA is W_Shootable gunA) ammoRemaining.Add(weaponA, gunA.ammoCapacity);
@@ -432,11 +457,14 @@ public class Arm : MonoBehaviour
 
         if (weapon)
         {
+            if (equippedWeapon != null)
+                previousWeapon = equippedWeapon.prefab.name;
+
             // Change currently equipped weapon
             equippedWeapon = weapon;
 
             if (matchType != MatchType.Online)
-                SwitchAppearance(weapon.mesh.name, weapon.material.name);
+                SwitchAppearance(weapon.prefab.name);
 
             // Update UI
             if (uiManager) uiManager.ui_Players[player.GetPlayerID()].UpdateSelectedUI(armSide, weaponLetters[weapon]);
@@ -447,12 +475,19 @@ public class Arm : MonoBehaviour
     /// <summary>
     /// Every client refreshes the appearance of their Arm
     /// </summary>
-    /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
-    /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
-    public void SwitchAppearance(string meshName, string materialName)
+    /// <param name="prefabName"> Which prefab needs to be activated </param>
+    public void SwitchAppearance(string prefabName)
     {
-        arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);
-        arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
+        if (previousWeapon != null)
+            weaponObjs[previousWeapon].SetActive(false);
+
+        weaponObjs[prefabName].SetActive(true);
+
+        //weaponObject = (GameObject)Resources.Load("Meshes/" + prefabName);
+        //weaponObject.transform = gameObject;
+
+        //arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);
+        //arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
     }
 
 
@@ -469,32 +504,35 @@ public class Arm : MonoBehaviour
     // Initializes the loadout of the arm based on it being the front arm
     public void FrontArmInitialize()
     {
+
+        // player.SetArms();
         weaponA = player.frontArmWeapons[0];
         weaponB = player.frontArmWeapons[1];
         weaponC = player.frontArmWeapons[2];
         weaponD = player.frontArmWeapons[3];
 
         // Initialize equippedWeapon
-        if (weaponA) Switch(weaponA);
-        else if (weaponB) Switch(weaponB);
-        else if (weaponC) Switch(weaponC);
-        else Switch(weaponD);
+        //if (weaponA) Switch(weaponA);
+        //else if (weaponB) Switch(weaponB);
+        //else if (weaponC) Switch(weaponC);
+        //else Switch(weaponD);
     }
 
 
     // Initializes the loadout of the arm based on it being the back arm
     public void BackArmInitialize()
     {
+        // player.SetArms();
         weaponA = player.backArmWeapons[0];
         weaponB = player.backArmWeapons[1];
         weaponC = player.backArmWeapons[2];
         weaponD = player.backArmWeapons[3];
 
         // Initialize equippedWeapon
-        if (weaponA) Switch(weaponA);
-        else if (weaponB) Switch(weaponB);
-        else if (weaponC) Switch(weaponC);
-        else Switch(weaponD);
+        //if (weaponA) Switch(weaponA);
+        //else if (weaponB) Switch(weaponB);
+        //else if (weaponC) Switch(weaponC);
+        //else Switch(weaponD);
     }
 
     //Get weaponA

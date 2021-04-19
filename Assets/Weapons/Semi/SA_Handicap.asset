@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6148bcc569955e848aa4436ee58d46ac, type: 3}
+  m_Name: SA_Handicap
+  m_EditorClassIdentifier: 
+  weaponName: Handicap
+  description: Terrible weapon, only for the best players
+  prefab: {fileID: 3002241038389116776, guid: 7c1467be8b835f94e9ec592a87882d8b, type: 3}
+  icon: {fileID: 21300000, guid: d738c08a5b78abc4b9e02c79a9107249, type: 3}
+  rarity: 0
+  fireRate: 0.1
+  ammoCapacity: 15
+  recoil: 100
+  reloadRate: 0.25
+  dropoffDist: 5
+  dropoffMod: 0.75
+  spreadRange: 0.05
+  bulletDamage: 5
+  burstCount: 1
+  bulletPushback: 50

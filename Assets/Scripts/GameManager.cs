@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
-
+using UnityEngine.InputSystem;
 
 public enum MatchType
 {
@@ -33,6 +34,9 @@ public class GameManager : MonoBehaviour
     public UIManager uiManager;
     [Tooltip("Local players within the scene")]
     public Player[] localPlayers = new Player[4];
+
+    public Main_Camera dynamicCamera;
+    public GameObject Indicator;
 
     public Player ai;
     private AI_Controller aiC;
@@ -117,6 +121,20 @@ public class GameManager : MonoBehaviour
         //    ai.Activate();
         //    aiC = ai.GetComponent<AI_Controller>();
         //}
+
+        if (matchType == MatchType.Local)
+        {
+            PlayerInputManager pim = GetComponent<PlayerInputManager>();
+            for (int i = 0; i < MenuManager.Instance().numPlayers; i++)
+            {
+                PlayerInput pi = pim.JoinPlayer(i, -1, "PlayerControls", InputSystem.devices[i + 2]);
+                // Calls respawn in player
+                if (pi.gameObject.GetComponent<Player_Networked>() != null)
+                    pi.gameObject.GetComponent<Player_Networked>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
+                else if (pi.gameObject.GetComponent<Player>() != null)
+                    pi.gameObject.GetComponent<Player>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
+            }
+        }
         
     }
 
@@ -228,6 +246,15 @@ public class GameManager : MonoBehaviour
         if (currentGameTime >= totalGameTime)
         {
             ServerMessage("ROUND ENDED");
+
+            // Temporary for now
+            AchievementManager.Instance().OnEvent(AchievementType.games);
+            Scene main = SceneManager.GetSceneByName("L_MainMenu");
+            // Get the Children of Scene, Child 6 is "Canvas:, Child 0 is "Menus", Find the postgame screen, set it active
+            if (main.IsValid())
+                main.GetRootGameObjects()[6].transform.GetChild(0).Find("Postgame Results Screen").gameObject.SetActive(true);
+
+            SceneManager.LoadScene("L_MainMenu");
         }
     }
 
@@ -310,7 +337,16 @@ public class GameManager : MonoBehaviour
     public IEnumerator RespawnPlayer(GameObject obj)
     {
         yield return new WaitForSeconds(playerRespawnTime);
-        obj.SetActive(true);
+
+        // Reactivates the player's children and rigidbody
+        obj.GetComponent<Rigidbody>().isKinematic = false;
+        obj.GetComponent<Collider>().enabled = true;
+        foreach (Transform child in obj.transform)
+        {
+            child.gameObject.SetActive(true);
+        }
+
+        // Calls respawn in player
         if (obj.GetComponent<Player_Networked>() != null)
             obj.GetComponent<Player_Networked>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
         else if (obj.GetComponent<Player>() != null)

@@ -48,6 +48,7 @@ public class Player : MonoBehaviour
     public Player_Networked onlinePlayer;
 
 
+
     // ===========================================================
     //                            DAMAGE
     // ===========================================================
@@ -147,9 +148,16 @@ public class Player : MonoBehaviour
                 else
                     TrackDeath(killerID, playerID, weaponType);
             }
-            
-            // Deactivates the GameObject
-            gameObject.SetActive(false);
+
+            // Deactivates the GameObject's children and rigidbody
+            rb.isKinematic = true;
+            gameObject.GetComponent<Collider>().enabled = false;
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+
+            //gameObject.SetActive(false);
 
             return true;
         }
@@ -206,6 +214,10 @@ public class Player : MonoBehaviour
         // Retrieves an ID from GameManager
         int newID = GameManager.Instance().ClientConnected();
         GameManager.Instance().localPlayers[newID] = this;
+        GameManager.Instance().dynamicCamera.targets.Add(gameObject);
+        
+        GameObject playerIndicator = Instantiate(GameManager.Instance().Indicator);
+        playerIndicator.GetComponent<Indicator>().player = gameObject;
 
         this.playerID = newID;
         lastAttackedID = this.playerID;
@@ -220,6 +232,9 @@ public class Player : MonoBehaviour
             // Tells the server that the Player is connected
             PlayerConnected();
 
+            // Assign Weapon Loadouts from Weapon Managaer
+            SetArms();
+
             uiManager.ui_Players[playerID].UpdateWeaponIcons(playerID);
             // If UI exists (only local player), connect health bar and weapon UI
             //if (uiManager && matchType != MatchType.Local)
@@ -230,6 +245,8 @@ public class Player : MonoBehaviour
             //}
         }
     }
+
+
 
     public void Activate()
     {
@@ -255,6 +272,17 @@ public class Player : MonoBehaviour
             //if (uiManager) uiManager.ui_Players[playerID].UpdateHealthBar(currHealth / maxHealth);
     }
 
+    /// <summary>
+    /// Sets the arms based on the loadouts saved
+    /// </summary>
+    public void SetArms()
+    {
+        WeaponManager.Instance().LoadLoadout();
+        backArmWeapons = WeaponManager.Instance().playerLoadouts[playerID][0];
+        arms[1].BackArmInitialize();
+        frontArmWeapons = WeaponManager.Instance().playerLoadouts[playerID][1];
+        arms[0].FrontArmInitialize();
+    }
 
     /// <summary>
     /// Tells the server to update the appearance of both Arms
@@ -263,15 +291,15 @@ public class Player : MonoBehaviour
     {
         if (matchType == MatchType.Online)
         {
-            arms[0].onlineArm.CmdSwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
-            arms[1].onlineArm.CmdSwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+            arms[0].onlineArm.CmdSwitchAppearance(arms[0].GetEquippedWeapon().prefab.name);
+            arms[1].onlineArm.CmdSwitchAppearance(arms[1].GetEquippedWeapon().prefab.name);
         }
         else
         {
             if (arms != null)
             {
-                arms[0].SwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
-                arms[1].SwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+                arms[0].SwitchAppearance(arms[0].GetEquippedWeapon().prefab.name);
+                arms[1].SwitchAppearance(arms[1].GetEquippedWeapon().prefab.name);
             }
         }
     }

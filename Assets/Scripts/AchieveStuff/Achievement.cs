@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /**
  * Base idea of what Achievements are
@@ -11,14 +12,16 @@
 /// Types of Achievements
 /// Used for checking in Manager
 /// </summary>
+[Serializable]
 public enum AchievementType
 {
-    kills, deaths, wins, shotsFired
+    kills, deaths, wins, shotsFired, games
 }
 
 /// <summary>
 /// Base Achievement variables and methods
 /// </summary>
+[Serializable]
 public class Achievement : ScriptableObject
 {
     [Header("Achievement Info")]
@@ -100,11 +103,37 @@ public class Achievement : ScriptableObject
             case AchievementType.wins:
                 returnable += "Wins";
                 break;
+            case AchievementType.games:
+                returnable += "Games Played";
+                break;
             default:
                 returnable = "ERROR IN \'Achievement.toString()\' METHOD";
                 break;
         }
 
         return returnable;
+    }
+
+    /// <summary>
+    /// Puts the important data into a "greater than seperated values" string in order to save it
+    /// </summary>
+    /// <returns> CSV string to save into PlayerPrefs </returns>
+    public virtual string SaveToString()
+    {
+        return achievementMessage + ">" + achieved + ">" + currentValue;
+    }
+
+    /// <summary>
+    /// Takes a CSV string and parses it into the usable data
+    /// </summary>
+    /// <param name="json"> CSV string to parse through </param>
+    public virtual void LoadFromString( string json )
+    {
+        string[] data = json.Split('>');
+        if (achievementMessage.Equals(data[0]))
+        {
+            achieved = data[1].Equals("True");
+            currentValue = int.Parse(data[2]);
+		}
     }
 }
