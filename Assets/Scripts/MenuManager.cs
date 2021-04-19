@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using UnityEngine.InputSystem.UI;
 
 public class MenuManager : MonoBehaviour
 {
@@ -77,6 +78,8 @@ public class MenuManager : MonoBehaviour
     public GameObject localPregameFirstButton;
     [Tooltip("First Selected Weapon Selection")]
     public GameObject selectionFirstButton;
+    [Tooltip("Postgame Selected Input")]
+    public GameObject postgameButton;
 
     [Header("Return to last Menu Button for each Menu")]
     [Tooltip("Return to Main Button on Training Menu")]
@@ -178,6 +181,10 @@ public class MenuManager : MonoBehaviour
     [Header("Result Screen Info")]
     [Tooltip("Player Scores Container")]
     public GameObject playerScores;
+
+    [Header("Event System")]
+    [Tooltip("Event System Object")]
+    public GameObject es;
 
     // Current Menu on
     private GameObject currentMenu;
@@ -672,6 +679,7 @@ public class MenuManager : MonoBehaviour
     public void LoadLobby()
 	{
         // SceneManager.LoadScene( "L_LobbyMenu" );
+        gameObject.SetActive(false);
         SceneManager.LoadScene("OfflineScene");
 	}
 
@@ -785,6 +793,7 @@ public class MenuManager : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             // Set button to LoadoutFirst
             EventSystem.current.SetSelectedGameObject(pregameFirstButton);
+            currentMenu = PregameMenu;
         }
         else if (LocalMenu.activeSelf)
         {
@@ -795,9 +804,10 @@ public class MenuManager : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             // Set button to LoadoutFirst
             EventSystem.current.SetSelectedGameObject(localPregameFirstButton);
+            currentMenu = LocalPregameMenu;
         }
         //setActiveMenu( PregameMenu );
-        currentMenu = PregameMenu;
+        
 
         this.mapName = mapName;
 
@@ -842,6 +852,9 @@ public class MenuManager : MonoBehaviour
     /// <param name="name"> Name of the Scene to load </param>
     public void LoadScene( string name )
     {
+        // Hide Menus
+        menuGroup.SetActive(false);
+        currentMenu.SetActive(false);
         // load scene
         SceneManager.LoadScene( name );
         // clear selected
@@ -984,7 +997,10 @@ public class MenuManager : MonoBehaviour
 
     public void LoadResults(Dictionary<int, int> kills, Dictionary<int, int> deaths)
     {
-        // Get Parent of Manager, Find "Canvas:, Child 0 is "Menus", Find Postgame screen, set active
+        
+        // Set Menus to active
+        menuGroup.gameObject.SetActive(true);
+        // set the Postgame menu to active
         postgameResultsMenu.SetActive(true);
 
         Dictionary<int, int> placements = new Dictionary<int, int>();
@@ -995,10 +1011,27 @@ public class MenuManager : MonoBehaviour
 
         // Get PlayerInputManager
         PlayerInputManager pim = playerScores.GetComponent<PlayerInputManager>();
-        for (int id = 0; id < MenuManager.Instance().numPlayers; id++)
+        for (int id = 0; id < numPlayers; id++)
         {
             // Make player per connected
-            PlayerInput pi = pim.JoinPlayer(id, -1, "MenuControls", InputSystem.devices[id + 2]);
+            int preDevices = 0;
+            for (int j = 0; j < InputSystem.devices.Count; j++)
+            {
+                if (!(InputSystem.devices[j] is Gamepad))
+                {
+                    preDevices++;
+                }
+            }
+            PlayerInput pi = pim.JoinPlayer(-1, -1, "MenuControls", InputSystem.devices[id + preDevices]);
+            if (id == 0)
+            {
+                postgameButton = pi.gameObject;
+                EventSystem.current.SetSelectedGameObject(postgameButton);
+            }
+            // Put object in correct spot
+            pi.transform.SetParent(playerScores.transform, false);
+            pi.gameObject.name = "Player " + id;
+            pi.GetComponent<Button>().onClick.AddListener(() => ReadyUp(pi.GetComponent<Button>()));
 
             // Set loadout Icons
             Transform loadouts = pi.transform.Find("Loadout");
@@ -1006,8 +1039,8 @@ public class MenuManager : MonoBehaviour
             Transform front = loadouts.Find("Front Arm Loadout");
             for (int arm = 0; arm < 4; arm++)
             {
-                back.GetChild(arm + 1).GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[id][0][arm].icon;
-                front.GetChild(arm + 1).GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[id][1][arm].icon;
+                back.GetChild(arm + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[id][0][arm].icon;
+                front.GetChild(arm + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[id][1][arm].icon;
             }
 
             // Set Player
@@ -1041,6 +1074,7 @@ public class MenuManager : MonoBehaviour
         // check to see if all players readied
         if (readyCount >= numPlayers)
         {
+            readyCount = 0;
             ReturnToMain();
         }
     }

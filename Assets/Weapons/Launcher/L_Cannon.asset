@@ -17,6 +17,7 @@ MonoBehaviour:
   prefab: {fileID: 7640254383217042964, guid: 727d84a0580b28c438b3ea13293168a4, type: 3}
   icon: {fileID: 21300000, guid: 92c72eb3f1a83b343aa948fea08b64a6, type: 3}
   rarity: 0
+  unlocked: 1
   fireRate: 0.5
   ammoCapacity: 25
   recoil: 100
