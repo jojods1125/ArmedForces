@@ -14,15 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Engine
   description: Low damage, high recoil. Used for flying
-  mesh: {fileID: 4300000, guid: 87d91dfbadc3fc340936a420a1707ffa, type: 2}
-  material: {fileID: 2100000, guid: a2eee8323495b514f87547fc9727a108, type: 2}
+  prefab: {fileID: 9218789629299828155, guid: 32ef7e59ae688914aaddced902e31158, type: 3}
   icon: {fileID: 21300000, guid: f0412bd5414a6254285f0c8fb36c9c48, type: 3}
   rarity: 0
   fireRate: 0.015
   ammoCapacity: 1000
-  recoil: 15
+  recoil: 25
   reloadRate: 0.05
+  dropoffDist: 0
+  dropoffMod: 1
   spreadRange: 0.7
-  sprayDistance: 2
-  bulletDamage: 0.75
+  sprayDistance: 1
+  bulletDamage: 1
   bulletPushback: 6

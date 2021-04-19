@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
     [Tooltip("Local players within the scene")]
     public Player[] localPlayers = new Player[4];
 
+    public Main_Camera dynamicCamera;
+
     public Player ai;
     private AI_Controller aiC;
 
@@ -247,10 +249,12 @@ public class GameManager : MonoBehaviour
 
             // Temporary for now
             AchievementManager.Instance().OnEvent(AchievementType.games);
+            Scene main = SceneManager.GetSceneByName("L_MainMenu");
+            // Get the Children of Scene, Child 6 is "Canvas:, Child 0 is "Menus", Find the postgame screen, set it active
+            if (main.IsValid())
+                main.GetRootGameObjects()[6].transform.GetChild(0).Find("Postgame Results Screen").gameObject.SetActive(true);
 
-            MenuManager.Instance().LoadResults(kills, deaths);
-            
-
+            SceneManager.LoadScene("L_MainMenu");
         }
     }
 
@@ -336,6 +340,7 @@ public class GameManager : MonoBehaviour
 
         // Reactivates the player's children and rigidbody
         obj.GetComponent<Rigidbody>().isKinematic = false;
+        obj.GetComponent<Collider>().enabled = true;
         foreach (Transform child in obj.transform)
         {
             child.gameObject.SetActive(true);

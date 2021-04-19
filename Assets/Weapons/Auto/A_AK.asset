@@ -14,16 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: AK
   description: Basic gun with well-rounded stats
-  mesh: {fileID: 4300000, guid: 87d91dfbadc3fc340936a420a1707ffa, type: 2}
-  material: {fileID: 2100000, guid: 4a4d2b787eb393a469ae9860f5de4031, type: 2}
+  prefab: {fileID: 5775568051499200765, guid: e708581101f3b9b40843c9abaa2a2f8b, type: 3}
   icon: {fileID: 21300000, guid: 89a5cca590e5f6e4bb4553b1a3de8737, type: 3}
   rarity: 0
-  unlocked: 1
-  fireRate: 0.075
+  fireRate: 0.09
   ammoCapacity: 60
-  recoil: 25
+  recoil: 30
   reloadRate: 0.05
-  dropoffDist: 5
+  dropoffDist: 4
   dropoffMod: 0.75
   spreadRange: 0.15
   bulletDamage: 10

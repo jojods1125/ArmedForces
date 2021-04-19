@@ -14,18 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Sniper
   description: DESCRIPTION
-  mesh: {fileID: 4300000, guid: 87d91dfbadc3fc340936a420a1707ffa, type: 2}
-  material: {fileID: 2100000, guid: 038d265cf9316054798da520d0468d0b, type: 2}
+  prefab: {fileID: 3002241038389116776, guid: 5437547751fd0bc42aee37c783653f11, type: 3}
   icon: {fileID: 21300000, guid: 6e923db4de8155a4cbd26d175eed5e30, type: 3}
-  rarity: 2
-  unlocked: 1
-  fireRate: 0.1
-  ammoCapacity: 15
-  recoil: 200
-  reloadRate: 0.25
-  dropoffDist: 5
-  dropoffMod: 0.75
-  spreadRange: 0.05
-  bulletDamage: 25
+  rarity: 0
+  fireRate: 2
+  ammoCapacity: 10
+  recoil: 10
+  reloadRate: 3
+  dropoffDist: 10
+  dropoffMod: 1
+  spreadRange: 0.015
+  bulletDamage: 35
   burstCount: 1
-  bulletPushback: 50
+  bulletPushback: 150

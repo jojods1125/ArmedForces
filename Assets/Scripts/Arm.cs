@@ -65,6 +65,11 @@ public class Arm : MonoBehaviour
     private readonly Dictionary<Weapon, int> ammoRemaining = new Dictionary<Weapon, int>();
     /// <summary> Dictionary used for knowing which weapons are in which slots </summary>
     private readonly Dictionary<Weapon, char> weaponLetters = new Dictionary<Weapon, char>();
+    /// <summary> Dictionary used for knowing which weapons objects belong to which prefab name </summary>
+    private readonly Dictionary<string, GameObject> weaponObjs = new Dictionary<string, GameObject>();
+
+    private string previousWeapon;
+
     /// <summary> UIManager, as retrieved from GameManager </summary>
     protected UIManager uiManager;
 
@@ -397,6 +402,16 @@ public class Arm : MonoBehaviour
         weaponLetters[weaponC] = 'C';
         weaponLetters[weaponD] = 'D';
 
+        // Fills in the dictionary of letters to weapon GameObjects
+        weaponObjs[weaponA.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponA.prefab.name), transform);
+        weaponObjs[weaponA.prefab.name].SetActive(false);
+        weaponObjs[weaponB.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponB.prefab.name), transform);
+        weaponObjs[weaponB.prefab.name].SetActive(false);
+        weaponObjs[weaponC.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponC.prefab.name), transform);
+        weaponObjs[weaponC.prefab.name].SetActive(false);
+        weaponObjs[weaponD.prefab.name] = (GameObject)Instantiate(Resources.Load("Weapons/" + weaponD.prefab.name), transform);
+        weaponObjs[weaponD.prefab.name].SetActive(false);
+
         // Initializes ammoRemaining dictionary for each weapon
         if (!ammoRemaining.ContainsKey(weaponA))
             if (weaponA is W_Shootable gunA) ammoRemaining.Add(weaponA, gunA.ammoCapacity);
@@ -442,11 +457,14 @@ public class Arm : MonoBehaviour
 
         if (weapon)
         {
+            if (equippedWeapon != null)
+                previousWeapon = equippedWeapon.prefab.name;
+
             // Change currently equipped weapon
             equippedWeapon = weapon;
 
             if (matchType != MatchType.Online)
-                SwitchAppearance(weapon.mesh.name, weapon.material.name);
+                SwitchAppearance(weapon.prefab.name);
 
             // Update UI
             if (uiManager) uiManager.ui_Players[player.GetPlayerID()].UpdateSelectedUI(armSide, weaponLetters[weapon]);
@@ -457,12 +475,19 @@ public class Arm : MonoBehaviour
     /// <summary>
     /// Every client refreshes the appearance of their Arm
     /// </summary>
-    /// <param name="meshName"> Mesh file name, loaded from Resources/Meshes </param>
-    /// <param name="materialName"> Material file name, loaded from Resources/Materials </param>
-    public void SwitchAppearance(string meshName, string materialName)
+    /// <param name="prefabName"> Which prefab needs to be activated </param>
+    public void SwitchAppearance(string prefabName)
     {
-        arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);
-        arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
+        if (previousWeapon != null)
+            weaponObjs[previousWeapon].SetActive(false);
+
+        weaponObjs[prefabName].SetActive(true);
+
+        //weaponObject = (GameObject)Resources.Load("Meshes/" + prefabName);
+        //weaponObject.transform = gameObject;
+
+        //arm.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Meshes/" + meshName);
+        //arm.GetComponent<MeshRenderer>().material = (Material)Resources.Load("Materials/" + materialName);
     }
 
 
@@ -487,10 +512,10 @@ public class Arm : MonoBehaviour
         weaponD = player.frontArmWeapons[3];
 
         // Initialize equippedWeapon
-        if (weaponA) Switch(weaponA);
-        else if (weaponB) Switch(weaponB);
-        else if (weaponC) Switch(weaponC);
-        else Switch(weaponD);
+        //if (weaponA) Switch(weaponA);
+        //else if (weaponB) Switch(weaponB);
+        //else if (weaponC) Switch(weaponC);
+        //else Switch(weaponD);
     }
 
 
@@ -504,10 +529,10 @@ public class Arm : MonoBehaviour
         weaponD = player.backArmWeapons[3];
 
         // Initialize equippedWeapon
-        if (weaponA) Switch(weaponA);
-        else if (weaponB) Switch(weaponB);
-        else if (weaponC) Switch(weaponC);
-        else Switch(weaponD);
+        //if (weaponA) Switch(weaponA);
+        //else if (weaponB) Switch(weaponB);
+        //else if (weaponC) Switch(weaponC);
+        //else Switch(weaponD);
     }
 
     //Get weaponA

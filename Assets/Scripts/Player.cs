@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     public Rigidbody rb;
     private Arm[] arms;
     private float currHealth = 100;
-    private bool dying = false;
+    public bool dying = false;
 
     //Used for differentiating each player in GameManager
     [SerializeField]
@@ -150,6 +150,7 @@ public class Player : MonoBehaviour
 
             // Deactivates the GameObject's children and rigidbody
             rb.isKinematic = true;
+            gameObject.GetComponent<Collider>().enabled = false;
             foreach (Transform child in transform)
             {
                 child.gameObject.SetActive(false);
@@ -212,6 +213,7 @@ public class Player : MonoBehaviour
         // Retrieves an ID from GameManager
         int newID = GameManager.Instance().ClientConnected();
         GameManager.Instance().localPlayers[newID] = this;
+        GameManager.Instance().dynamicCamera.targets.Add(gameObject);
 
         this.playerID = newID;
         lastAttackedID = this.playerID;
@@ -285,15 +287,15 @@ public class Player : MonoBehaviour
     {
         if (matchType == MatchType.Online)
         {
-            arms[0].onlineArm.CmdSwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
-            arms[1].onlineArm.CmdSwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+            arms[0].onlineArm.CmdSwitchAppearance(arms[0].GetEquippedWeapon().prefab.name);
+            arms[1].onlineArm.CmdSwitchAppearance(arms[1].GetEquippedWeapon().prefab.name);
         }
         else
         {
             if (arms != null)
             {
-                arms[0].SwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
-                arms[1].SwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+                arms[0].SwitchAppearance(arms[0].GetEquippedWeapon().prefab.name);
+                arms[1].SwitchAppearance(arms[1].GetEquippedWeapon().prefab.name);
             }
         }
     }
