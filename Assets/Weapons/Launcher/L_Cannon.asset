@@ -19,14 +19,14 @@ MonoBehaviour:
   rarity: 0
   unlocked: 1
   fireRate: 0.5
-  ammoCapacity: 25
-  recoil: 100
+  ammoCapacity: 15
+  recoil: 300
   reloadRate: 1
   dropoffDist: 0
   dropoffMod: 1
   projectilePower: 500
-  projectilePrefab: {fileID: 7159978887230406093, guid: ea690a9212f478b4b9c70c2c0ba17e2f, type: 3}
+  projectilePrefab: {fileID: 7159978887230406093, guid: b10a6cebd2ce8c64380b6296965e73ad, type: 3}
   rocketPowered: 0
   explosionRadius: 0
   coreDamage: 25
-  corePushback: 100
+  corePushback: 400

@@ -19,12 +19,12 @@ MonoBehaviour:
   rarity: 0
   unlocked: 1
   fireRate: 0.015
-  ammoCapacity: 800
-  recoil: 10
+  ammoCapacity: 500
+  recoil: 4
   reloadRate: 0.05
   dropoffDist: 0
   dropoffMod: 1
   spreadRange: 0.25
   sprayDistance: 5
-  bulletDamage: 1.25
+  bulletDamage: 2.5
   bulletPushback: 6

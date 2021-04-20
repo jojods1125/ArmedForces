@@ -20,7 +20,7 @@ MonoBehaviour:
   unlocked: 1
   fireRate: 0.001
   ammoCapacity: 200
-  recoil: 12
+  recoil: 6
   reloadRate: 0.035
   dropoffDist: 1
   dropoffMod: 0.75
