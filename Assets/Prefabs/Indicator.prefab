@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 645146831692368475}
   - component: {fileID: 645146831692368468}
   - component: {fileID: 645146831692368469}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,6 +115,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 4a4d2b787eb393a469ae9860f5de4031, type: 2}
   - {fileID: 2100000, guid: a2eee8323495b514f87547fc9727a108, type: 2}
   child: {fileID: 5465108382832448280}
+  cameraObj: {fileID: 0}
 --- !u!1 &5465108382832448280
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,7 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6493917777492759882}
   - component: {fileID: 2580112615335004611}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
