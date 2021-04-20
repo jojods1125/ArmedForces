@@ -19,10 +19,10 @@ MonoBehaviour:
   rarity: 0
   fireRate: 0.1
   ammoCapacity: 50
-  recoil: 0
+  recoil: 30
   reloadRate: 0.01
   dropoffDist: 0
   dropoffMod: 1
   spreadRange: 0.2
-  bulletDamage: 5
+  bulletDamage: 4
   bulletPushback: 10

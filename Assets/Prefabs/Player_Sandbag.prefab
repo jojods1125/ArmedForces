@@ -536,6 +536,7 @@ MonoBehaviour:
   walkMomentum: 10
   maxWalkSpeed: 5
   jumpForce: 100
+  isAI: 0
   backArmWeapons:
   - {fileID: 11400000, guid: 25f85aae63736c2438ac9a66015bff74, type: 2}
   - {fileID: 11400000, guid: 3e86a95a2de72ce468388c4516465b8c, type: 2}
@@ -604,18 +605,19 @@ MonoBehaviour:
   enemy: {fileID: 0}
   frontArm: {fileID: 5977895261803497040}
   backArm: {fileID: 5784502104321264497}
+  enemyTargetTime: 20
   attackRange: 2
   stoppingDist: 2
   stuckDist: 1
-  mapWidth: 17
+  mapWidth: 18
   mapHeight: 9
   safeSpeed: 4
-  lowSprayerAmmo: 0
-  lowShotgunAmmo: 0
+  lowSprayerAmmo: 300
+  lowShotgunAmmo: 2
   lowAutoAmmo: 0
-  maxSprayerAmmo: 0
-  maxShotgunAmmo: 0
-  maxAutoAmmo: 0
+  maxSprayerAmmo: 700
+  maxShotgunAmmo: 10
+  maxAutoAmmo: 40
 --- !u!1 &5830838117268684917
 GameObject:
   m_ObjectHideFlags: 0

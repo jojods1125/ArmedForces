@@ -6,6 +6,7 @@ public class Indicator : MonoBehaviour
 {
     public Material[] materials;
     public GameObject child;
+    public Camera camera;
 
     private int playerID;
     private GameObject player;
@@ -21,7 +22,7 @@ public class Indicator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 targetPosOnScreen = Camera.main.WorldToScreenPoint (player.GetComponent<Transform>().position);
+        Vector3 targetPosOnScreen = camera.WorldToScreenPoint (player.GetComponent<Transform>().position);
         if (onScreen (targetPosOnScreen) || player.GetComponent<Player>().dying) {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
             child.SetActive(false);
@@ -49,7 +50,7 @@ public class Indicator : MonoBehaviour
         else if (angle < 360 - degreeRange / 4f) edgeLine = 3;
         else edgeLine = 0;
 
-        gameObject.GetComponent<Transform>().position = Camera.main.ScreenToWorldPoint(intersect(edgeLine, center, targetPosOnScreen)+new Vector3(0,0,10));
+        gameObject.GetComponent<Transform>().position = camera.ScreenToWorldPoint(intersect(edgeLine, center, targetPosOnScreen)+new Vector3(0,0,10));
         gameObject.GetComponent<Transform>().eulerAngles = new Vector3 (0, 0, angle);
         
     }
