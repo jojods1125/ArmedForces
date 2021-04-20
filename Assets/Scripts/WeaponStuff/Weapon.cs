@@ -18,6 +18,9 @@ public class Weapon : ScriptableObject
 
     [Tooltip("Rarity level of the weapon")]
     public WeaponRarity rarity;
+
+    [Tooltip("Is Weapon Unlocked")]
+    public bool unlocked = false;
 }
 
 public enum WeaponRarity

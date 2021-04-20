@@ -31,7 +31,7 @@ public class LoadingLoadout : MonoBehaviour
         int playerId = MenuManager.Instance().numPlayers++;
 
         // Put layout in correct spot
-        loadoutLayout.transform.SetParent(transform);
+        loadoutLayout.transform.SetParent(transform, false);
         loadoutLayout.gameObject.name = "Player Loadout " + playerId;
 
         // set button onClick()'s
@@ -90,6 +90,10 @@ public class LoadingLoadout : MonoBehaviour
                     // Create Weapon Display
                     GameObject weapon = Instantiate(weaponPrefab, weaponList);
                     weapon.GetComponent<Button>().onClick.AddListener(() => ChooseWeapon(playerId, w));
+                    if (!w.unlocked)
+                    {
+                        weapon.GetComponent<Button>().interactable = false;
+                    }
                     temp.Add(weapon);
 
                     // Set Weapon & stats
@@ -258,13 +262,14 @@ public class LoadingLoadout : MonoBehaviour
         startButton.interactable = true;
     }
 
-    private void Update()
+/*    private void Update()
     {
         for (int i = 0; i < MenuManager.Instance().numPlayers; i++)
         {
             // Find Description Box
             GameObject selection = transform.Find("Player Loadout " + i).Find("Selection").gameObject;
             GameObject descriptionBox = selection.transform.Find("Description Box").gameObject;
+            
 
             // Update Weapon display
             if (selection.gameObject.activeSelf)
@@ -502,4 +507,4 @@ public class LoadingLoadout : MonoBehaviour
             }
         }
     }
-}
+*/}

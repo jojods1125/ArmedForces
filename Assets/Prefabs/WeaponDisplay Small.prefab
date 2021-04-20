@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 4970655156858171615}
   - component: {fileID: 8708793134448369479}
   m_Layer: 5
-  m_Name: WeaponDisplay
+  m_Name: WeaponDisplay Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -255,7 +255,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0.5019608}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0, g: 0, b: 0, a: 0.5019608}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0.8784314}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -270,7 +270,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 5916672077392969218}
+  m_TargetGraphic: {fileID: 5916672077392969218, guid: 7802398b723f95e4f9ae03c2641fc202, type: 3}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:

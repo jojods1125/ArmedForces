@@ -36,6 +36,7 @@ public class A_Tiered : Achievement
         if (nextTier < activationValues.Length && CheckValue(nextTier))
         {
             nextTier++;
+            unlockReward(nextTier);
             Debug.Log(achievementMessage + " Achieved: " + activationValues[nextTier - 1] + "\n Total: " + currentValue);
             return CheckNext() || true;
         }
@@ -67,12 +68,31 @@ public class A_Tiered : Achievement
     }
 
     /// <summary>
+    /// Unlocks the corresponding reward if its point is reached
+    /// </summary>
+    public void unlockReward(int tierReached)
+    {
+        foreach (Unlockable u in unlockables)
+        {
+            if (u.value <= tierReached)
+            {
+                u.Unlock();
+            }
+        }
+    }
+
+    /// <summary>
     /// Puts the important data into a CSV string in order to save it
     /// </summary>
     /// <returns> CSV string to save into PlayerPrefs </returns>
     public override string SaveToString()
     {
-        return achievementMessage + ">" + achieved + ">" + currentValue + ">" + nextTier;
+        string ret = achievementMessage + ">" + achieved + ">" + currentValue + ">" + nextTier + "|";
+        foreach (Unlockable u in unlockables)
+        {
+            ret += u.ToString() + "\\";
+        }
+        return ret;
     }
 
     /// <summary>
@@ -81,12 +101,29 @@ public class A_Tiered : Achievement
     /// <param name="json"> CSV string to parse through </param>
     public override void LoadFromString(string json)
     {
-        string[] data = json.Split('>');
-        if (achievementMessage.Equals(data[0]))
+        string[] data = json.Split('|');
+        // data[0] => achievement data
+        // data[1] => unlockables data
+        string[] aData = data[0].Split('>');
+        if (achievementMessage.Equals(aData[0]))
         {
-            achieved = data[1].Equals("True");
-            currentValue = int.Parse(data[2]);
-            nextTier = int.Parse(data[3]);
+            achieved = aData[1].Equals("True");
+            currentValue = int.Parse(aData[2]);
+            nextTier = int.Parse(aData[3]);
+            // split by unlockables
+            if (data.Length > 1)
+            {
+                string[] uData = data[1].Split('\\');
+                for (int i = 0; i < unlockables.Count; i++)
+                {
+                    string curr = uData[i];
+                    string[] currData = curr.Split('<');
+                    unlockables[i].value = float.Parse(currData[0]);
+                    unlockables[i].reward = WeaponManager.Instance().getByName(currData[1]);
+                    unlockables[i].reward.unlocked = bool.Parse(currData[2]);
+                    unlockables[i].unlocked = bool.Parse(currData[2]);
+                }
+            }
         }
     }
 }

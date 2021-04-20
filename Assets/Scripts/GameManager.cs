@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public enum MatchType
 {
@@ -126,7 +127,15 @@ public class GameManager : MonoBehaviour
             PlayerInputManager pim = GetComponent<PlayerInputManager>();
             for (int i = 0; i < MenuManager.Instance().numPlayers; i++)
             {
-                PlayerInput pi = pim.JoinPlayer(i, -1, "PlayerControls", InputSystem.devices[i + 2]);
+                int preDevices = 0;
+                for (int j = 0; j < InputSystem.devices.Count; j++)
+                {
+                    if (!(InputSystem.devices[j] is Gamepad))
+                    {
+                        preDevices++;
+                    }
+                }
+                PlayerInput pi = pim.JoinPlayer(i, -1, "PlayerControls", InputSystem.devices[i + preDevices]);
                 // Calls respawn in player
                 if (pi.gameObject.GetComponent<Player_Networked>() != null)
                     pi.gameObject.GetComponent<Player_Networked>().Respawn(spawnPoints[Random.Range(0, spawnPoints.Count)]);
@@ -245,13 +254,21 @@ public class GameManager : MonoBehaviour
 
             // Temporary for now
             AchievementManager.Instance().OnEvent(AchievementType.games);
-            Scene main = SceneManager.GetSceneByName("L_MainMenu");
-            // Get the Children of Scene, Child 6 is "Canvas:, Child 0 is "Menus", Find the postgame screen, set it active
-            if (main.IsValid())
-                main.GetRootGameObjects()[6].transform.GetChild(0).Find("Postgame Results Screen").gameObject.SetActive(true);
-
             SceneManager.LoadScene("L_MainMenu");
+
+            //StartCoroutine("EndGame");
+            MenuManager.Instance().LoadResults(kills, deaths);
         }
+    }
+
+    IEnumerator EndGame()
+    {
+        if (!SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("L_MainMenu")))
+        {
+            yield return new WaitForSeconds(1f);
+        }
+        MenuManager.Instance().LoadResults(kills, deaths);
+        yield return null;
     }
 
     public void SetCurrentGameTime(float time)
