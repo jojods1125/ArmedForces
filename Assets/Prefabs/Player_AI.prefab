@@ -777,8 +777,9 @@ MonoBehaviour:
   enemy: {fileID: 0}
   frontArm: {fileID: 5424813265914721609}
   backArm: {fileID: 1811882566059405464}
-  attackRange: 2
-  stoppingDist: 2
+  enemyTargetTime: 20
+  attackRange: 12
+  stoppingDist: 4
   stuckDist: 1
   mapWidth: 18
   mapHeight: 9
