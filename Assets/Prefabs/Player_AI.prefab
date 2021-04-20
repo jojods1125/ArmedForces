@@ -743,7 +743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   matchType: 1
   maxHealth: 100
-  walkMomentum: 15
+  walkMomentum: 10
   maxWalkSpeed: 7.5
   jumpForce: 300
   isAI: 1

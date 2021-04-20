@@ -38,9 +38,6 @@ public class GameManager : MonoBehaviour
     public Main_Camera dynamicCamera;
     public GameObject Indicator;
 
-    public Player ai;
-    private AI_Controller aiC;
-
 
     /// <summary> List of spawn point locations </summary>
     private List<Vector3> spawnPoints = new List<Vector3>();

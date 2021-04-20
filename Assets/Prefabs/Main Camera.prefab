@@ -96,13 +96,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d48ccf7d50bb24ea465d0a3f46c62c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets:
-  - {fileID: 0}
-  - {fileID: 0}
+  targets: []
   offset: {x: 0, y: 10, z: -60}
   smoothTime: 0.1
-  minZoom: 40
+  minZoom: 35
   maxZoom: 12
-  zoomLimiter: 70
-  mapX: 16
+  zoomLimiter: 100
+  mapX: 14
   mapY: 8

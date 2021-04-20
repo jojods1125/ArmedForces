@@ -2145,7 +2145,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   matchType: 1
   playerRespawnTime: 3
-  totalGameTime: 300
+  totalGameTime: 150
   serverGameTimeStep: 0.25
   spawnPointContainer: {fileID: 1066990613}
   uiManager: {fileID: 126081587}
@@ -2156,7 +2156,6 @@ MonoBehaviour:
   - {fileID: 0}
   dynamicCamera: {fileID: 1663679616}
   Indicator: {fileID: 645146831692368470, guid: aeba7f35b24c0b047b49ba77e05252be, type: 3}
-  ai: {fileID: 0}
 --- !u!1 &4243853699334238499
 GameObject:
   m_ObjectHideFlags: 0
@@ -2223,22 +2222,6 @@ PrefabInstance:
     - target: {fileID: 4426586938317923157, guid: dc4395658a3bfed469f134745a7b206c, type: 3}
       propertyPath: m_Name
       value: Main Camera
-      objectReference: {fileID: 0}
-    - target: {fileID: 5433465853004697065, guid: dc4395658a3bfed469f134745a7b206c, type: 3}
-      propertyPath: targets.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5433465853004697065, guid: dc4395658a3bfed469f134745a7b206c, type: 3}
-      propertyPath: minZoom
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 5433465853004697065, guid: dc4395658a3bfed469f134745a7b206c, type: 3}
-      propertyPath: zoomLimiter
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 5433465853004697065, guid: dc4395658a3bfed469f134745a7b206c, type: 3}
-      propertyPath: mapX
-      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc4395658a3bfed469f134745a7b206c, type: 3}

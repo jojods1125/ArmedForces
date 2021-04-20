@@ -2381,7 +2381,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   matchType: 1
   playerRespawnTime: 3
-  totalGameTime: 300
+  totalGameTime: 150
   serverGameTimeStep: 0.25
   spawnPointContainer: {fileID: 1066990613}
   uiManager: {fileID: 126081587}
@@ -2392,7 +2392,6 @@ MonoBehaviour:
   - {fileID: 0}
   dynamicCamera: {fileID: 1663679616}
   Indicator: {fileID: 645146831692368470, guid: aeba7f35b24c0b047b49ba77e05252be, type: 3}
-  ai: {fileID: 0}
 --- !u!1 &4243853699334238499
 GameObject:
   m_ObjectHideFlags: 0
