@@ -220,6 +220,7 @@ public class Player : MonoBehaviour
         
         GameObject playerIndicator = Instantiate(GameManager.Instance().Indicator);
         playerIndicator.GetComponent<Indicator>().SetPlayer(newID, gameObject);
+        playerIndicator.GetComponent<Indicator>().camera = GameManager.Instance().dynamicCamera.GetComponent<Camera>();
 
         this.playerID = newID;
         lastAttackedID = this.playerID;
