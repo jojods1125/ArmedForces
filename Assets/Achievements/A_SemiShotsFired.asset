@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be35fab68fc7d44a8ebc1972641712, type: 3}
   m_Name: A_SemiShotsFired
   m_EditorClassIdentifier: 
-  achievementMessage: Take Aim!
+  achievementMessage: Fire!
   achieved: 0
   type: 3
   currentValue: 0
+  unlockables:
+  - {fileID: 11400000, guid: 8a285de560414734181f81e94b880444, type: 2}
   nextTier: 0
   activationValues: 01000000050000000a00000019000000320000004b0000007d000000
   weaponType: 2

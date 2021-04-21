@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf80db299a61ac248aa944117fab5e02, type: 3}
+  m_Name: A_Magnet
+  m_EditorClassIdentifier: 
+  weaponName: Magnet
+  description: No damage, but sucks you towards where you point
+  prefab: {fileID: 5775568051499200765, guid: ceda8341158c9bd48a1d995bae55a506, type: 3}
+  icon: {fileID: 21300000, guid: 301deb7eadb978f448ef9a4abe10d448, type: 3}
+  rarity: 0
+  unlocked: 1
+  fireRate: 0.001
+  ammoCapacity: 300
+  recoil: -15
+  reloadRate: 0.01
+  dropoffDist: 5
+  dropoffMod: 0.75
+  spreadRange: 0
+  bulletDamage: 0
+  bulletPushback: 0

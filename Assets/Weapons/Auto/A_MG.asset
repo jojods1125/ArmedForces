@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf80db299a61ac248aa944117fab5e02, type: 3}
+  m_Name: A_MG
+  m_EditorClassIdentifier: 
+  weaponName: Machine Gun
+  description: More damage, but more recoil and bullet spread
+  prefab: {fileID: 5775568051499200765, guid: 05ef8965c3bccef47a59a01a3f6eb5a9, type: 3}
+  icon: {fileID: 21300000, guid: 98623227386b5e64c844b9031c0d6334, type: 3}
+  rarity: 0
+  unlocked: 1
+  fireRate: 0.1
+  ammoCapacity: 275
+  recoil: 30
+  reloadRate: 0.075
+  dropoffDist: 2
+  dropoffMod: 0.75
+  spreadRange: 0.025
+  bulletDamage: 10
+  bulletPushback: 15

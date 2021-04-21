@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     [Min(0)]
     public int jumpForce = 100;
 
+    public bool isAI = false;
+
 
     [Header("Weapon Loadouts")]
 
@@ -30,7 +32,7 @@ public class Player : MonoBehaviour
     public Rigidbody rb;
     private Arm[] arms;
     private float currHealth = 100;
-    private bool dying = false;
+    public bool dying = false;
 
     //Used for differentiating each player in GameManager
     [SerializeField]
@@ -46,6 +48,7 @@ public class Player : MonoBehaviour
     protected UIManager uiManager;
 
     public Player_Networked onlinePlayer;
+
 
 
     // ===========================================================
@@ -147,9 +150,16 @@ public class Player : MonoBehaviour
                 else
                     TrackDeath(killerID, playerID, weaponType);
             }
-            
-            // Deactivates the GameObject
-            gameObject.SetActive(false);
+
+            // Deactivates the GameObject's children and rigidbody
+            rb.isKinematic = true;
+            gameObject.GetComponent<Collider>().enabled = false;
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+
+            //gameObject.SetActive(false);
 
             return true;
         }
@@ -206,6 +216,11 @@ public class Player : MonoBehaviour
         // Retrieves an ID from GameManager
         int newID = GameManager.Instance().ClientConnected();
         GameManager.Instance().localPlayers[newID] = this;
+        GameManager.Instance().dynamicCamera.targets.Add(gameObject);
+        
+        GameObject playerIndicator = Instantiate(GameManager.Instance().Indicator);
+        playerIndicator.GetComponent<Indicator>().SetPlayer(newID, gameObject);
+        playerIndicator.GetComponent<Indicator>().cameraObj = GameManager.Instance().dynamicCamera.GetComponent<Camera>();
 
         this.playerID = newID;
         lastAttackedID = this.playerID;
@@ -214,11 +229,19 @@ public class Player : MonoBehaviour
 
     protected void Start()
     {
+        if ((matchType == MatchType.Online && onlinePlayer.isLocalPlayer) || matchType != MatchType.Online)
+        {
+            uiManager = GameManager.Instance().uiManager;
+        }
+
         // If not an online player
         if (matchType != MatchType.Online)
         {
             // Tells the server that the Player is connected
             PlayerConnected();
+
+            // Assign Weapon Loadouts from Weapon Managaer
+            SetArms();
 
             uiManager.ui_Players[playerID].UpdateWeaponIcons(playerID);
             // If UI exists (only local player), connect health bar and weapon UI
@@ -230,6 +253,8 @@ public class Player : MonoBehaviour
             //}
         }
     }
+
+
 
     public void Activate()
     {
@@ -255,6 +280,25 @@ public class Player : MonoBehaviour
             //if (uiManager) uiManager.ui_Players[playerID].UpdateHealthBar(currHealth / maxHealth);
     }
 
+    /// <summary>
+    /// Sets the arms based on the loadouts saved
+    /// </summary>
+    public void SetArms()
+    {
+        if (!isAI)
+        {
+            WeaponManager.Instance().LoadLoadout();
+            backArmWeapons = WeaponManager.Instance().playerLoadouts[playerID][0];
+            arms[1].BackArmInitialize();
+            frontArmWeapons = WeaponManager.Instance().playerLoadouts[playerID][1];
+            arms[0].FrontArmInitialize();
+        }
+        else
+        {
+            arms[1].BackArmInitialize();
+            arms[0].FrontArmInitialize();
+        }
+    }
 
     /// <summary>
     /// Tells the server to update the appearance of both Arms
@@ -263,15 +307,15 @@ public class Player : MonoBehaviour
     {
         if (matchType == MatchType.Online)
         {
-            arms[0].onlineArm.CmdSwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
-            arms[1].onlineArm.CmdSwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+            arms[0].onlineArm.CmdSwitchAppearance(arms[0].GetEquippedWeapon().prefab.name);
+            arms[1].onlineArm.CmdSwitchAppearance(arms[1].GetEquippedWeapon().prefab.name);
         }
         else
         {
             if (arms != null)
             {
-                arms[0].SwitchAppearance(arms[0].GetEquippedWeapon().mesh.name, arms[0].GetEquippedWeapon().material.name);
-                arms[1].SwitchAppearance(arms[1].GetEquippedWeapon().mesh.name, arms[1].GetEquippedWeapon().material.name);
+                arms[0].SwitchAppearance(arms[0].GetEquippedWeapon().prefab.name);
+                arms[1].SwitchAppearance(arms[1].GetEquippedWeapon().prefab.name);
             }
         }
     }

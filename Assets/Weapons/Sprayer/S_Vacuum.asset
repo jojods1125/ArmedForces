@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37bb4b310cc54bf4b9c9932d776220b5, type: 3}
+  m_Name: S_Vacuum
+  m_EditorClassIdentifier: 
+  weaponName: Vacuum
+  description: No damage, pulls enemy in
+  prefab: {fileID: 9218789629299828155, guid: 1b297ce0208369947ba285fce1b8c846, type: 3}
+  icon: {fileID: 21300000, guid: a2e2a6f213a384a498f8a3d6e6eb1a11, type: 3}
+  rarity: 0
+  unlocked: 1
+  fireRate: 0.01
+  ammoCapacity: 400
+  recoil: -6
+  reloadRate: 0.035
+  dropoffDist: 0
+  dropoffMod: 1
+  spreadRange: 0.25
+  sprayDistance: 7
+  bulletDamage: 0
+  bulletPushback: -18

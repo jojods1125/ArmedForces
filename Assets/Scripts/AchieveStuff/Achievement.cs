@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 /**
  * Base idea of what Achievements are
@@ -11,14 +13,16 @@
 /// Types of Achievements
 /// Used for checking in Manager
 /// </summary>
+[Serializable]
 public enum AchievementType
 {
-    kills, deaths, wins, shotsFired
+    kills, deaths, wins, shotsFired, games
 }
 
 /// <summary>
 /// Base Achievement variables and methods
 /// </summary>
+[Serializable]
 public class Achievement : ScriptableObject
 {
     [Header("Achievement Info")]
@@ -38,6 +42,8 @@ public class Achievement : ScriptableObject
      * CREATE DICTIONARY<INT, WEAPON> FOR UNLOCKABLES
      * CREATE METHOD TO CHECK FOR UNLOCKABLES
      */
+    [Tooltip("List of Unlockables")]
+    public List<Unlockable> unlockables;
 
 
     /// <summary>
@@ -47,14 +53,6 @@ public class Achievement : ScriptableObject
     public void AddValue(int amount)
     {
         currentValue += amount;
-    }
-
-    /// <summary>
-    /// Unlocks the corresponding reward if its point is reached
-    /// </summary>
-    public void unlockReward ()
-    {
-        
     }
 
     /// <summary>
@@ -100,11 +98,59 @@ public class Achievement : ScriptableObject
             case AchievementType.wins:
                 returnable += "Wins";
                 break;
+            case AchievementType.games:
+                returnable += "Games Played";
+                break;
             default:
                 returnable = "ERROR IN \'Achievement.toString()\' METHOD";
                 break;
         }
 
         return returnable;
+    }
+
+    /// <summary>
+    /// Puts the important data into a "greater than seperated values" string in order to save it
+    /// </summary>
+    /// <returns> CSV string to save into PlayerPrefs </returns>
+    public virtual string SaveToString()
+    {
+        string ret = achievementMessage + ">" + achieved + ">" + currentValue + "|";
+        foreach (Unlockable u in unlockables)
+        {
+            ret += u.ToString() + "\\";
+        }
+        return ret;
+    }
+
+    /// <summary>
+    /// Takes a CSV string and parses it into the usable data
+    /// </summary>
+    /// <param name="json"> CSV string to parse through </param>
+    public virtual void LoadFromString( string json )
+    {
+        string[] data = json.Split('|');
+        // data[0] => achievement data
+        // data[1] => unlockables data
+        string[] aData = data[0].Split('>');
+        if (achievementMessage.Equals(aData[0]))
+        {
+            achieved = aData[1].Equals("True");
+            currentValue = int.Parse(aData[2]);
+            // split by unlockables
+            if (data.Length > 1)
+            {
+                string[] uData = data[1].Split('\\');
+                for (int i = 0; i < unlockables.Count; i++)
+                {
+                    string curr = uData[i];
+                    string[] currData = curr.Split('<');
+                    unlockables[i].value = float.Parse(currData[0]);
+                    unlockables[i].reward = WeaponManager.Instance().getByName(currData[1]);
+                    unlockables[i].reward.unlocked = bool.Parse(currData[2]);
+                    unlockables[i].unlocked = bool.Parse(currData[2]);
+                }
+            }
+		}
     }
 }
