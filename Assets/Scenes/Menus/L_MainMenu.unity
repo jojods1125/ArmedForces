@@ -6041,7 +6041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b16c6f78230fa4964a222622d8aae332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 1544760054}
+  m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
   m_PlayerRoot: {fileID: 201516953}
@@ -9619,7 +9619,7 @@ MonoBehaviour:
   PregameMenu: {fileID: 591909361}
   LocalPregameMenu: {fileID: 1032318212}
   SelectionMenu: {fileID: 260062026}
-  postgameResultsMenu: {fileID: 883617528}
+  PostgameResultsMenu: {fileID: 883617528}
   menuGroup: {fileID: 1545451816}
   mainFirstButton: {fileID: 1544760054}
   trainingFirstButton: {fileID: 341579137}
