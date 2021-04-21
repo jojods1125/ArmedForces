@@ -52,7 +52,7 @@ public class MenuManager : MonoBehaviour
     [Tooltip("Weapon Selection Screen Link")]
     public GameObject SelectionMenu;
     [Tooltip("Postgame Results Screen")]
-    public GameObject postgameResultsMenu;
+    public GameObject PostgameResultsMenu;
 
     [Header("Menus")]
     [Tooltip("Group of all Menus")]
@@ -204,6 +204,8 @@ public class MenuManager : MonoBehaviour
 
     // Ordered listing of weapons
     public Dictionary<string, Dictionary<WeaponRarity, List<Weapon>>> order;
+
+    private bool test = false;
 
     // Start is called before the first frame update
     void Start()
@@ -616,6 +618,11 @@ public class MenuManager : MonoBehaviour
     /// </summary>
     public void TrainingMode()
     {
+        if (test)
+        {
+            test = false;
+            return;
+        }
         // set inactive if active
         if (PregameMenu.activeSelf)
 		{
@@ -624,7 +631,6 @@ public class MenuManager : MonoBehaviour
 		}
 
         TrainingMenu.SetActive( true );
-        //setActiveMenu( OfflineMenu );
         currentMenu = TrainingMenu;
 
         // Clear selected object
@@ -997,11 +1003,13 @@ public class MenuManager : MonoBehaviour
 
     public void LoadResults(Dictionary<int, int> kills, Dictionary<int, int> deaths)
     {
+        test = true;
         
         // Set Menus to active
         menuGroup.gameObject.SetActive(true);
         // set the Postgame menu to active
-        postgameResultsMenu.SetActive(true);
+        setActiveMenu(PostgameResultsMenu);
+        currentMenu = PostgameResultsMenu;
 
         Dictionary<int, int> placements = new Dictionary<int, int>();
         foreach (KeyValuePair<int, int> playerKills in kills.OrderBy(key => key.Value))
@@ -1023,11 +1031,7 @@ public class MenuManager : MonoBehaviour
                 }
             }
             PlayerInput pi = pim.JoinPlayer(-1, -1, "MenuControls", InputSystem.devices[id + preDevices]);
-            if (id == 0)
-            {
-                postgameButton = pi.gameObject;
-                EventSystem.current.SetSelectedGameObject(postgameButton);
-            }
+            EventSystem.current.SetSelectedGameObject(pi.gameObject);
             // Put object in correct spot
             pi.transform.SetParent(playerScores.transform, false);
             pi.gameObject.name = "Player " + id;
@@ -1075,6 +1079,7 @@ public class MenuManager : MonoBehaviour
         if (readyCount >= numPlayers)
         {
             readyCount = 0;
+            numPlayers = 0;
             ReturnToMain();
         }
     }
