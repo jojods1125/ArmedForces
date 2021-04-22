@@ -3680,7 +3680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groupPrefab: {fileID: 3838088369049439431, guid: 16798b0f9134a9347a82d4baca5c60f8, type: 3}
-  weaponPrefab: {fileID: 4970655156858171585, guid: 7802398b723f95e4f9ae03c2641fc202, type: 3}
+  weaponPrefab: {fileID: 4970655156858171585, guid: 5c9602b29bd00cf4894b02e51aca8a0f, type: 3}
   backButton: {fileID: 1957735834}
   startButton: {fileID: 570028915}
 --- !u!114 &357416386
@@ -3727,7 +3727,7 @@ MonoBehaviour:
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings:
-      - m_Name: Button With One Modifier
+      - m_Name: Bumbers/Shoulders pressed
         m_Id: 2ed04b57-6d86-4731-af3b-459a0bc1beb1
         m_Path: ButtonWithOneModifier
         m_Interactions: 
@@ -3752,7 +3752,7 @@ MonoBehaviour:
         m_Action: Join
         m_Flags: 8
     m_Reference: {fileID: 0}
-  m_PlayerPrefab: {fileID: 719121252223735373, guid: 2b3d74bce71396441a36aec458694917, type: 3}
+  m_PlayerPrefab: {fileID: 3176216309322642038, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
   m_SplitScreen: 0
   m_MaintainAspectRatioInSplitScreen: 0
   m_FixedNumberOfSplitScreens: -1
@@ -6041,10 +6041,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b16c6f78230fa4964a222622d8aae332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 1544760054}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
-  m_PlayerRoot: {fileID: 201516953}
+  m_PlayerRoot: {fileID: 1545451816}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -8687,6 +8687,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1187702433}
     m_Modifications:
+    - target: {fileID: -6302371680263612619, guid: 2b3d74bce71396441a36aec458694917, type: 3}
+      propertyPath: mes
+      value: 
+      objectReference: {fileID: 684602272}
     - target: {fileID: 398131496239075840, guid: 2b3d74bce71396441a36aec458694917, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -9035,6 +9039,10 @@ PrefabInstance:
       propertyPath: m_UIInputModule
       value: 
       objectReference: {fileID: 684602269}
+    - target: {fileID: 3027967457248530645, guid: 2b3d74bce71396441a36aec458694917, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3430686239380672523, guid: 2b3d74bce71396441a36aec458694917, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -9844,7 +9852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groupPrefab: {fileID: 3838088369049439431, guid: 16798b0f9134a9347a82d4baca5c60f8, type: 3}
-  weaponPrefab: {fileID: 4970655156858171585, guid: 7802398b723f95e4f9ae03c2641fc202, type: 3}
+  weaponPrefab: {fileID: 4970655156858171585, guid: 5c9602b29bd00cf4894b02e51aca8a0f, type: 3}
   backButton: {fileID: 815177357}
   startButton: {fileID: 197621758}
 --- !u!1 &1227437061
@@ -14643,6 +14651,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 357416388}
     m_Modifications:
+    - target: {fileID: 752881700326585392, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 965882785034629902, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
+      propertyPath: mes
+      value: 
+      objectReference: {fileID: 684602272}
     - target: {fileID: 1147146060531856622, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
       propertyPath: m_UIInputModule
       value: 
@@ -14650,11 +14666,11 @@ PrefabInstance:
     - target: {fileID: 3176216308597388656, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 357416385}
+      objectReference: {fileID: 0}
     - target: {fileID: 3176216308717522110, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 357416385}
+      objectReference: {fileID: 0}
     - target: {fileID: 3176216308725833581, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -14775,5 +14791,6 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 1957735834}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3170744392077639875, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}

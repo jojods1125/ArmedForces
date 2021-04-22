@@ -623,6 +623,7 @@ public class MenuManager : MonoBehaviour
             test = false;
             return;
         }
+
         // set inactive if active
         if (PregameMenu.activeSelf)
 		{
