@@ -6041,7 +6041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b16c6f78230fa4964a222622d8aae332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 1544760054}
+  m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
   m_PlayerRoot: {fileID: 201516953}
@@ -6897,7 +6897,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 4
-    m_SelectOnUp: {fileID: 167182665}
+    m_SelectOnUp: {fileID: 980176646}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 197621758}
@@ -7891,6 +7891,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972595188}
   m_CullTransparentMesh: 0
+--- !u!114 &980176646 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 719121254130329133, guid: 2b3d74bce71396441a36aec458694917, type: 3}
+  m_PrefabInstance: {fileID: 1095405809}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &986311853
 GameObject:
   m_ObjectHideFlags: 0
@@ -8750,7 +8761,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 719121252223735372, guid: 2b3d74bce71396441a36aec458694917, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 413.52274
+      value: 411.50616
       objectReference: {fileID: 0}
     - target: {fileID: 719121252223735372, guid: 2b3d74bce71396441a36aec458694917, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -8758,7 +8769,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 719121252223735372, guid: 2b3d74bce71396441a36aec458694917, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 827.0455
+      value: 823.0123
       objectReference: {fileID: 0}
     - target: {fileID: 719121252223735372, guid: 2b3d74bce71396441a36aec458694917, type: 3}
       propertyPath: m_SizeDelta.y
@@ -8919,7 +8930,7 @@ PrefabInstance:
     - target: {fileID: 719121254130329133, guid: 2b3d74bce71396441a36aec458694917, type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 815177357}
     - target: {fileID: 719121254130329133, guid: 2b3d74bce71396441a36aec458694917, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -8943,7 +8954,7 @@ PrefabInstance:
     - target: {fileID: 719121254266655235, guid: 2b3d74bce71396441a36aec458694917, type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
-      objectReference: {fileID: 815177357}
+      objectReference: {fileID: 197621758}
     - target: {fileID: 719121254266655235, guid: 2b3d74bce71396441a36aec458694917, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -9608,7 +9619,7 @@ MonoBehaviour:
   PregameMenu: {fileID: 591909361}
   LocalPregameMenu: {fileID: 1032318212}
   SelectionMenu: {fileID: 260062026}
-  postgameResultsMenu: {fileID: 883617528}
+  PostgameResultsMenu: {fileID: 883617528}
   menuGroup: {fileID: 1545451816}
   mainFirstButton: {fileID: 1544760054}
   trainingFirstButton: {fileID: 341579137}
