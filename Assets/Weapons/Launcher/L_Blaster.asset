@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Blaster
   description: No explosion, fast shot
-  prefab: {fileID: 7640254383217042964, guid: 213bd7b31cbadf0408990cee38ffa33a, type: 3}
+  prefab: {fileID: 3847624759602873583, guid: 86961dcf732edc84a89570def5058022, type: 3}
   icon: {fileID: 21300000, guid: 6753c00b67edd7d42864ca4f29ea501c, type: 3}
   rarity: 0
   unlocked: 1
