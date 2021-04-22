@@ -72,11 +72,19 @@ public class A_Tiered : Achievement
     /// </summary>
     public void unlockReward(int tierReached)
     {
+        // check to reset bool
+        if (hadUnlock)
+        {
+            hadUnlock = false;
+        }
+        // go through all unlockables
         foreach (Unlockable u in unlockables)
         {
-            if (u.value <= tierReached)
+            if (!u.unlocked && u.value <= tierReached)
             {
                 u.Unlock();
+                lastUnlocked = u.reward.weaponName;
+                hadUnlock = true;
             }
         }
     }
