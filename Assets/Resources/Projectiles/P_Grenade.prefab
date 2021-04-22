@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5778492838927807564}
   - component: {fileID: 7159978887230406092}
   m_Layer: 8
-  m_Name: P_Cannonball
+  m_Name: P_Grenade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,13 +28,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7159978887230406093}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 50, y: 50, z: 50}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &7159978887230406097
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7159978887230406093}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -8031502829385147155, guid: 73fa8815081bfcd4c8bf205713fa30f4, type: 3}
 --- !u!23 &7159978887230406098
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2c27448b65a671645893b497ea5ab50f, type: 2}
+  - {fileID: 2100000, guid: 60b3951705e020c4aa0e2b01d9ae141a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -95,7 +95,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.005
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5778492838927807564
 Rigidbody:
@@ -126,4 +126,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab_Explosion: {fileID: 4602660630726238711, guid: a16dd68dd2a7e5146908dc1144271cd0, type: 3}
-  spinning: 0
+  spinning: 1
