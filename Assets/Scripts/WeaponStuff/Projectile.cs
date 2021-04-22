@@ -4,6 +4,7 @@
 public class Projectile : MonoBehaviour
 {
     public GameObject prefab_Explosion;
+    public bool spinning;
 
     private Rigidbody proj_rb;
     private Collider proj_collide;
@@ -31,10 +32,21 @@ public class Projectile : MonoBehaviour
         this.corePushback = corePushback;
         this.playerID = playerID;
 
+        Quaternion rotation = new Quaternion();
+        rotation.SetLookRotation(direction, Vector3.up);
+
+        transform.localRotation = rotation;
         proj_rb.useGravity = !rocketPowered;
         proj_rb.AddForce(direction.normalized * projectilePower);
     }
 
+    void Update()
+    {
+        if (spinning)
+        {
+            transform.Rotate(new Vector3(0, 0, 1), 1);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -86,6 +98,8 @@ public class Projectile : MonoBehaviour
                 proj_rb.constraints = RigidbodyConstraints.FreezeAll;
                 proj_collide.enabled = false;
                 proj_rend.enabled = false;
+                foreach (Transform child in transform)
+                    Destroy(child.gameObject);
                 Destroy(gameObject, .5f);
             }
             // Does not create an explosion if there is no explosion radius
@@ -114,6 +128,8 @@ public class Projectile : MonoBehaviour
                 proj_rb.constraints = RigidbodyConstraints.FreezeAll;
                 proj_collide.enabled = false;
                 proj_rend.enabled = false;
+                foreach (Transform child in transform)
+                    Destroy(child.gameObject);
                 Destroy(gameObject, .5f);
             }
         }

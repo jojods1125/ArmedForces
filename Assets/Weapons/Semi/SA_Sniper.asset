@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Sniper
   description: DESCRIPTION
-  prefab: {fileID: 3002241038389116776, guid: 5437547751fd0bc42aee37c783653f11, type: 3}
+  prefab: {fileID: 3002241038389116776, guid: 70e8730c2d6b3c647b12e870908a48f9, type: 3}
   icon: {fileID: 21300000, guid: 6e923db4de8155a4cbd26d175eed5e30, type: 3}
   rarity: 0
   unlocked: 1
