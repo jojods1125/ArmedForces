@@ -3680,7 +3680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groupPrefab: {fileID: 3838088369049439431, guid: 16798b0f9134a9347a82d4baca5c60f8, type: 3}
-  weaponPrefab: {fileID: 4970655156858171585, guid: 4c3420cbad8b37c45aeaaae58cae2acb, type: 3}
+  weaponPrefab: {fileID: 4970655156858171585, guid: 5c9602b29bd00cf4894b02e51aca8a0f, type: 3}
   backButton: {fileID: 1957735834}
   startButton: {fileID: 570028915}
 --- !u!114 &357416386
@@ -3727,7 +3727,7 @@ MonoBehaviour:
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings:
-      - m_Name: Button With One Modifier
+      - m_Name: Bumbers/Shoulders pressed
         m_Id: 2ed04b57-6d86-4731-af3b-459a0bc1beb1
         m_Path: ButtonWithOneModifier
         m_Interactions: 
@@ -13443,6 +13443,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1848330313}
   m_CullTransparentMesh: 0
+--- !u!1 &1871220104 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1980751025008468933, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
+  m_PrefabInstance: {fileID: 2733398138377753877}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1919484113
 GameObject:
   m_ObjectHideFlags: 0
@@ -14646,6 +14651,10 @@ PrefabInstance:
       propertyPath: m_UIInputModule
       value: 
       objectReference: {fileID: 684602269}
+    - target: {fileID: 2466125579728406570, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
+      propertyPath: scroller
+      value: 
+      objectReference: {fileID: 1871220104}
     - target: {fileID: 3176216308597388656, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -14774,5 +14783,6 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
       objectReference: {fileID: 1957735834}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3170744392077639875, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
