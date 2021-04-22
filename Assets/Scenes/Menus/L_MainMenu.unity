@@ -3680,7 +3680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groupPrefab: {fileID: 3838088369049439431, guid: 16798b0f9134a9347a82d4baca5c60f8, type: 3}
-  weaponPrefab: {fileID: 4970655156858171585, guid: 4c3420cbad8b37c45aeaaae58cae2acb, type: 3}
+  weaponPrefab: {fileID: 4970655156858171585, guid: 7802398b723f95e4f9ae03c2641fc202, type: 3}
   backButton: {fileID: 1957735834}
   startButton: {fileID: 570028915}
 --- !u!114 &357416386
@@ -9187,7 +9187,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -17.5
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 715584320807970040, guid: 2b3d74bce71396441a36aec458694917, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2b3d74bce71396441a36aec458694917, type: 3}
 --- !u!1 &1101360298
 GameObject:
@@ -9843,7 +9844,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groupPrefab: {fileID: 3838088369049439431, guid: 16798b0f9134a9347a82d4baca5c60f8, type: 3}
-  weaponPrefab: {fileID: 4970655156858171585, guid: 4c3420cbad8b37c45aeaaae58cae2acb, type: 3}
+  weaponPrefab: {fileID: 4970655156858171585, guid: 7802398b723f95e4f9ae03c2641fc202, type: 3}
   backButton: {fileID: 815177357}
   startButton: {fileID: 197621758}
 --- !u!1 &1227437061
