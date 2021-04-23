@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Magnet
   description: No damage, but sucks you towards where you point
-  prefab: {fileID: 5775568051499200765, guid: ceda8341158c9bd48a1d995bae55a506, type: 3}
+  prefab: {fileID: 8835242592906688950, guid: a9175f4d41c10cd4d90c028c928ff0f6, type: 3}
   icon: {fileID: 21300000, guid: 301deb7eadb978f448ef9a4abe10d448, type: 3}
   rarity: 0
   unlocked: 1

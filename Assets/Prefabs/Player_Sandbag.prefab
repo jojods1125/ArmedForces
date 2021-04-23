@@ -531,11 +531,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e087b23b62cf29846a9d9a301bb4330f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchType: 2
+  matchType: 1
   maxHealth: 100
   walkMomentum: 10
   maxWalkSpeed: 5
   jumpForce: 100
+  isAI: 0
   backArmWeapons:
   - {fileID: 11400000, guid: 25f85aae63736c2438ac9a66015bff74, type: 2}
   - {fileID: 11400000, guid: 3e86a95a2de72ce468388c4516465b8c, type: 2}
@@ -547,6 +548,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 308df20a53b6de4478172dcc79b2e2e8, type: 2}
   - {fileID: 11400000, guid: 25f85aae63736c2438ac9a66015bff74, type: 2}
   rb: {fileID: 0}
+  dying: 0
   playerID: 0
   onlinePlayer: {fileID: 0}
 --- !u!114 &5977895261803497040
@@ -561,7 +563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a77193d37f2f54cbd7bd984cd116e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchType: 2
+  matchType: 1
   arm: {fileID: 6641161892462705578}
   barrel: {fileID: 5830838117268684917}
   player: {fileID: 1151577964800567072}
@@ -580,7 +582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a77193d37f2f54cbd7bd984cd116e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchType: 2
+  matchType: 1
   arm: {fileID: 6641161893273605172}
   barrel: {fileID: 5830838116088299327}
   player: {fileID: 1151577964800567072}
@@ -603,18 +605,19 @@ MonoBehaviour:
   enemy: {fileID: 0}
   frontArm: {fileID: 5977895261803497040}
   backArm: {fileID: 5784502104321264497}
+  enemyTargetTime: 20
   attackRange: 2
   stoppingDist: 2
   stuckDist: 1
-  mapWidth: 17
+  mapWidth: 18
   mapHeight: 9
   safeSpeed: 4
-  lowSprayerAmmo: 0
-  lowShotgunAmmo: 0
+  lowSprayerAmmo: 300
+  lowShotgunAmmo: 2
   lowAutoAmmo: 0
-  maxSprayerAmmo: 0
-  maxShotgunAmmo: 0
-  maxAutoAmmo: 0
+  maxSprayerAmmo: 700
+  maxShotgunAmmo: 10
+  maxAutoAmmo: 40
 --- !u!1 &5830838117268684917
 GameObject:
   m_ObjectHideFlags: 0

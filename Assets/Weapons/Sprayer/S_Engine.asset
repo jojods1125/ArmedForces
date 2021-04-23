@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Engine
   description: Low damage, high recoil. Used for flying
-  prefab: {fileID: 9218789629299828155, guid: 32ef7e59ae688914aaddced902e31158, type: 3}
+  prefab: {fileID: 384646950186704225, guid: 965ba393012170b4990df04db25e17da, type: 3}
   icon: {fileID: 21300000, guid: f0412bd5414a6254285f0c8fb36c9c48, type: 3}
   rarity: 0
   unlocked: 1
   fireRate: 0.015
-  ammoCapacity: 1000
+  ammoCapacity: 250
   recoil: 25
   reloadRate: 0.05
   dropoffDist: 0

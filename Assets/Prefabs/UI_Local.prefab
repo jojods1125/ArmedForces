@@ -2152,10 +2152,10 @@ MonoBehaviour:
   weaponB_L_image: {fileID: 364321982509921770}
   weaponC_L_image: {fileID: 364321983424306132}
   weaponD_L_image: {fileID: 364321983447080447}
-  weaponA_R_image: {fileID: 0}
-  weaponB_R_image: {fileID: 0}
-  weaponC_R_image: {fileID: 0}
-  weaponD_R_image: {fileID: 0}
+  weaponA_R_image: {fileID: 364321982315478995}
+  weaponB_R_image: {fileID: 364321982337202188}
+  weaponC_R_image: {fileID: 364321983729389551}
+  weaponD_R_image: {fileID: 364321982710585775}
   weaponA_L_ammo: {fileID: 364321983549167147}
   weaponB_L_ammo: {fileID: 364321982699834945}
   weaponC_L_ammo: {fileID: 364321983373564305}

@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public enum MatchType
 {
-    Training,
     Online,
     Local
 }
@@ -37,9 +36,7 @@ public class GameManager : MonoBehaviour
     public Player[] localPlayers = new Player[4];
 
     public Main_Camera dynamicCamera;
-
-    public Player ai;
-    private AI_Controller aiC;
+    public GameObject Indicator;
 
 
     /// <summary> List of spawn point locations </summary>
@@ -205,9 +202,6 @@ public class GameManager : MonoBehaviour
     {
         // Refreshes arms so new player sees them
         //localPlayer.UpdateAppearance();
-
-        if (matchType == MatchType.Training)
-            aiC.Activate();
     }
 
 

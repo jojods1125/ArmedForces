@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Rocket Launcher
   description: No gravity, big explosion
-  prefab: {fileID: 7640254383217042964, guid: 6576c3868abef304dbdb6c6bf05b7c79, type: 3}
+  prefab: {fileID: 7640254383217042964, guid: 12b5b24b9c3307047a51c91f268b337c, type: 3}
   icon: {fileID: 21300000, guid: b71f1c3fb10840840a48d88f8eb5112d, type: 3}
   rarity: 0
   unlocked: 1
-  fireRate: 0.5
-  ammoCapacity: 7
+  fireRate: 1
+  ammoCapacity: 4
   recoil: 100
   reloadRate: 1.5
   dropoffDist: 0
   dropoffMod: 1
-  projectilePower: 750
-  projectilePrefab: {fileID: 7159978887230406093, guid: ea690a9212f478b4b9c70c2c0ba17e2f, type: 3}
+  projectilePower: 600
+  projectilePrefab: {fileID: 7159978887230406093, guid: 6e008b5ca3412ff449e605f1e625d07e, type: 3}
   rocketPowered: 1
   explosionRadius: 3
-  coreDamage: 25
+  coreDamage: 40
   corePushback: 500

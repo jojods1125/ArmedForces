@@ -3819,7 +3819,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: TRAIN_Lobby
+          m_StringArgument: LocalTrain
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &341579139
@@ -6804,7 +6804,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: L_LocalMulti
+          m_StringArgument: LocalMulti
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &789936815
@@ -9577,7 +9577,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -17.5
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 715584320807970040, guid: 2b3d74bce71396441a36aec458694917, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2b3d74bce71396441a36aec458694917, type: 3}
 --- !u!1 &1096639640
 GameObject:
@@ -10366,7 +10367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_NotificationBehavior: 0
-  m_MaxPlayerCount: 4
+  m_MaxPlayerCount: 3
   m_AllowJoining: 1
   m_JoinBehavior: 1
   m_PlayerJoinedEvent:

@@ -480,7 +480,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 8c1162a182b9426409e6dae91b343108, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -741,11 +741,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 910a1d2a7ae3f5e4db393c1a8a0d5ed6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchType: 2
+  matchType: 1
   maxHealth: 100
-  walkMomentum: 15
+  walkMomentum: 10
   maxWalkSpeed: 7.5
   jumpForce: 300
+  isAI: 0
   backArmWeapons:
   - {fileID: 11400000, guid: 1003ffeff5d255f47b1645768584e42c, type: 2}
   - {fileID: 11400000, guid: 6bd7cc997b3d7fa41907b9f6249416b7, type: 2}
@@ -1141,7 +1142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54acc96f0ff77e468d2978d938539bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchType: 2
+  matchType: 1
   arm: {fileID: 9093051126470135228}
   barrel: {fileID: 8282234078560122467}
   player: {fileID: -141906719412523213}
@@ -1258,7 +1259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54acc96f0ff77e468d2978d938539bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchType: 2
+  matchType: 1
   arm: {fileID: 9093051127276069410}
   barrel: {fileID: 8282234077263579433}
   player: {fileID: -141906719412523213}

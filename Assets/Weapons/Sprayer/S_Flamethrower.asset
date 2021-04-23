@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Flamethrower
   description: Standard sprayer weapon
-  prefab: {fileID: 9218789629299828155, guid: ef41b89a7dc9d384aaab9ec2986d8cc3, type: 3}
+  prefab: {fileID: 9218789629299828155, guid: aaf2224658f63a34fa28e77d477f1a41, type: 3}
   icon: {fileID: 21300000, guid: 4bd7873dd9d30764bb709f9ee4a029e2, type: 3}
   rarity: 0
   unlocked: 1
   fireRate: 0.015
-  ammoCapacity: 800
-  recoil: 10
+  ammoCapacity: 500
+  recoil: 4
   reloadRate: 0.05
   dropoffDist: 0
   dropoffMod: 1
   spreadRange: 0.25
   sprayDistance: 5
-  bulletDamage: 1.25
+  bulletDamage: 2.5
   bulletPushback: 6
