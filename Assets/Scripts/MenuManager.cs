@@ -1030,11 +1030,20 @@ public class MenuManager : MonoBehaviour
         // set the Postgame menu to active
         setActiveMenu(PostgameResultsMenu);
         currentMenu = PostgameResultsMenu;
-
-        Dictionary<int, int> placements = new Dictionary<int, int>();
-        foreach (KeyValuePair<int, int> playerKills in kills.OrderBy(key => key.Value))
+        
+        // Get K/D for players
+        Dictionary<int, float> kds = new Dictionary<int, float>();
+        for (int i = 0; i < kills.Count; i++)
         {
-            placements.Add(playerKills.Key, playerKills.Value);
+            kds.Add(i, (float)kills[i] / (float)deaths[i]);
+        }
+
+        // Make placements
+        Dictionary<int, int> placements = new Dictionary<int, int>();
+        int order = numPlayers;
+        foreach (KeyValuePair<int, float> kd in kds.OrderBy(key => key.Value))
+        {
+            placements.Add(kd.Key, order--);
         }
 
         // Get PlayerInputManager
