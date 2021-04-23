@@ -42,8 +42,13 @@ public class Achievement : ScriptableObject
      * CREATE DICTIONARY<INT, WEAPON> FOR UNLOCKABLES
      * CREATE METHOD TO CHECK FOR UNLOCKABLES
      */
+    [Header("Unlockable Info")]
     [Tooltip("List of Unlockables")]
     public List<Unlockable> unlockables;
+    [Tooltip("Name of last Unlock")]
+    public string lastUnlocked;
+    [Tooltip("Was unlocked on last milestone")]
+    public bool hadUnlock = false;
 
 
     /// <summary>
@@ -59,18 +64,18 @@ public class Achievement : ScriptableObject
     /// Says whether the last tier had a reward tied to it
     /// </summary>
     /// <returns> Whether or not the last tier had a reward </returns>
-    public bool hadReward ()
+    public bool HadReward()
     {
-        return true;
+        return hadUnlock;
     }
 
     /// <summary>
     /// Gives the last reward unlocked if any
     /// </summary>
     /// <returns> Last unlocked reward, null otherwise </returns>
-    public string lastReward()
+    public string LastReward()
     {
-        return null;
+        return lastUnlocked;
     }
 
     /// <summary>

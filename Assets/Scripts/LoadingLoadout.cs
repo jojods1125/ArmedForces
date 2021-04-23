@@ -30,6 +30,8 @@ public class LoadingLoadout : MonoBehaviour
     {
         int playerId = MenuManager.Instance().numPlayers++;
 
+        loadoutLayout.GetComponent<TempFix>().playerId = playerId;
+
         // Put layout in correct spot
         loadoutLayout.transform.SetParent(transform, false);
         loadoutLayout.gameObject.name = "Player Loadout " + playerId;
@@ -48,7 +50,22 @@ public class LoadingLoadout : MonoBehaviour
         frontArm.Find("Weapon C").GetComponent<Button>().onClick.AddListener(() => DisplayWeapons(playerId + "FC"));
         frontArm.Find("Weapon D").GetComponent<Button>().onClick.AddListener(() => DisplayWeapons(playerId + "FD"));
 
+        WeaponManager.Instance().LoadLoadout();
+
+        // Update Loadouts
+        for (int i = 0; i < WeaponManager.Instance().playerLoadouts[playerId][0].Length; i++)
+        {
+            backArm.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[playerId][0][i].icon;
+            frontArm.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[playerId][1][i].icon;
+        }
+
         Dictionary<string, Dictionary<WeaponRarity, List<Weapon>>> order = MenuManager.Instance().order;
+
+        // Check that Display not already made
+        if (weaponButtons.ContainsKey(playerId))
+        {
+            return;
+        }
         // Construct the display
         List<GameObject> temp = new List<GameObject>();
         foreach (KeyValuePair<string, Dictionary<WeaponRarity, List<Weapon>>> type in order)
@@ -151,15 +168,6 @@ public class LoadingLoadout : MonoBehaviour
         }
 
         weaponButtons.Add(playerId, temp);
-
-        WeaponManager.Instance().LoadLoadout();
-
-        // Update Loadouts
-        for (int i = 0; i < WeaponManager.Instance().playerLoadouts[playerId][0].Length; i++)
-        {
-            backArm.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[playerId][0][i].icon;
-            frontArm.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[playerId][1][i].icon;
-        }
     }
 
     public void OnPlayerLeft (PlayerInput loadoutLayout)

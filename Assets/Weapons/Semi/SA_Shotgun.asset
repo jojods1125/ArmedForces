@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Shotgun
   description: DESCRIPTION
-  prefab: {fileID: 3002241038389116776, guid: 3293a53d9b5151b40a59afe2d2fa76ca, type: 3}
+  prefab: {fileID: 7222253858063095911, guid: 1aae54d7905d42f44a73f0ec20e41014, type: 3}
   icon: {fileID: 21300000, guid: 622923c75ecc3ad49bfbeb3a2f3257d1, type: 3}
   rarity: 0
   unlocked: 1

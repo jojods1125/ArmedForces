@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Leafblower
   description: No damage, crazy pushback
-  prefab: {fileID: 9218789629299828155, guid: 5689615907349194dae75e52c2237f4d, type: 3}
+  prefab: {fileID: 2311284680935275308, guid: 03de60af491d0884cab60e7f00922aad, type: 3}
   icon: {fileID: 21300000, guid: 4eb2e4d31ac38354a9319115d3a1b1fc, type: 3}
   rarity: 0
   unlocked: 1

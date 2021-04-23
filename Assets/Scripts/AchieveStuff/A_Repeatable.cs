@@ -20,6 +20,12 @@ public class A_Repeatable : Achievement
     /// <returns> True if milestone met, False otherwise </returns>
     public bool CheckMet ()
     {
+        // check to reset bool
+        if (hadUnlock)
+        {
+            hadUnlock = false;
+        }
+        // go through all unlockables
         if (currentValue >= repeatValue)
         {
             // add number of time over achieved
@@ -40,7 +46,7 @@ public class A_Repeatable : Achievement
     {
         foreach (Unlockable u in unlockables)
         {
-            if (u.value <= repNum)
+            if (!u.unlocked && u.value <= repNum)
             {
                 u.Unlock();
             }
