@@ -80,9 +80,13 @@ public class UIManager : MonoBehaviour
             popUp.transform.Find("Name").gameObject.GetComponent<TMP_Text>().text = a.achievementMessage;
 
             // Reward
-            if (a.hadReward())
+            if (a.HadReward())
             {
-                popUp.transform.Find("Reward?").gameObject.GetComponent<TMP_Text>().text = "Unlocked: " + a.lastReward();
+                popUp.transform.Find("Reward?").gameObject.GetComponent<TMP_Text>().text = "Unlocked: " + a.LastReward();
+            }
+            else
+            {
+                popUp.transform.Find("Reward?").gameObject.GetComponent<TMP_Text>().text = "";
             }
             // Set finished if tiered
             if (a is A_Tiered)

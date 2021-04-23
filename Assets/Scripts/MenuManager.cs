@@ -114,6 +114,8 @@ public class MenuManager : MonoBehaviour
     public GameObject weaponPrefab;
     [Tooltip("Weapon Description Box")]
     public GameObject descriptionBox;
+    [Tooltip("Loadout Display")]
+    public GameObject loadoutDisplay;
 
     // List of Weapon Buttons
     private List<GameObject> weaponButtons = new List<GameObject>();
@@ -738,12 +740,24 @@ public class MenuManager : MonoBehaviour
         if (arm.Equals('B'))
 		{
             currentArm = "Back";
-		}
+            loadoutDisplay.transform.Find("Diamond").Find("Text").GetComponent<Text>().text = "Back Arm";
+            for (int i = 0; i < 4; i++)
+            {
+                loadoutDisplay.transform.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[0][0][i].icon;
+            }
+
+        }
         else if (arm.Equals('F'))
 		{
             currentArm = "Front";
-		}
+            loadoutDisplay.transform.Find("Diamond").Find("Text").GetComponent<Text>().text = "Front Arm";
+            for (int i = 0; i < 4; i++)
+            {
+                loadoutDisplay.transform.GetChild(i + 1).Find("Image").GetComponent<Image>().sprite = WeaponManager.Instance().playerLoadouts[0][1][i].icon;
+            }
+        }
         currentWeapon = weaponSlot[1];
+        loadoutDisplay.transform.Find("Weapon " + currentWeapon).Find("Highlight").gameObject.SetActive(true);
         MainMenu.SetActive(false);
         LoadoutMenu.SetActive(false);
 
@@ -763,6 +777,9 @@ public class MenuManager : MonoBehaviour
     public void ChooseWeapon( Weapon weapon )
 	{
         Debug.Log("In ChooseWeapon for " + currentArm + "\'s weapon " + currentWeapon + " to have weapon " + weapon.name);
+
+        // Un-highlight
+        loadoutDisplay.transform.Find("Weapon " + currentWeapon).Find("Highlight").gameObject.SetActive(false);
 
         // Change Loadout
         int index = currentWeapon - 65;
@@ -862,6 +879,7 @@ public class MenuManager : MonoBehaviour
         // Hide Menus
         menuGroup.SetActive(false);
         currentMenu.SetActive(false);
+        transform.Find("EventSystem").gameObject.SetActive(false);
         // load scene
         SceneManager.LoadScene( name );
         // clear selected
@@ -1008,14 +1026,24 @@ public class MenuManager : MonoBehaviour
         
         // Set Menus to active
         menuGroup.gameObject.SetActive(true);
+        transform.Find("EventSystem").gameObject.SetActive(true);
         // set the Postgame menu to active
         setActiveMenu(PostgameResultsMenu);
         currentMenu = PostgameResultsMenu;
-
-        Dictionary<int, int> placements = new Dictionary<int, int>();
-        foreach (KeyValuePair<int, int> playerKills in kills.OrderBy(key => key.Value))
+        
+        // Get K/D for players
+        Dictionary<int, float> kds = new Dictionary<int, float>();
+        for (int i = 0; i < kills.Count; i++)
         {
-            placements.Add(playerKills.Key, playerKills.Value);
+            kds.Add(i, (float)kills[i] / (float)deaths[i]);
+        }
+
+        // Make placements
+        Dictionary<int, int> placements = new Dictionary<int, int>();
+        int order = numPlayers;
+        foreach (KeyValuePair<int, float> kd in kds.OrderBy(key => key.Value))
+        {
+            placements.Add(kd.Key, order--);
         }
 
         // Get PlayerInputManager
