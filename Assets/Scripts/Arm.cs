@@ -430,6 +430,9 @@ public class Arm : MonoBehaviour
         else if (weaponB) Switch(weaponB);
         else if (weaponC) Switch(weaponC);
         else Switch(weaponD);
+
+        //Remove collision with platforms
+        Physics.IgnoreLayerCollision(12,13);
     }
 
 
