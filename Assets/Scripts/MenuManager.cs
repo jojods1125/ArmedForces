@@ -879,7 +879,7 @@ public class MenuManager : MonoBehaviour
         // Hide Menus
         menuGroup.SetActive(false);
         currentMenu.SetActive(false);
-        transform.Find("EventSystem").gameObject.SetActive(false);
+        // transform.Find("EventSystem").gameObject.SetActive(false);
         // load scene
         SceneManager.LoadScene( name );
         // clear selected
@@ -1026,7 +1026,7 @@ public class MenuManager : MonoBehaviour
         
         // Set Menus to active
         menuGroup.gameObject.SetActive(true);
-        transform.Find("EventSystem").gameObject.SetActive(true);
+        // transform.Find("EventSystem").gameObject.SetActive(true);
         // set the Postgame menu to active
         setActiveMenu(PostgameResultsMenu);
         currentMenu = PostgameResultsMenu;

@@ -3,7 +3,17 @@ guid: 1a591e443459c194c996a0fb8f272a99
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_far_RedLight
+    second: {fileID: 2100000, guid: a90a51277776faa4a87419eb85ca11b0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_far_building01
+    second: {fileID: 2100000, guid: 38a99a2d02244b44db0aea9e6d178c27, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

@@ -3,7 +3,12 @@ guid: ac0081ae4c34002499021db16e25173d
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_A_frea01_D1M_col1
+    second: {fileID: 2100000, guid: daee03f82ae74754dad0630924129bf3, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

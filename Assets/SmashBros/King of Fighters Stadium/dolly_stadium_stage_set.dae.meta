@@ -3,7 +3,52 @@ guid: 8220033f5d79e8a4590f94bd56446b5b
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_A_Ring_01_logo
+    second: {fileID: 2100000, guid: 7a471e0a1c0c3794aac1cbb9a5019e75, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_A_Ring_03_base2
+    second: {fileID: 2100000, guid: 859a24014fa57c54db2d4e2d2da90b69, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_A_Ring_lightparts
+    second: {fileID: 2100000, guid: 4f5ef785219e90d42b2c5e267e040e01, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_C_Ring_01
+    second: {fileID: 2100000, guid: 837871c992a20ae4f9ed9a457404a26f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_DA_Ring_06
+    second: {fileID: 2100000, guid: 073eb5ee2b8a5594aa696d3a5106a45b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_DB_Ring_metal_punch_01
+    second: {fileID: 2100000, guid: 9fd45d38e90a43f4c9acccb26fda3e36, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_E_Ring_09_Metal
+    second: {fileID: 2100000, guid: bd878400c313b1a42bd54ef221bbf449, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_F_Base_02
+    second: {fileID: 2100000, guid: 6d41ec47c6f0baa4e819dba557265c31, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_G_Base_04
+    second: {fileID: 2100000, guid: 29f68f960ca49624dbbf88c6b3279a1b, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

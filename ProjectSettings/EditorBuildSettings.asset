@@ -14,13 +14,31 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FinalScenes/OnlineMulti.unity
     guid: ecb5dfa0773e1ac4e97d06e5ec88f3a3
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FinalScenes/LocalMulti.unity
     guid: 1a5591fccc99c8241ba7d5ea77328d9c
-  - enabled: 1
-    path: Assets/Scenes/L_LocalMulti.unity
-    guid: 976b732c73b3afa42a623ad0f7915f19
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/FinalScenes/LocalTrain.unity
     guid: c530867b4a6df0e428cf7efe46ad2775
+  - enabled: 1
+    path: Assets/Scenes/FinalScenes/Find Mii (StreetPass Quest).unity
+    guid: 02681322cdd3a714bad3b510e1d223a4
+  - enabled: 1
+    path: Assets/Scenes/FinalScenes/Great Plateau.unity
+    guid: b3bb26f42ab68a041bde463ed2b34512
+  - enabled: 1
+    path: Assets/Scenes/FinalScenes/King of FIghters.unity
+    guid: c4c12469e7a7a4843b0799005b77144d
+  - enabled: 1
+    path: Assets/Scenes/FinalScenes/Mushroom Battlefield.unity
+    guid: 7acf4d3cef1e3024db7984c1e7cc456e
+  - enabled: 1
+    path: Assets/Scenes/FinalScenes/Mushroom Kingdom.unity
+    guid: baac9d78669092841ab7db7d144af836
+  - enabled: 1
+    path: Assets/Scenes/FinalScenes/Temple.unity
+    guid: b8171e2134d96be4cb0d2ecaceb13a4a
   m_configObjects: {}

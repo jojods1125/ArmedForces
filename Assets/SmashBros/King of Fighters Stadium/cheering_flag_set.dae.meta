@@ -3,7 +3,12 @@ guid: fe715aef3fa74af4baa61e7fc4f0d392
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_cheering_flag02
+    second: {fileID: 2100000, guid: a1f2d75cdf565254191efd662c691bbb, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

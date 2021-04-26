@@ -3,7 +3,22 @@ guid: 09c72c7305e8d1e40bbbcb0b889d8423
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_logo_A_multi
+    second: {fileID: 2100000, guid: d242ea17ec91782499c1db16af3abedd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_logo_B
+    second: {fileID: 2100000, guid: be530f54fc4ca214e87e13098c9f648d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_logo_C
+    second: {fileID: 2100000, guid: 68239665d5f9ff549ab2fcf673075099, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
