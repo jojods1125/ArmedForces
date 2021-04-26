@@ -939,15 +939,15 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: adce0d0407a00fb4fa4bbb921849670b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 4076f164e2bb3d44e8a0fcb0e88cf14e, type: 2}
+      objectReference: {fileID: 2100000, guid: 579225299a97e4a4f8c086b093063347, type: 2}
     - target: {fileID: -7511558181221131132, guid: adce0d0407a00fb4fa4bbb921849670b, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 16e23c71e0683bf4488265b1b6a68aae, type: 2}
+      objectReference: {fileID: 2100000, guid: 293074161efa96d4895b7f1adb3b7aac, type: 2}
     - target: {fileID: -7511558181221131132, guid: adce0d0407a00fb4fa4bbb921849670b, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 6a9c8296f3a97e441ab7d3334135c9fa, type: 2}
+      objectReference: {fileID: 2100000, guid: d2e185a584831014096b932fe04131fb, type: 2}
     - target: {fileID: -7511558181221131132, guid: adce0d0407a00fb4fa4bbb921849670b, type: 3}
       propertyPath: m_Materials.Array.data[5]
       value: 
@@ -1033,15 +1033,15 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: c1cc541ac190467468606a7c924407ce, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 4076f164e2bb3d44e8a0fcb0e88cf14e, type: 2}
+      objectReference: {fileID: 2100000, guid: cffd5a48ca8070643a3a17f3e3e88c1b, type: 2}
     - target: {fileID: -7511558181221131132, guid: c1cc541ac190467468606a7c924407ce, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 16e23c71e0683bf4488265b1b6a68aae, type: 2}
+      objectReference: {fileID: 2100000, guid: 366403ef0a54d064fab9850d20d24c03, type: 2}
     - target: {fileID: -7511558181221131132, guid: c1cc541ac190467468606a7c924407ce, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 6a9c8296f3a97e441ab7d3334135c9fa, type: 2}
+      objectReference: {fileID: 2100000, guid: 8247a44b866246f4c809df9a8874054b, type: 2}
     - target: {fileID: 919132149155446097, guid: c1cc541ac190467468606a7c924407ce, type: 3}
       propertyPath: m_Name
       value: GreenBot
@@ -1120,13 +1120,25 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 1c69d4ebc9a8f2a488ccc753a6598e59, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: c6f856d757bc0c2458fdaea852fac286, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 1c69d4ebc9a8f2a488ccc753a6598e59, type: 3}
+      propertyPath: m_Materials.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5151deb01fdfc15448fb415f2d2ffb75, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 1c69d4ebc9a8f2a488ccc753a6598e59, type: 3}
+      propertyPath: m_Materials.Array.data[4]
+      value: 
+      objectReference: {fileID: 2100000, guid: af99bc46764ef114ca2dedf873b49121, type: 2}
     - target: {fileID: 919132149155446097, guid: 1c69d4ebc9a8f2a488ccc753a6598e59, type: 3}
       propertyPath: m_Name
       value: YellowBot
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 1c69d4ebc9a8f2a488ccc753a6598e59, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c69d4ebc9a8f2a488ccc753a6598e59, type: 3}
@@ -1216,7 +1228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 910df62d1d4b11d44a449fcda702705d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 910df62d1d4b11d44a449fcda702705d, type: 3}

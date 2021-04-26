@@ -98,6 +98,11 @@ public class Arm : MonoBehaviour
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-auto.spreadRange, auto.spreadRange), Random.Range(-auto.spreadRange, auto.spreadRange));
             ///Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.green, 1);
 
+            foreach (ParticleSystem p in weaponObjs[auto.prefab.name].GetComponentsInChildren<ParticleSystem>())
+            {
+                if (p != null)
+                    p.Play();
+            }
 
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
@@ -147,6 +152,11 @@ public class Arm : MonoBehaviour
                 reloadRateTimeStamp = Time.time;
                 ReduceAmmo(1);
                 AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.semi);
+
+                foreach(ParticleSystem p in weaponObjs[semi.prefab.name].GetComponentsInChildren<ParticleSystem>()) {
+                    if (p != null)
+                        p.Play();   
+                }
 
                 // Burst loop
                 for (int i = 0; i < semi.burstCount; i++)
@@ -265,7 +275,18 @@ public class Arm : MonoBehaviour
             if (matchType == MatchType.Online)
                 onlineArm.CmdDrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
             else
+            {
                 DrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
+                //foreach(ParticleSystem p in sprayer.sprayFX)
+                //{
+                //    p.Play();
+                //}
+                foreach (ParticleSystem p in weaponObjs[sprayer.prefab.name].GetComponentsInChildren<ParticleSystem>())
+                {
+                    if (p != null)
+                        p.Play();
+                }
+            }
 
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit, sprayer.sprayDistance))
@@ -374,6 +395,29 @@ public class Arm : MonoBehaviour
                 {
                     RegainAmmo(1);
                     reloadRateTimeStamp = Time.time;
+                }
+            }
+
+            if (equippedWeapon is W_Sprayer sprayer) {
+                foreach (ParticleSystem p in weaponObjs[sprayer.prefab.name].GetComponentsInChildren<ParticleSystem>())
+                {
+                    if (p != null)
+                        p.Stop();
+                }
+            }
+            //else if (equippedWeapon is W_SemiGun semi)
+            //{
+            //   if (weaponObjs[semi.prefab.name].GetComponentInChildren<ParticleSystem>() != null)
+            //    {
+            //        weaponObjs[semi.prefab.name].GetComponentInChildren<ParticleSystem>().Stop();
+            //    }
+            //}
+            else if (equippedWeapon is W_AutoGun auto)
+            {
+                foreach (ParticleSystem p in weaponObjs[auto.prefab.name].GetComponentsInChildren<ParticleSystem>())
+                {
+                    if (p != null)
+                        p.Stop();
                 }
             }
         }
