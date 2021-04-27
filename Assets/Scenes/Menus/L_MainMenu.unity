@@ -14265,7 +14265,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 708e363e67cc8c246bbf439b2ff03ec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  topValue: 0
+  topValue: 15
+  bottomValue: 50
 --- !u!114 &1706505755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17094,6 +17095,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 752881700326585392, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 858500443023477514, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
+      propertyPath: bottomValue
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 965882785034629902, guid: 4b27aa243b7510f438f2026c157e6463, type: 3}
