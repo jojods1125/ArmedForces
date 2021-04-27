@@ -244,14 +244,6 @@ public class AI_Controller : MonoBehaviour
                         targetPos.x = rightPos;
                     }
                 }
-
-                /**
-                if(enemy.transform.position.x < self.transform.position.x){
-                    targetPos.x = enemy.transform.position.x + attackRange / 2;
-                } else{
-                    targetPos.x = enemy.transform.position.x - attackRange / 2;
-                }
-                */
                 targetPos.y = enemy.transform.position.y + 1;
             }
             //Check if you need to attack
@@ -284,12 +276,7 @@ public class AI_Controller : MonoBehaviour
             if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > attackRange){
                 state = State.follow;
                 return;
-            }
-
-
-
-            
-
+            }  
         }              
     }
 
@@ -304,8 +291,6 @@ public class AI_Controller : MonoBehaviour
             frontArm.Aim(direction);
             frontArm.SetFiring(true);
             frontArm.releaseTrigger();
-
-
     }
 
     private void followTarget(){

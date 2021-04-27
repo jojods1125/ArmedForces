@@ -8,9 +8,14 @@ public class Oneway_Platform : MonoBehaviour
 
     // Start is called before the first frame update
     private void OnTriggerEnter(Collider other) {
-        Physics.IgnoreCollision(other.GetComponent<Collider>(), platform.GetComponent<Collider>(), true);
+        if(other.gameObject.layer == 9){
+            Physics.IgnoreCollision(other.GetComponent<Collider>(), platform.GetComponent<Collider>(), true);
+        }
+        
     }
     private void OnTriggerExit(Collider other) {
-        Physics.IgnoreCollision(other.GetComponent<Collider>(), platform.GetComponent<Collider>(), false);
+        if(other.gameObject.layer == 9){
+            Physics.IgnoreCollision(other.GetComponent<Collider>(), platform.GetComponent<Collider>(), false);
+        }
     }
 }
