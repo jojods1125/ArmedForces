@@ -191,10 +191,6 @@ PrefabInstance:
       value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 461288294701952413, guid: fca72c43499717246a3b01cac1e5da28, type: 3}
-      propertyPath: moveWithTransform
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 461288294701952413, guid: fca72c43499717246a3b01cac1e5da28, type: 3}
       propertyPath: ShapeModule.radius.value
       value: 0.5
       objectReference: {fileID: 0}
@@ -279,10 +275,6 @@ PrefabInstance:
     - target: {fileID: 9048443963617078076, guid: 7e2b8b1ea0487fc4fb7d143b1805f05f, type: 3}
       propertyPath: VelocityModule.orbitalOffsetZ.scalar
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9048443963617078076, guid: 7e2b8b1ea0487fc4fb7d143b1805f05f, type: 3}
-      propertyPath: moveWithTransform
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9048443963617078076, guid: 7e2b8b1ea0487fc4fb7d143b1805f05f, type: 3}
       propertyPath: ShapeModule.type

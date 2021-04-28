@@ -27,6 +27,7 @@ public class Player_Controlled : Player
         {
             currWalkMomentum += -walkMomentum;
             movingL = true;
+            FaceLeft();
         }
         else if (context.canceled)
         {
@@ -48,6 +49,7 @@ public class Player_Controlled : Player
         {
             currWalkMomentum += walkMomentum;
             movingR = true;
+            FaceRight();
         }
         else if (context.canceled)
         {
