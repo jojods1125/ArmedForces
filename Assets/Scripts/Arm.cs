@@ -131,6 +131,14 @@ public class Arm : MonoBehaviour
             // Pushes player
             player.EnactForce(bulletPath.normalized * -auto.recoil);
         }
+        else if (ammoRemaining[auto] == 0)
+        {
+            foreach (ParticleSystem p in weaponObjs[auto.prefab.name].GetComponentsInChildren<ParticleSystem>())
+            {
+                if (p != null)
+                    p.Stop();
+            }
+        }
     }
 
 
@@ -276,11 +284,7 @@ public class Arm : MonoBehaviour
                 onlineArm.CmdDrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
             else
             {
-                DrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
-                //foreach(ParticleSystem p in sprayer.sprayFX)
-                //{
-                //    p.Play();
-                //}
+                //DrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
                 foreach (ParticleSystem p in weaponObjs[sprayer.prefab.name].GetComponentsInChildren<ParticleSystem>())
                 {
                     if (p != null)
@@ -307,6 +311,14 @@ public class Arm : MonoBehaviour
 
             // Pushes player
             player.EnactForce(bulletPath.normalized * -sprayer.recoil);
+        }
+        else if (ammoRemaining[sprayer] == 0)
+        {
+            foreach (ParticleSystem p in weaponObjs[sprayer.prefab.name].GetComponentsInChildren<ParticleSystem>())
+            {
+                if (p != null)
+                    p.Stop();
+            }
         }
     }
 
