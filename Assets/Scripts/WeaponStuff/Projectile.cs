@@ -52,7 +52,7 @@ public class Projectile : MonoBehaviour
     {
         // THIS HAPPENS CLIENT-SIDE, CAUSING A SLIGHT OFFSET FROM WHAT THE SERVER HAS
 
-        if (other.gameObject.layer != LayerMask.NameToLayer("Bound"))
+        if (other.gameObject.layer != LayerMask.NameToLayer("Bound") && other.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast"))
         {
             // Creates explosion if there is an explosion radius
             if (explosionRadius > 0)

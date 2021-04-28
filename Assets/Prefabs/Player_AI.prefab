@@ -778,10 +778,10 @@ MonoBehaviour:
   frontArm: {fileID: 5424813265914721609}
   backArm: {fileID: 1811882566059405464}
   enemyTargetTime: 20
-  attackRange: 12
+  attackRange: 11
   stoppingDist: 4
   stuckDist: 1
-  mapWidth: 20
+  mapWidth: 21
   mapHeight: 9
   safeSpeed: 4
   lowSprayerAmmo: 300
