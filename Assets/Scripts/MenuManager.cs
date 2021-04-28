@@ -209,6 +209,9 @@ public class MenuManager : MonoBehaviour
 
     private bool test = false;
 
+    [HideInInspector]
+    public bool training = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -818,6 +821,8 @@ public class MenuManager : MonoBehaviour
             // Set button to LoadoutFirst
             EventSystem.current.SetSelectedGameObject(pregameFirstButton);
             currentMenu = PregameMenu;
+
+            training = true;
         }
         else if (LocalMenu.activeSelf)
         {
@@ -855,6 +860,8 @@ public class MenuManager : MonoBehaviour
         setActiveMenu( MainMenu );
 
         currentMenu = MainMenu;
+
+        training = false;
 
         // Clear selected object
         EventSystem.current.SetSelectedGameObject(null);
@@ -1110,6 +1117,13 @@ public class MenuManager : MonoBehaviour
         {
             readyCount = 0;
             numPlayers = 0;
+
+            // Delete all scorecards
+            foreach (Transform child in playerScores.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
             ReturnToMain();
         }
     }

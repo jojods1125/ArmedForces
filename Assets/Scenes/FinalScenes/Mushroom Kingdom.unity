@@ -1383,6 +1383,7 @@ GameObject:
   - component: {fileID: 1194870886}
   - component: {fileID: 1194870885}
   - component: {fileID: 1194870884}
+  - component: {fileID: 1194870887}
   m_Layer: 0
   m_Name: Spawn (1)
   m_TagString: Untagged
@@ -1453,6 +1454,19 @@ Transform:
   m_Father: {fileID: 1066990614}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1194870887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194870883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 267e3d0340d79064db9a91599cb5518f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aiPrefab: {fileID: 8282234077870317098, guid: 4e9b0fcbcb29e0a40886a590237b97f3, type: 3}
 --- !u!1 &1296680652
 GameObject:
   m_ObjectHideFlags: 0
@@ -4006,10 +4020,10 @@ MonoBehaviour:
   - {fileID: 0}
   dynamicCamera: {fileID: 1663679616}
   Indicator: {fileID: 645146831692368470, guid: aeba7f35b24c0b047b49ba77e05252be, type: 3}
-  topBound: {fileID: 0}
-  leftBound: {fileID: 0}
-  rightBound: {fileID: 0}
-  bottomBound: {fileID: 0}
+  topBound: {fileID: 920174014}
+  leftBound: {fileID: 1622976677}
+  rightBound: {fileID: 556198267}
+  bottomBound: {fileID: 363138325}
 --- !u!1 &4243853699334238499
 GameObject:
   m_ObjectHideFlags: 0
