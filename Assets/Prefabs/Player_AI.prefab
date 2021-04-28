@@ -781,8 +781,6 @@ MonoBehaviour:
   attackRange: 11
   stoppingDist: 4
   stuckDist: 1
-  mapWidth: 21
-  mapHeight: 9
   safeSpeed: 4
   lowSprayerAmmo: 300
   lowShotgunAmmo: 2
@@ -790,6 +788,8 @@ MonoBehaviour:
   maxSprayerAmmo: 600
   maxShotgunAmmo: 10
   maxAutoAmmo: 40
+  killZoneVerticalOffset: 4
+  killZoneHorzOffset: 6
 --- !u!1 &8282234078560122467
 GameObject:
   m_ObjectHideFlags: 0
