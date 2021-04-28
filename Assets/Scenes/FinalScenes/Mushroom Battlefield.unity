@@ -1548,7 +1548,7 @@ MonoBehaviour:
   m_NotificationBehavior: 0
   m_MaxPlayerCount: 4
   m_AllowJoining: 1
-  m_JoinBehavior: 1
+  m_JoinBehavior: 2
   m_PlayerJoinedEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -2753,6 +2753,10 @@ MonoBehaviour:
   - {fileID: 0}
   dynamicCamera: {fileID: 1663679616}
   Indicator: {fileID: 645146831692368470, guid: aeba7f35b24c0b047b49ba77e05252be, type: 3}
+  topBound: {fileID: 0}
+  leftBound: {fileID: 0}
+  rightBound: {fileID: 0}
+  bottomBound: {fileID: 0}
 --- !u!1 &4243853699334238499
 GameObject:
   m_ObjectHideFlags: 0

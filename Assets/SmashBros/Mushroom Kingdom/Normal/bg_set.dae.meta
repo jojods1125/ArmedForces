@@ -3,7 +3,102 @@ guid: 674e056cafc5bc34b97f85f0ec0983b2
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: back
+    second: {fileID: 2100000, guid: 62526ed3f1138664da0b8c2f5b6eea7c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: block_f
+    second: {fileID: 2100000, guid: 94ef8a6eddd94a74eab756f2e6b16824, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: block_h
+    second: {fileID: 2100000, guid: d3299582db0c9fc4f90abd042df5762c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: castle
+    second: {fileID: 2100000, guid: b70096a7760a9e943896c364f695457f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cloud
+    second: {fileID: 2100000, guid: be6f6ec746b7bc24d8b517753777dcfb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cloud_back
+    second: {fileID: 2100000, guid: 52259c61181067b4fb659eaea75ddc53, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: coin
+    second: {fileID: 2100000, guid: 65554b915038697438ec29911ef9760c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: danger
+    second: {fileID: 2100000, guid: 4e0b82f75a812bf4f9093d5d3cf29f7f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: flag_a
+    second: {fileID: 2100000, guid: d854e151ab5b5bf40909b991d791ed3a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: flag_b
+    second: {fileID: 2100000, guid: 134706d834e5c7c45b5c93039d275a07, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: grass
+    second: {fileID: 2100000, guid: 42a5b716cf87f014fb2c775bf5c08c0d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: jump
+    second: {fileID: 2100000, guid: 8faa5eb0b31dc9e46a8dcebf179c1257, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: killer
+    second: {fileID: 2100000, guid: 01f33411f8f346f4e869feb8a9badcad, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: kinokobase
+    second: {fileID: 2100000, guid: 21f7725ce5db3f94592f957c3cc5a8ad, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mame
+    second: {fileID: 2100000, guid: 354e963b72e124a49bec303969c7c154, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: met
+    second: {fileID: 2100000, guid: b9319a886bcd24643bf9441fd95e0b39, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: nokonoko
+    second: {fileID: 2100000, guid: 13f6954716c593d40b9a18da4d6062c9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tree_a
+    second: {fileID: 2100000, guid: b12f5b8abb758eb458d7741ba013e2d2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tree_b
+    second: {fileID: 2100000, guid: bfd1aceee0f345e4688cc0a17794892e, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
