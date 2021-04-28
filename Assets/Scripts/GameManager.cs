@@ -34,9 +34,18 @@ public class GameManager : MonoBehaviour
     public UIManager uiManager;
     [Tooltip("Local players within the scene")]
     public Player[] localPlayers = new Player[4];
-
+    [Tooltip("Main dynamic camera")]
     public Main_Camera dynamicCamera;
+    [Tooltip("Reference to the indicator prefab")]
     public GameObject Indicator;
+    [Tooltip("Top Bound of the map")]
+    public GameObject topBound;
+    [Tooltip("Left Bound of the map")]
+    public GameObject leftBound;
+    [Tooltip("Right Bound of the map")]
+    public GameObject rightBound;
+    [Tooltip("Bottom Bound of the map")]
+    public GameObject bottomBound;
 
 
     /// <summary> List of spawn point locations </summary>

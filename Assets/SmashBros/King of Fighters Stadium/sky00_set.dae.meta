@@ -3,7 +3,12 @@ guid: 41f199fe54fc002428b44106ecb09aa6
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_sky
+    second: {fileID: 2100000, guid: 13e1fb1feb6c872459e9d981e04d0c10, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

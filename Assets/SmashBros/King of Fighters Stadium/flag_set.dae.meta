@@ -3,7 +3,12 @@ guid: b5a0da1bcefc8d740916919a7226eaef
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: _Dolly_Stadium_sponsor_flag1
+    second: {fileID: 2100000, guid: d7944dd8bb502da4dbb816098a9a3c8c, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

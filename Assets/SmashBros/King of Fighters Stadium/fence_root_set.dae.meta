@@ -3,7 +3,92 @@ guid: 6b99d49d81b54994c9c2d61e0a70fd69
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ADolly_Stadium_lightparts02
+    second: {fileID: 2100000, guid: dda69c6d04506a5488c788a9139651af, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ADolly_Stadium_lightparts03
+    second: {fileID: 2100000, guid: e4daed4f58d09964d9240648269bba10, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ADolly_Stadium_sponsor_shield
+    second: {fileID: 2100000, guid: 0d9b5e8280afb5f4f9e304543b1b346b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_A_steel_root_R2
+    second: {fileID: 2100000, guid: 2264daf1a2632c04f847b668bfbf21c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_C_steel_root_R1
+    second: {fileID: 2100000, guid: 19cc452d7375803449b35bffa11cc59a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_fence_A
+    second: {fileID: 2100000, guid: 9d23eab190a955d4fb2b67fc4cf5864d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_fence_A1
+    second: {fileID: 2100000, guid: be23bbde53955064ebdfe8175821faab, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_fence_B
+    second: {fileID: 2100000, guid: fdba59721860cea47b11a001cd2b728b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_fence_B_star
+    second: {fileID: 2100000, guid: 589e99228f4aa334d858ac1cd0ba04de, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_fence_C
+    second: {fileID: 2100000, guid: 9496a69c56be9414f8791bc34d493e31, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_fence_D
+    second: {fileID: 2100000, guid: 2498c30e11ed08a409f37a95197a3645, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_fence_D1
+    second: {fileID: 2100000, guid: 2d0d4d48c40d6734891fd3fc841b2d45, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_fence_F
+    second: {fileID: 2100000, guid: fc0fbbbb79d9f3a4ca435dd5ee08293f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dolly_Stadium_steel_root_L1
+    second: {fileID: 2100000, guid: a0629a875f1968541bf44d878608a2c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShaderfxShader23
+    second: {fileID: 2100000, guid: d6a94dabb26f7b945a33beedd19817d6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__ADolly_Stadium_lightparts02
+    second: {fileID: 2100000, guid: fe0aa3a3516157b49b9007224a9871c7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__Dolly_Stadium_fence_E1
+    second: {fileID: 2100000, guid: 87af56b51868b654f9e39681a9604722, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

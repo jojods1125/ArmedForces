@@ -23,9 +23,6 @@ public class AI_Controller : MonoBehaviour
     public float attackRange; //How close the AI follows
     public float stoppingDist; //What range the AI should stop following
     public float stuckDist; //Distance AI must move in a second before decided its stuck
-
-    public float mapWidth; //Width AI tries to stay in
-    public float mapHeight; //Height AI tries to stay in
     public float safeSpeed; //AI cannot move too quickly on edges
     public int lowSprayerAmmo;
     public int lowShotgunAmmo;
@@ -34,16 +31,19 @@ public class AI_Controller : MonoBehaviour
     public int maxShotgunAmmo;
     public int maxAutoAmmo;
 
+    public int killZoneVerticalOffset;
+    public int killZoneHorzOffset;
 
-    //private Weapon[] backArmWeapons;
-    //private Weapon[] frontArmWeapons;
+    private float mapLeft;
+    private float mapRight;
+    private float mapTop;
+    private float mapBottom;
 
     enum State{
         follow,
         reload,
         attack,
-        rest,
-        test
+        rest
     }
 
     private void Awake()
@@ -66,6 +66,10 @@ public class AI_Controller : MonoBehaviour
         reloadTime = 6;
 
         InvokeRepeating(nameof(Activate), 0, enemyTargetTime);
+        mapRight = GameManager.Instance().rightBound.GetComponent<Transform>().position.x - killZoneHorzOffset;
+        mapLeft = GameManager.Instance().leftBound.GetComponent<Transform>().position.x + killZoneHorzOffset;
+        mapBottom = GameManager.Instance().bottomBound.GetComponent<Transform>().position.y + killZoneVerticalOffset + 1;
+        mapTop = GameManager.Instance().topBound.GetComponent<Transform>().position.y - killZoneVerticalOffset;
 
         //Activate(0);
     }
@@ -96,22 +100,22 @@ public class AI_Controller : MonoBehaviour
     //Use the shotgun to avoid flying off edges
     //**
         //Don't fly off the Right
-        if (self.transform.position.x > mapWidth && self.GetComponent<Rigidbody>().velocity.x > safeSpeed){
+        if (self.transform.position.x > mapRight && self.GetComponent<Rigidbody>().velocity.x > safeSpeed){
             posAdjust(new Vector3(1,0,0));
             return;
         }
         //Don't fly off the Left
-        if(self.transform.position.x < -mapWidth && self.GetComponent<Rigidbody>().velocity.x < safeSpeed){
+        if(self.transform.position.x < mapLeft && self.GetComponent<Rigidbody>().velocity.x < safeSpeed){
             posAdjust(new Vector3(-1,0,0));
             return;
         }
         //Don't fly off the Top
-        if(self.transform.position.y > mapHeight && self.GetComponent<Rigidbody>().velocity.y > safeSpeed){
+        if(self.transform.position.y > mapTop && self.GetComponent<Rigidbody>().velocity.y > safeSpeed){
             posAdjust(new Vector3(0,1,0));
             return;
         }
         //Don't fly off the bottom
-        if(self.transform.position.y < -mapHeight + 1 && self.GetComponent<Rigidbody>().velocity.y < 0){
+        if(self.transform.position.y < mapBottom && self.GetComponent<Rigidbody>().velocity.y < 0){
             posAdjust(new Vector3(0,-1,0));
             return;
         }
@@ -232,30 +236,22 @@ public class AI_Controller : MonoBehaviour
                 float leftPos = enemy.transform.position.x - attackRange / 2;
                 float rightPos = enemy.transform.position.x + attackRange / 2;
                 if(self.transform.position.x > enemy.transform.position.x ){
-                    if(rightPos < mapWidth - 1){
+                    if(rightPos < mapRight - 1){
                         targetPos.x = rightPos;
                     }else{
                         targetPos.x = leftPos;
                     }
                 }else{
-                    if(leftPos > -mapWidth + 1){
+                    if(leftPos > mapLeft + 1){
                         targetPos.x = leftPos;
                     }else{
                         targetPos.x = rightPos;
                     }
                 }
-
-                /**
-                if(enemy.transform.position.x < self.transform.position.x){
-                    targetPos.x = enemy.transform.position.x + attackRange / 2;
-                } else{
-                    targetPos.x = enemy.transform.position.x - attackRange / 2;
-                }
-                */
                 targetPos.y = enemy.transform.position.y + 1;
             }
             //Check if you need to attack
-            else if( Vector3.Magnitude(targetPos - self.transform.position) < stoppingDist){
+            else if( Vector3.Magnitude(targetPos - self.transform.position) < stoppingDist && !enemy.GetComponent<Player>().dying){
                 state = State.attack;
                 return;     
             }
@@ -281,15 +277,10 @@ public class AI_Controller : MonoBehaviour
             Vector3.Normalize(targetAngle);
             frontArm.Aim(targetAngle);
             backArm.Aim(targetAngle);
-            if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > attackRange){
+            if( Vector3.Magnitude(enemy.transform.position - self.transform.position) > attackRange || enemy.GetComponent<Player>().dying){
                 state = State.follow;
                 return;
-            }
-
-
-
-            
-
+            }  
         }              
     }
 
@@ -304,8 +295,6 @@ public class AI_Controller : MonoBehaviour
             frontArm.Aim(direction);
             frontArm.SetFiring(true);
             frontArm.releaseTrigger();
-
-
     }
 
     private void followTarget(){

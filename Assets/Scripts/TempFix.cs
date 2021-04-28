@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 
 public class TempFix : MonoBehaviour
 {
@@ -16,6 +17,11 @@ public class TempFix : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (mes == null)
+        {
+            mes = SceneManager.GetActiveScene().GetRootGameObjects()[2].GetComponent<MultiplayerEventSystem>();
+        }
+
         // currently selected object
         GameObject curr = mes.currentSelectedGameObject;
 
