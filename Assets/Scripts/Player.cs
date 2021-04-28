@@ -255,6 +255,14 @@ public class Player : MonoBehaviour
             //    uiManager.ui_Players[0].UpdateWeaponIcons();
             //}
         }
+        //else
+        //{
+        //    // Tells the server that the Player is connected
+        //    PlayerConnected();
+
+        //    // Assign Weapon Loadouts from Weapon Managaer
+        //    SetArms();
+        //}
     }
 
 

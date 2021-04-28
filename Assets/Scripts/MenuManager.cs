@@ -878,7 +878,8 @@ public class MenuManager : MonoBehaviour
     {
         // Hide Menus
         menuGroup.SetActive(false);
-        currentMenu.SetActive(false);
+        if (currentMenu != null)
+            currentMenu.SetActive(false);
         // transform.Find("EventSystem").gameObject.SetActive(false);
         // load scene
         SceneManager.LoadScene( name );
