@@ -21,6 +21,10 @@ public class W_Sprayer : W_Shootable
     [Tooltip("Pushback the bullets inflict on collision")]
     public float bulletPushback;
 
+    //[Tooltip("Particle effects for current sprayer")]
+    //public ParticleSystem[] sprayFX;
+    
+
     //[Tooltip("Particle system of spray")]
     //public ParticleSystem particles;
 }

@@ -27,15 +27,16 @@ public class Player : MonoBehaviour
 
     public Weapon[] backArmWeapons = new Weapon[4];
     public Weapon[] frontArmWeapons = new Weapon[4];
+    public GameObject[] playerModels = new GameObject[4];
 
     [HideInInspector]
     public Rigidbody rb;
     private Arm[] arms;
     private float currHealth = 100;
+    [HideInInspector]
     public bool dying = false;
 
     //Used for differentiating each player in GameManager
-    [SerializeField]
     private int playerID;
 
     // Last player ID to have attacked, reset on death
@@ -222,6 +223,8 @@ public class Player : MonoBehaviour
         playerIndicator.GetComponent<Indicator>().SetPlayer(newID, gameObject);
         playerIndicator.GetComponent<Indicator>().cameraObj = GameManager.Instance().dynamicCamera.GetComponent<Camera>();
 
+        playerModels[newID].SetActive(true);
+
         this.playerID = newID;
         lastAttackedID = this.playerID;
     }
@@ -252,6 +255,14 @@ public class Player : MonoBehaviour
             //    uiManager.ui_Players[0].UpdateWeaponIcons();
             //}
         }
+        //else
+        //{
+        //    // Tells the server that the Player is connected
+        //    PlayerConnected();
+
+        //    // Assign Weapon Loadouts from Weapon Managaer
+        //    SetArms();
+        //}
     }
 
 
@@ -389,12 +400,27 @@ public class Player : MonoBehaviour
     public void EnactForce(Vector3 force)
     {
         rb.AddForce(force);
+
+        if (force.x > 20)
+            FaceLeft();
+        else if (force.x < -20)
+            FaceRight();
     }
 
 
     public void FreezeConstraints()
     {
         rb.constraints = RigidbodyConstraints.FreezeAll;
+    }
+
+    public void FaceLeft()
+    {
+        playerModels[playerID].transform.parent.transform.localScale = Vector3.one;
+    }
+
+    public void FaceRight()
+    {
+        playerModels[playerID].transform.parent.transform.localScale = new Vector3(-1, 1, 1);
     }
 
 
