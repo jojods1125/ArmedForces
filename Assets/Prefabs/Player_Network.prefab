@@ -350,14 +350,14 @@ MonoBehaviour:
   isAI: 1
   backArmWeapons:
   - {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
-  - {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
-  - {fileID: 11400000, guid: 88bb61f48a16e874b819e936eeac2530, type: 2}
   - {fileID: 11400000, guid: 1b8abfcb36d99c84d9701b01c936fd17, type: 2}
+  - {fileID: 11400000, guid: ace6e4e7f6cc63840ba677ffbc02e786, type: 2}
+  - {fileID: 11400000, guid: 08d22907bf924df4489b7364d81fbc4b, type: 2}
   frontArmWeapons:
   - {fileID: 11400000, guid: 18b3deb72773b9d4b9dc8d38daf11a8a, type: 2}
   - {fileID: 11400000, guid: 1360621bb9eb4c34e8c555116605b5c4, type: 2}
-  - {fileID: 11400000, guid: 88bb61f48a16e874b819e936eeac2530, type: 2}
-  - {fileID: 11400000, guid: 1b8abfcb36d99c84d9701b01c936fd17, type: 2}
+  - {fileID: 11400000, guid: 2cd685ee863253647bb8cfeedb20ef82, type: 2}
+  - {fileID: 11400000, guid: 4c6ea9e773df7e640bd701b25caf3850, type: 2}
   playerModels:
   - {fileID: 3422118094753376286}
   - {fileID: 4570371200116954803}
@@ -864,7 +864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54acc96f0ff77e468d2978d938539bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchType: 1
+  matchType: 0
   arm: {fileID: 9093051126470135228}
   barrel: {fileID: 8282234078560122467}
   player: {fileID: -141906719412523213}
@@ -981,7 +981,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54acc96f0ff77e468d2978d938539bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchType: 1
+  matchType: 0
   arm: {fileID: 9093051127276069410}
   barrel: {fileID: 8282234077263579433}
   player: {fileID: -141906719412523213}

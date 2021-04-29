@@ -196,6 +196,7 @@ public class Player_Networked : NetworkBehaviour
         // Sets the Player's ID and the last attacked ID
         player.SetPlayerID(playerID);
         player.SetLastAttackedID(player.GetPlayerID());
+        player.playerModels[playerID].SetActive(true);
     }
 
 
@@ -207,10 +208,13 @@ public class Player_Networked : NetworkBehaviour
         // Tells the server that the Player is connected
         CmdPlayerConnected();
 
+        GameManager.Instance().dynamicCamera.targets.Add(gameObject);
+
         // If a copy of the Player on a client, freeze
         if (!isLocalPlayer)
         {
             player.FreezeConstraints();
+            player.playerModels[0].SetActive(true);
         }
 
         // If UI exists (only local player), connect health bar and weapon UI

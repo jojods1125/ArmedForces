@@ -255,14 +255,13 @@ public class Player : MonoBehaviour
             //    uiManager.ui_Players[0].UpdateWeaponIcons();
             //}
         }
-        //else
-        //{
-        //    // Tells the server that the Player is connected
-        //    PlayerConnected();
+        else
+        {
+            GameObject playerIndicator = Instantiate(GameManager.Instance().Indicator);
+            playerIndicator.GetComponent<Indicator>().SetPlayer(playerID, gameObject);
+            playerIndicator.GetComponent<Indicator>().cameraObj = GameManager.Instance().dynamicCamera.GetComponent<Camera>();
+        }
 
-        //    // Assign Weapon Loadouts from Weapon Managaer
-        //    SetArms();
-        //}
     }
 
 
