@@ -223,7 +223,7 @@ public class GameManager : MonoBehaviour
     public int getID()
     {
         int newID = playerCount;
-        playerCount++;
+        MenuManager.Instance().numPlayers = playerCount++;
         return newID;
     }
 
@@ -254,7 +254,6 @@ public class GameManager : MonoBehaviour
         // Updates clock UI
         uiManager.matchClock.GetComponent<TMP_Text>().text = mins.ToString("D2") + ":" + secs.ToString("D2");
 
-        /// TODO: ADD FUNCTIONALITY FOR ROUND ENDING
         // Server notification if round ends
         if (currentGameTime >= totalGameTime)
         {
@@ -264,19 +263,8 @@ public class GameManager : MonoBehaviour
             AchievementManager.Instance().OnEvent(AchievementType.games);
             SceneManager.LoadScene("L_MainMenu");
 
-            //StartCoroutine("EndGame");
             MenuManager.Instance().LoadResults(kills, deaths);
         }
-    }
-
-    IEnumerator EndGame()
-    {
-        if (!SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("L_MainMenu")))
-        {
-            yield return new WaitForSeconds(1f);
-        }
-        MenuManager.Instance().LoadResults(kills, deaths);
-        yield return null;
     }
 
     public void SetCurrentGameTime(float time)
