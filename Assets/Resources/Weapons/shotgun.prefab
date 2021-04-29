@@ -90,10 +90,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8030280093924049629}
     m_Modifications:
-    - target: {fileID: 5889344332351294385, guid: 7c5b295c71d30ea459614e145fddeb90, type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5889344332351294412, guid: 7c5b295c71d30ea459614e145fddeb90, type: 3}
       propertyPath: m_Name
       value: MuzzleFlash
@@ -171,10 +167,6 @@ PrefabInstance:
     - target: {fileID: 718449402337943416, guid: e81c860f0dee6f94b88c8938ad26502b, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 718449402337943416, guid: e81c860f0dee6f94b88c8938ad26502b, type: 3}
-      propertyPath: playOnAwake
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 718449402337943416, guid: e81c860f0dee6f94b88c8938ad26502b, type: 3}
       propertyPath: stopAction
