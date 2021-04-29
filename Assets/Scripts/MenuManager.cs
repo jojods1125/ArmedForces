@@ -78,8 +78,6 @@ public class MenuManager : MonoBehaviour
     public GameObject localPregameFirstButton;
     [Tooltip("First Selected Weapon Selection")]
     public GameObject selectionFirstButton;
-    [Tooltip("Postgame Selected Input")]
-    public GameObject postgameButton;
 
     [Header("Return to last Menu Button for each Menu")]
     [Tooltip("Return to Main Button on Training Menu")]
@@ -184,10 +182,6 @@ public class MenuManager : MonoBehaviour
     [Tooltip("Player Scores Container")]
     public GameObject playerScores;
 
-    [Header("Event System")]
-    [Tooltip("Event System Object")]
-    public GameObject es;
-
     // Current Menu on
     private GameObject currentMenu;
     // Last visited Menu
@@ -208,6 +202,12 @@ public class MenuManager : MonoBehaviour
     public Dictionary<string, Dictionary<WeaponRarity, List<Weapon>>> order;
 
     private bool test = false;
+
+    [Header("AI Scoring")]
+    [Tooltip("AI Prefab")]
+    public GameObject aiPrefab;
+    [Tooltip("AI Scorecard")]
+    public GameObject aiScorecard;
 
     [HideInInspector]
     public bool training = false;
@@ -822,6 +822,7 @@ public class MenuManager : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(pregameFirstButton);
             currentMenu = PregameMenu;
 
+            // Set training to true to spawn AI
             training = true;
         }
         else if (LocalMenu.activeSelf)
@@ -874,6 +875,10 @@ public class MenuManager : MonoBehaviour
     /// </summary>
     public void LoadMap()
 	{
+        if (training)
+        {
+            numPlayers++;
+        }
         LoadScene( mapName );
 	}
 
@@ -1056,17 +1061,22 @@ public class MenuManager : MonoBehaviour
 
         // Get PlayerInputManager
         PlayerInputManager pim = playerScores.GetComponent<PlayerInputManager>();
-        for (int id = 0; id < numPlayers; id++)
+        // Get number of human players
+        int numberOfPlayers = training ? numPlayers - 1 : numPlayers;
+
+        // Get past non-controller devices
+        int preDevices = 0;
+        for (int j = 0; j < InputSystem.devices.Count; j++)
+        {
+            if (!(InputSystem.devices[j] is Gamepad))
+            {
+                preDevices++;
+            }
+        }
+
+        for (int id = 0; id < numberOfPlayers; id++)
         {
             // Make player per connected
-            int preDevices = 0;
-            for (int j = 0; j < InputSystem.devices.Count; j++)
-            {
-                if (!(InputSystem.devices[j] is Gamepad))
-                {
-                    preDevices++;
-                }
-            }
             PlayerInput pi = pim.JoinPlayer(-1, -1, "MenuControls", InputSystem.devices[id + preDevices]);
             EventSystem.current.SetSelectedGameObject(pi.gameObject);
             // Put object in correct spot
@@ -1094,6 +1104,27 @@ public class MenuManager : MonoBehaviour
             pi.transform.Find("Deaths").GetComponent<Text>().text = "Deaths: " + deaths[id];
         }
 
+        if (training)
+        {
+            GameObject score = Instantiate(aiScorecard, playerScores.transform);
+            // Set loadout Icons
+            Transform loadouts = score.transform.Find("Loadout");
+            Transform back = loadouts.Find("Back Arm Loadout");
+            Transform front = loadouts.Find("Front Arm Loadout");
+            for (int arm = 0; arm < 4; arm++)
+            {
+                back.GetChild(arm + 1).Find("Image").GetComponent<Image>().sprite = aiPrefab.GetComponent<Player>().backArmWeapons[arm].icon;
+                front.GetChild(arm + 1).Find("Image").GetComponent<Image>().sprite = aiPrefab.GetComponent<Player>().frontArmWeapons[arm].icon;
+            }
+
+            // Set placement
+            score.transform.Find("Placement").GetComponent<Text>().text = placements[numPlayers - 1].ToString();
+            // Set kills
+            score.transform.Find("Kills").GetComponent<Text>().text = "Kills: " + kills[numPlayers - 1];
+            // Set deaths
+            score.transform.Find("Deaths").GetComponent<Text>().text = "Deaths: " + deaths[numPlayers - 1];
+        }
+
         SceneManager.LoadScene("L_MainMenu");
     }
 
@@ -1112,8 +1143,11 @@ public class MenuManager : MonoBehaviour
         // Disable the button
         button.interactable = false;
 
+        // Get number of readyable players
+        int numberOfPlayers = training ? numPlayers - 1 : numPlayers;
+
         // check to see if all players readied
-        if (readyCount >= numPlayers)
+        if (readyCount >= numberOfPlayers)
         {
             readyCount = 0;
             numPlayers = 0;

@@ -10529,7 +10529,6 @@ MonoBehaviour:
   pregameFirstButton: {fileID: 254629667}
   localPregameFirstButton: {fileID: 1555472620}
   selectionFirstButton: {fileID: 391232483}
-  postgameButton: {fileID: 0}
   trainingReturnButton: {fileID: 1379604919}
   localReturnButton: {fileID: 804873267}
   achievementsReturnButton: {fileID: 2020952737}
@@ -10571,7 +10570,8 @@ MonoBehaviour:
   maxSprayerReloadSpeed: 0
   maxSprayDistance: 0
   playerScores: {fileID: 1604212283}
-  es: {fileID: 0}
+  aiPrefab: {fileID: 8282234077870317098, guid: 4e9b0fcbcb29e0a40886a590237b97f3, type: 3}
+  aiScorecard: {fileID: 8308290631104177125, guid: 0f736e1a7ecabfb43b1f1f7b53fb79b0, type: 3}
   training: 0
 --- !u!4 &1179617425
 Transform:
