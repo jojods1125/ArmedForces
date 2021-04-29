@@ -66,7 +66,8 @@ public class Arm : MonoBehaviour
     /// <summary> Dictionary used for knowing which weapons are in which slots </summary>
     private readonly Dictionary<Weapon, char> weaponLetters = new Dictionary<Weapon, char>();
     /// <summary> Dictionary used for knowing which weapons objects belong to which prefab name </summary>
-    private readonly Dictionary<string, GameObject> weaponObjs = new Dictionary<string, GameObject>();
+    [HideInInspector]
+    public readonly Dictionary<string, GameObject> weaponObjs = new Dictionary<string, GameObject>();
 
     private string previousWeapon;
 
@@ -98,6 +99,18 @@ public class Arm : MonoBehaviour
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-auto.spreadRange, auto.spreadRange), Random.Range(-auto.spreadRange, auto.spreadRange));
             ///Debug.DrawRay(barrel.transform.position, bulletPath * 1000f, Color.green, 1);
 
+            if (matchType == MatchType.Online)
+            {
+                onlineArm.CmdActivateParticles(auto.prefab.name);
+            }
+            else
+            {
+                foreach (ParticleSystem p in weaponObjs[auto.prefab.name].GetComponentsInChildren<ParticleSystem>())
+                {
+                    if (p != null)
+                        p.Play();
+                }
+            }
 
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit))
@@ -126,6 +139,21 @@ public class Arm : MonoBehaviour
             // Pushes player
             player.EnactForce(bulletPath.normalized * -auto.recoil);
         }
+        else if (ammoRemaining[auto] == 0)
+        {
+            if (matchType == MatchType.Online)
+            {
+                onlineArm.CmdDeactivateParticles(auto.prefab.name);
+            }
+            else
+            {
+                foreach (ParticleSystem p in weaponObjs[auto.prefab.name].GetComponentsInChildren<ParticleSystem>())
+                {
+                    if (p != null)
+                        p.Stop();
+                }
+            }
+        }
     }
 
 
@@ -147,6 +175,19 @@ public class Arm : MonoBehaviour
                 reloadRateTimeStamp = Time.time;
                 ReduceAmmo(1);
                 AchievementManager.Instance().OnEvent(AchievementType.shotsFired, 1, WeaponType.semi);
+
+                if (matchType == MatchType.Online)
+                {
+                    onlineArm.CmdActivateParticles(semi.prefab.name);
+                }
+                else
+                {
+                    foreach (ParticleSystem p in weaponObjs[semi.prefab.name].GetComponentsInChildren<ParticleSystem>())
+                    {
+                        if (p != null)
+                            p.Play();
+                    }
+                }
 
                 // Burst loop
                 for (int i = 0; i < semi.burstCount; i++)
@@ -263,9 +304,19 @@ public class Arm : MonoBehaviour
             Vector3 bulletPath = barrel.transform.up + new Vector3(Random.Range(-sprayer.spreadRange, sprayer.spreadRange), Random.Range(-sprayer.spreadRange, sprayer.spreadRange));
             ///Debug.DrawRay(barrel.transform.position, bulletPath * sprayer.sprayDistance, Color.yellow, 1);
             if (matchType == MatchType.Online)
-                onlineArm.CmdDrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
+            {
+                //onlineArm.CmdDrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
+                onlineArm.CmdActivateParticles(sprayer.prefab.name);
+            }
             else
-                DrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
+            {
+                //DrawBullet(barrel.transform.position, barrel.transform.position + (bulletPath * sprayer.sprayDistance));
+                foreach (ParticleSystem p in weaponObjs[sprayer.prefab.name].GetComponentsInChildren<ParticleSystem>())
+                {
+                    if (p != null)
+                        p.Play();
+                }
+            }
 
             // Raycasts bullet path
             if (Physics.Raycast(barrel.transform.position, bulletPath, out RaycastHit hit, sprayer.sprayDistance))
@@ -286,6 +337,21 @@ public class Arm : MonoBehaviour
 
             // Pushes player
             player.EnactForce(bulletPath.normalized * -sprayer.recoil);
+        }
+        else if (ammoRemaining[sprayer] == 0)
+        {
+            if (matchType == MatchType.Online)
+            {
+                onlineArm.CmdDeactivateParticles(sprayer.prefab.name);
+            }
+            else
+            {
+                foreach (ParticleSystem p in weaponObjs[sprayer.prefab.name].GetComponentsInChildren<ParticleSystem>())
+                {
+                    if (p != null)
+                        p.Stop();
+                }
+            }
         }
     }
 
@@ -330,6 +396,7 @@ public class Arm : MonoBehaviour
     }
 
 
+    bool particlesStopped = true;
 
     void FixedUpdate()
     {
@@ -338,6 +405,9 @@ public class Arm : MonoBehaviour
         {
             if (!Application.isFocused)
                 return;
+
+            if (particlesStopped)
+                particlesStopped = false;
 
             if (equippedWeapon is W_SemiGun semi)
             {
@@ -362,9 +432,10 @@ public class Arm : MonoBehaviour
             /// INCLUDE MORE WEAPONS HERE
         }
 
-        // If the player is not firing, reset the variable that requires trigger releasing
+        // If the player is not firing...
         else
         {
+            // Reset the variable that requires trigger releasing
             if (singleShotFired) singleShotFired = false;
 
             // Currently equipped weapon regains ammo if player is grounded
@@ -376,6 +447,46 @@ public class Arm : MonoBehaviour
                     reloadRateTimeStamp = Time.time;
                 }
             }
+
+            // Turn off particles
+            if (!particlesStopped)
+            {
+                particlesStopped = true;
+
+                if (equippedWeapon is W_Sprayer sprayer)
+                {
+                    if (matchType == MatchType.Online)
+                    {
+                        onlineArm.CmdDeactivateParticles(sprayer.prefab.name);
+                    }
+                    else
+                    {
+                        foreach (ParticleSystem p in weaponObjs[sprayer.prefab.name].GetComponentsInChildren<ParticleSystem>())
+                        {
+                            if (p != null)
+                                p.Stop();
+                        }
+                    }
+                }
+                else if (equippedWeapon is W_AutoGun auto)
+                {
+                    if (matchType == MatchType.Online)
+                    {
+                        onlineArm.CmdDeactivateParticles(auto.prefab.name);
+                    }
+                    else
+                    {
+                        foreach (ParticleSystem p in weaponObjs[auto.prefab.name].GetComponentsInChildren<ParticleSystem>())
+                        {
+                            if (p != null)
+                                p.Stop();
+                        }
+                    }
+                }
+
+            }
+
+
         }
 
     }
@@ -481,8 +592,16 @@ public class Arm : MonoBehaviour
     /// <param name="prefabName"> Which prefab needs to be activated </param>
     public void SwitchAppearance(string prefabName)
     {
-        if (previousWeapon != null)
-            weaponObjs[previousWeapon].SetActive(false);
+        foreach(string weaponName in weaponObjs.Keys)
+        {
+            weaponObjs[weaponName].SetActive(false);
+        }
+
+        //if (previousWeapon != null)
+        //{
+            //Debug.LogError(previousWeapon);
+        //    weaponObjs[previousWeapon].SetActive(false);
+        //}
 
         weaponObjs[prefabName].SetActive(true);
 

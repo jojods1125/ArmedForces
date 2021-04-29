@@ -104,6 +104,44 @@ public class Arm_Networked : NetworkBehaviour
     }
 
 
+    [Command]
+    public void CmdActivateParticles(string prefabName)
+    {
+        if (!isServer)
+            return;
+
+        RpcActivateParticles(prefabName);
+    }
+
+    [ClientRpc]
+    void RpcActivateParticles(string prefabName)
+    {
+        foreach (ParticleSystem p in arm.weaponObjs[prefabName].GetComponentsInChildren<ParticleSystem>())
+        {
+            if (p != null)
+                p.Play();
+        }
+    }
+
+
+    [Command]
+    public void CmdDeactivateParticles(string prefabName)
+    {
+        if (!isServer)
+            return;
+
+        RpcDeactivateParticles(prefabName);
+    }
+
+    [ClientRpc]
+    void RpcDeactivateParticles(string prefabName)
+    {
+        foreach (ParticleSystem p in arm.weaponObjs[prefabName].GetComponentsInChildren<ParticleSystem>())
+        {
+            if (p != null)
+                p.Stop();
+        }
+    }
 
     // ===========================================================
     //                  ARM CONTROLS  AND VISUALS

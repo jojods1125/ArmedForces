@@ -499,7 +499,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 25.15, y: 12.3, z: 0}
 --- !u!1001 &713752632
 PrefabInstance:
@@ -902,7 +902,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e9961953f454483489fb60288fc2772c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6062108922849791122, guid: e9961953f454483489fb60288fc2772c, type: 3}
       propertyPath: m_CastShadows
@@ -1456,8 +1456,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e1b4acbf6c29443886a786ad10d15c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matchType: 0
+  playerRespawnTime: 3
+  totalGameTime: 180
+  serverGameTimeStep: 0.25
   spawnPointContainer: {fileID: 1066990613}
-  playerRespawnTimer: 3
+  uiManager: {fileID: 0}
+  localPlayers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  dynamicCamera: {fileID: 0}
+  Indicator: {fileID: 0}
 --- !u!4 &1883818580
 Transform:
   m_ObjectHideFlags: 0
@@ -1470,7 +1481,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2145850397
 PrefabInstance:

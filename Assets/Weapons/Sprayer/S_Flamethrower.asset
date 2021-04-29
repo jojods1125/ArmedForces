@@ -28,3 +28,5 @@ MonoBehaviour:
   sprayDistance: 5
   bulletDamage: 2.5
   bulletPushback: 6
+  sprayFX:
+  - {fileID: 7822168007250088592, guid: 04ccee94db8d80f41bf797b0d5c4f0dd, type: 3}

@@ -267,10 +267,10 @@ MonoBehaviour:
   serverBatching: 0
   serverBatchInterval: 0
   offlineScene: Assets/Scenes/FinalScenes/OnlineLobby.unity
-  onlineScene: Assets/Scenes/FinalScenes/OnlineMulti.unity
+  onlineScene: Assets/Scenes/FinalScenes/OnlinePlateau.unity
   transport: {fileID: 838465590}
   networkAddress: localhost
-  maxConnections: 8
+  maxConnections: 4
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
@@ -278,7 +278,8 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 7159978887230406093, guid: a1e8b2772b7596a47bd524db1fb71bca, type: 3}
+  - {fileID: 8282234077870317098, guid: 70eb492705fdad4449e4be7cfc523131, type: 3}
+  - {fileID: 7159978887230406093, guid: e6138d1f2fb9b0c4c8ec46939114af9f, type: 3}
 --- !u!4 &838465592
 Transform:
   m_ObjectHideFlags: 0
