@@ -223,7 +223,8 @@ public class GameManager : MonoBehaviour
     public int getID()
     {
         int newID = playerCount;
-        MenuManager.Instance().numPlayers = playerCount++;
+        playerCount++;
+        MenuManager.Instance().numPlayers = playerCount;
         return newID;
     }
 
