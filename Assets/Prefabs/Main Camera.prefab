@@ -102,5 +102,5 @@ MonoBehaviour:
   minZoom: 35
   maxZoom: 12
   zoomLimiter: 100
-  mapX: 14
-  mapY: 8
+  killZoneVerticalOffset: 2
+  killZoneHorzOffset: 8

@@ -3055,5 +3055,13 @@ PrefabInstance:
       propertyPath: mapX
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 5433465853004697065, guid: dc4395658a3bfed469f134745a7b206c, type: 3}
+      propertyPath: killZoneVerticalOffset
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5433465853004697065, guid: dc4395658a3bfed469f134745a7b206c, type: 3}
+      propertyPath: killZoneHorzOffset
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc4395658a3bfed469f134745a7b206c, type: 3}

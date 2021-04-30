@@ -5,22 +5,38 @@ using UnityEngine;
 public class Main_Camera : MonoBehaviour
 {
 
-
+//List of objects to follow
 public List<GameObject> targets;
+//Offset from center between objects
 public Vector3 offset;
+//Speed camera is movie
 private Vector3 velocity;
+//Camera to be moved
 private Camera cam;
-public float smoothTime = .5f;
-public float minZoom = 40f;
-public float maxZoom = 10f;
-public float zoomLimiter = 50f;
-public float mapX;
-public float mapY;
+//USed to make movemenet smooth
+public float smoothTime;
+//Minimum zoom, bigger is more zoomed out
+public float minZoom;
+//Max zoom, smaller is more zoomed in
+public float maxZoom;
+//This is important I just don't know why
+public float zoomLimiter;
+
+//Used for limiting how far the screen can move
 private float minX;
 private float maxX;
 private float minY;
 private float maxY;
 
+//Bounds of the map
+private float mapLeft;
+private float mapRight;
+private float mapTop;
+private float mapBottom;
+
+//Offset from the killzone to limit camera
+public int killZoneVerticalOffset;
+public int killZoneHorzOffset;
 
 private void LateUpdate() {
     if(targets.Count == 0){
@@ -33,12 +49,7 @@ private void LateUpdate() {
 void Move(){
     Vector3 centerPoint = GetCenterPoint();
     //TAKEN FROM https://answers.unity.com/questions/501893/calculating-2d-camera-bounds.html
-        var vertExtent = cam.orthographicSize;    
-        var horzExtent = vertExtent * Screen.width / Screen.height;
-        maxX = horzExtent - mapX / 2.0f;
-        minX = mapX / 2.0f - horzExtent;
-        maxY = vertExtent - mapY / 2.0f;
-        minY = mapY / 2.0f - vertExtent;
+        
     centerPoint.x = Mathf.Clamp(centerPoint.x, minX, maxX);
     centerPoint.y = Mathf.Clamp(centerPoint.y, minY, maxY);
     Vector3 newPosition = centerPoint + offset;
@@ -73,6 +84,7 @@ float GetGreatestDistance(){
         return bounds.size.x;
 }
 
+//Returns the center point between all objects being tracked
 Vector3 GetCenterPoint(){
     int count = 0;
     for(int i = 0; i < targets.Count; i++){
@@ -100,14 +112,30 @@ Vector3 GetCenterPoint(){
     }
 }
 
-    // Use this for initialization
-    //TAKEN FROM http://gamedesigntheory.blogspot.com/2010/09/controlling-aspect-ratio-in-unity.html
-    //Controls aspect ratio to always be the same on any monitor
+
+
     void Start () 
     {
+        //Set the camera
         cam = GetComponent<Camera>();
 
+        //Setup bounds of the map
+        mapRight = GameManager.Instance().rightBound.GetComponent<Transform>().position.x - killZoneHorzOffset;
+        Debug.Log(mapRight);
+        mapLeft = GameManager.Instance().leftBound.GetComponent<Transform>().position.x + killZoneHorzOffset;
+        mapBottom = GameManager.Instance().bottomBound.GetComponent<Transform>().position.y + killZoneVerticalOffset + 1;
+        mapTop = GameManager.Instance().topBound.GetComponent<Transform>().position.y - killZoneVerticalOffset;
 
+        var vertExtent = cam.orthographicSize;    
+        var horzExtent = vertExtent * Screen.width / Screen.height;
+        maxX = mapRight - horzExtent;
+        minX = mapLeft + horzExtent;
+        maxY = mapTop - vertExtent;
+        minY = mapBottom + vertExtent;
+        
+
+    //TAKEN FROM http://gamedesigntheory.blogspot.com/2010/09/controlling-aspect-ratio-in-unity.html
+    //Controls aspect ratio to always be the same on any monitor
         // set the desired aspect ratio (the values in this example are
         // hard-coded for 16:9, but you could make them into public
         // variables instead so you can set them at design time)
@@ -122,7 +150,7 @@ Vector3 GetCenterPoint(){
         // obtain camera component so we can modify its viewport
         Camera camera = GetComponent<Camera>();
 
-        // if scaled height is less than current height, add letterbox
+        // if scaled height is less than current height, add letterbox (black bars across top and bottom)
         if (scaleheight < 1.0f)
         {  
             Rect rect = camera.rect;
@@ -134,7 +162,7 @@ Vector3 GetCenterPoint(){
             
             camera.rect = rect;
         }
-        else // add pillarbox
+        else // add pillarbox (black bars on left and right)
         {
             float scalewidth = 1.0f / scaleheight;
 
