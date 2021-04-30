@@ -15,7 +15,11 @@ MonoBehaviour:
   achievementMessage: Crack Shot!
   achieved: 0
   type: 0
-  currentValue: 0
-  nextTier: 0
+  currentValue: 24
+  unlockables:
+  - {fileID: 11400000, guid: b0fd5bb352e932444a9a912e7a8345e4, type: 2}
+  lastUnlocked: 
+  hadUnlock: 0
+  nextTier: 3
   activationValues: 01000000050000000a000000190000003200000064000000fa000000
   weaponType: 2

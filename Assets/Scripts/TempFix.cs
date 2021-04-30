@@ -34,10 +34,11 @@ public class TempFix : MonoBehaviour
                 mes.SetSelectedGameObject(scroller);
             }
         }
-/*        // if Selection not active, curr->(Back/Front) Arm Loadout->Loadouts->Player Input #
-        else if (!curr.transform.parent.parent.parent.name.Contains(playerId.ToString()))
+        // Selection not active
+/*        else
         {
-            mes.SetSelectedGameObject(scroller);
+            pi.devices[0]
         }*/
+
     }
 }

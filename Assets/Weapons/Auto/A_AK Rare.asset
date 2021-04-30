@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf80db299a61ac248aa944117fab5e02, type: 3}
+  m_Name: A_AK Rare
+  m_EditorClassIdentifier: 
+  weaponName: AK R
+  description: Basic gun with well-rounded stats
+  prefab: {fileID: 5775568051499200765, guid: ceda8341158c9bd48a1d995bae55a506, type: 3}
+  icon: {fileID: 21300000, guid: 89a5cca590e5f6e4bb4553b1a3de8737, type: 3}
+  rarity: 2
+  unlocked: 0
+  fireRate: 0.09
+  ammoCapacity: 60
+  recoil: 30
+  reloadRate: 0.05
+  dropoffDist: 4
+  dropoffMod: 0.75
+  spreadRange: 0.15
+  bulletDamage: 10
+  bulletPushback: 5

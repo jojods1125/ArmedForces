@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: A_LauncherKills
   m_EditorClassIdentifier: 
   achievementMessage: Ka-Boom!
-  nextTier: 0
   achieved: 0
   type: 0
-  currentValue: 0
+  currentValue: 5
+  unlockables:
+  - {fileID: 11400000, guid: e6b1d66b02f63e449ab3ca3a11803f46, type: 2}
+  lastUnlocked: 
+  hadUnlock: 0
+  nextTier: 2
   activationValues: 01000000050000000a000000190000003200000064000000fa000000
-  initialValue: 0
   weaponType: 3

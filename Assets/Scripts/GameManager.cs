@@ -131,7 +131,9 @@ public class GameManager : MonoBehaviour
         if (matchType == MatchType.Local)
         {
             PlayerInputManager pim = GetComponent<PlayerInputManager>();
-            for (int i = 0; i < MenuManager.Instance().numPlayers; i++)
+            // If training => subtract 1 from numPlayers for AI count, otherwise use numPlayers
+            int numberOfPlayers = MenuManager.Instance().training ? MenuManager.Instance().numPlayers - 1 : MenuManager.Instance().numPlayers;
+            for (int i = 0; i < numberOfPlayers; i++)
             {
                 int preDevices = 0;
                 for (int j = 0; j < InputSystem.devices.Count; j++)
@@ -222,6 +224,7 @@ public class GameManager : MonoBehaviour
     {
         int newID = playerCount;
         playerCount++;
+        MenuManager.Instance().numPlayers = playerCount;
         return newID;
     }
 
@@ -252,7 +255,6 @@ public class GameManager : MonoBehaviour
         // Updates clock UI
         uiManager.matchClock.GetComponent<TMP_Text>().text = mins.ToString("D2") + ":" + secs.ToString("D2");
 
-        /// TODO: ADD FUNCTIONALITY FOR ROUND ENDING
         // Server notification if round ends
         if (currentGameTime >= totalGameTime)
         {
@@ -262,19 +264,8 @@ public class GameManager : MonoBehaviour
             AchievementManager.Instance().OnEvent(AchievementType.games);
             SceneManager.LoadScene("L_MainMenu");
 
-            //StartCoroutine("EndGame");
             MenuManager.Instance().LoadResults(kills, deaths);
         }
-    }
-
-    IEnumerator EndGame()
-    {
-        if (!SceneManager.GetActiveScene().Equals(SceneManager.GetSceneByName("L_MainMenu")))
-        {
-            yield return new WaitForSeconds(1f);
-        }
-        MenuManager.Instance().LoadResults(kills, deaths);
-        yield return null;
     }
 
     public void SetCurrentGameTime(float time)

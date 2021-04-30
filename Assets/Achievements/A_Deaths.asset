@@ -16,5 +16,8 @@ MonoBehaviour:
   achieved: 0
   type: 1
   currentValue: 0
+  unlockables: []
+  lastUnlocked: 
+  hadUnlock: 0
   nextTier: 0
   activationValues: 01000000050000000a0000001900000032000000

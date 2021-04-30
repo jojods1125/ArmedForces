@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: A_SprayerKills
   m_EditorClassIdentifier: 
   achievementMessage: ... and Pray!
-  nextTier: 0
   achieved: 0
   type: 0
-  currentValue: 0
+  currentValue: 1
+  unlockables:
+  - {fileID: 11400000, guid: 92a1e90bf2a9a1d42aab183c55e0f521, type: 2}
+  lastUnlocked: 
+  hadUnlock: 0
+  nextTier: 1
   activationValues: 01000000050000000a000000190000003200000064000000fa000000
-  initialValue: 0
   weaponType: 4

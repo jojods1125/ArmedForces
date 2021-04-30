@@ -78,8 +78,6 @@ public class MenuManager : MonoBehaviour
     public GameObject localPregameFirstButton;
     [Tooltip("First Selected Weapon Selection")]
     public GameObject selectionFirstButton;
-    [Tooltip("Postgame Selected Input")]
-    public GameObject postgameButton;
 
     [Header("Return to last Menu Button for each Menu")]
     [Tooltip("Return to Main Button on Training Menu")]
@@ -184,10 +182,6 @@ public class MenuManager : MonoBehaviour
     [Tooltip("Player Scores Container")]
     public GameObject playerScores;
 
-    [Header("Event System")]
-    [Tooltip("Event System Object")]
-    public GameObject es;
-
     // Current Menu on
     private GameObject currentMenu;
     // Last visited Menu
@@ -208,6 +202,15 @@ public class MenuManager : MonoBehaviour
     public Dictionary<string, Dictionary<WeaponRarity, List<Weapon>>> order;
 
     private bool test = false;
+
+    [Header("AI Scoring")]
+    [Tooltip("AI Prefab")]
+    public GameObject aiPrefab;
+    [Tooltip("AI Scorecard")]
+    public GameObject aiScorecard;
+
+    [HideInInspector]
+    public bool training = false;
 
     // Start is called before the first frame update
     void Start()
@@ -305,7 +308,7 @@ public class MenuManager : MonoBehaviour
                         order["Automatic"][WeaponRarity.Rare].Add(w);
                         break;
                     case WeaponRarity.Legendary:
-                        order["Automatic"][WeaponRarity.Rare].Add(w);
+                        order["Automatic"][WeaponRarity.Legendary].Add(w);
                         break;
                     default:
                         Debug.LogError("Auto weapon does not have listed rarity");
@@ -507,6 +510,10 @@ public class MenuManager : MonoBehaviour
                 // Set button to OfflineFirst
                 EventSystem.current.SetSelectedGameObject(trainingReturnButton);
             }
+            else if (currentMenu == SelectionMenu)
+            {
+                Loadout();
+            }
 
         }
 
@@ -612,6 +619,20 @@ public class MenuManager : MonoBehaviour
             }
         }
 
+        if (LoadoutMenu.activeSelf)
+        {
+            if (Gamepad.current[GamepadButton.Select].isPressed) { ReturnToMain(); }
+
+            if (Gamepad.current[GamepadButton.DpadUp].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BA"); }
+            if (Gamepad.current[GamepadButton.DpadRight].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BB"); }
+            if (Gamepad.current[GamepadButton.DpadDown].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BC"); }
+            if (Gamepad.current[GamepadButton.DpadLeft].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BD"); }
+            if (Gamepad.current[GamepadButton.Y].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FA"); }
+            if (Gamepad.current[GamepadButton.B].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FB"); }
+            if (Gamepad.current[GamepadButton.A].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FC"); }
+            if (Gamepad.current[GamepadButton.X].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FD"); }
+        }
+
     }
 
     /// <summary>
@@ -712,7 +733,9 @@ public class MenuManager : MonoBehaviour
         // Set Loadout Images
         Transform back = LoadoutMenu.transform.Find("Back Arm Loadout");
         Transform front = LoadoutMenu.transform.Find("Front Arm Loadout");
-        
+
+        WeaponManager.Instance().LoadLoadout();
+
         // Loadouts
         for (int i = 0; i < WeaponManager.Instance().playerLoadouts[0][0].Length; i++)
 		{
@@ -728,6 +751,8 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to LoadoutFirst
         EventSystem.current.SetSelectedGameObject(loadoutFirstButton);
+
+        
     }
 
     /// <summary>
@@ -818,6 +843,9 @@ public class MenuManager : MonoBehaviour
             // Set button to LoadoutFirst
             EventSystem.current.SetSelectedGameObject(pregameFirstButton);
             currentMenu = PregameMenu;
+
+            // Set training to true to spawn AI
+            training = true;
         }
         else if (LocalMenu.activeSelf)
         {
@@ -856,6 +884,8 @@ public class MenuManager : MonoBehaviour
 
         currentMenu = MainMenu;
 
+        training = false;
+
         // Clear selected object
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to MainFirst
@@ -867,6 +897,10 @@ public class MenuManager : MonoBehaviour
     /// </summary>
     public void LoadMap()
 	{
+        if (training)
+        {
+            numPlayers++;
+        }
         LoadScene( mapName );
 	}
 
@@ -1049,17 +1083,22 @@ public class MenuManager : MonoBehaviour
 
         // Get PlayerInputManager
         PlayerInputManager pim = playerScores.GetComponent<PlayerInputManager>();
-        for (int id = 0; id < numPlayers; id++)
+        // Get number of human players
+        int numberOfPlayers = training ? numPlayers - 1 : numPlayers;
+
+        // Get past non-controller devices
+        int preDevices = 0;
+        for (int j = 0; j < InputSystem.devices.Count; j++)
+        {
+            if (!(InputSystem.devices[j] is Gamepad))
+            {
+                preDevices++;
+            }
+        }
+
+        for (int id = 0; id < numberOfPlayers; id++)
         {
             // Make player per connected
-            int preDevices = 0;
-            for (int j = 0; j < InputSystem.devices.Count; j++)
-            {
-                if (!(InputSystem.devices[j] is Gamepad))
-                {
-                    preDevices++;
-                }
-            }
             PlayerInput pi = pim.JoinPlayer(-1, -1, "MenuControls", InputSystem.devices[id + preDevices]);
             EventSystem.current.SetSelectedGameObject(pi.gameObject);
             // Put object in correct spot
@@ -1087,6 +1126,27 @@ public class MenuManager : MonoBehaviour
             pi.transform.Find("Deaths").GetComponent<Text>().text = "Deaths: " + deaths[id];
         }
 
+        if (training)
+        {
+            GameObject score = Instantiate(aiScorecard, playerScores.transform);
+            // Set loadout Icons
+            Transform loadouts = score.transform.Find("Loadout");
+            Transform back = loadouts.Find("Back Arm Loadout");
+            Transform front = loadouts.Find("Front Arm Loadout");
+            for (int arm = 0; arm < 4; arm++)
+            {
+                back.GetChild(arm + 1).Find("Image").GetComponent<Image>().sprite = aiPrefab.GetComponent<Player>().backArmWeapons[arm].icon;
+                front.GetChild(arm + 1).Find("Image").GetComponent<Image>().sprite = aiPrefab.GetComponent<Player>().frontArmWeapons[arm].icon;
+            }
+
+            // Set placement
+            score.transform.Find("Placement").GetComponent<Text>().text = placements[numPlayers - 1].ToString();
+            // Set kills
+            score.transform.Find("Kills").GetComponent<Text>().text = "Kills: " + kills[numPlayers - 1];
+            // Set deaths
+            score.transform.Find("Deaths").GetComponent<Text>().text = "Deaths: " + deaths[numPlayers - 1];
+        }
+
         SceneManager.LoadScene("L_MainMenu");
     }
 
@@ -1105,11 +1165,21 @@ public class MenuManager : MonoBehaviour
         // Disable the button
         button.interactable = false;
 
+        // Get number of readyable players
+        int numberOfPlayers = training ? numPlayers - 1 : numPlayers;
+
         // check to see if all players readied
-        if (readyCount >= numPlayers)
+        if (readyCount >= numberOfPlayers)
         {
             readyCount = 0;
             numPlayers = 0;
+
+            // Delete all scorecards
+            foreach (Transform child in playerScores.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
             ReturnToMain();
         }
     }

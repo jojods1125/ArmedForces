@@ -16,6 +16,9 @@ MonoBehaviour:
   achieved: 0
   type: 3
   currentValue: 0
+  unlockables: []
+  lastUnlocked: 
+  hadUnlock: 0
   nextTier: 0
   activationValues: 010000000a0000001900000064000000f4010000e80300008813000010270000a861000050c30000
   weaponType: 1

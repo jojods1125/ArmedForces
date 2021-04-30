@@ -15,7 +15,11 @@ MonoBehaviour:
   achievementMessage: Light 'em Up!
   achieved: 0
   type: 0
-  currentValue: 0
-  nextTier: 0
+  currentValue: 30
+  unlockables:
+  - {fileID: 11400000, guid: 5a82c0ae01f707d47a639741a15d8a8e, type: 2}
+  lastUnlocked: 
+  hadUnlock: 0
+  nextTier: 4
   activationValues: 01000000050000000a000000190000003200000064000000fa000000
   weaponType: 1

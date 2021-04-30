@@ -16,5 +16,8 @@ MonoBehaviour:
   achieved: 0
   type: 4
   currentValue: 0
+  unlockables: []
+  lastUnlocked: 
+  hadUnlock: 0
   repeatValue: 3
   timesAchieved: 0
