@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: A_SprayerShotsFired
   m_EditorClassIdentifier: 
   achievementMessage: Spray...
-  nextTier: 0
   achieved: 0
   type: 3
   currentValue: 0
+  unlockables: []
+  lastUnlocked: 
+  hadUnlock: 0
+  nextTier: 0
   activationValues: 0a0000003200000064000000fa000000f4010000e8030000c40900008813000010270000a8610000
-  initialValue: 0
   weaponType: 4

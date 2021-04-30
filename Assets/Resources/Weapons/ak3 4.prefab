@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7837103048752834018}
   - component: {fileID: 5415029873382773032}
   m_Layer: 0
-  m_Name: ak3 4
+  m_Name: ak3 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a2eee8323495b514f87547fc9727a108, type: 2}
+  - {fileID: 2100000, guid: 4a4d2b787eb393a469ae9860f5de4031, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

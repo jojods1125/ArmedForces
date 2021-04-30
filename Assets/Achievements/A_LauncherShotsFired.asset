@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be35fab68fc7d44a8ebc1972641712, type: 3}
   m_Name: A_LauncherShotsFired
   m_EditorClassIdentifier: 
-  achievementMessage: '{{Explosive}}, Inbound!'
-  nextTier: 0
+  achievementMessage: Explosive, Inbound!
   achieved: 0
   type: 3
   currentValue: 0
+  unlockables: []
+  lastUnlocked: 
+  hadUnlock: 0
+  nextTier: 0
   activationValues: 01000000050000000a00000019000000320000004b0000007d000000
-  initialValue: 0
   weaponType: 3

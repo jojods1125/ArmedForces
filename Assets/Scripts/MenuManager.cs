@@ -308,7 +308,7 @@ public class MenuManager : MonoBehaviour
                         order["Automatic"][WeaponRarity.Rare].Add(w);
                         break;
                     case WeaponRarity.Legendary:
-                        order["Automatic"][WeaponRarity.Rare].Add(w);
+                        order["Automatic"][WeaponRarity.Legendary].Add(w);
                         break;
                     default:
                         Debug.LogError("Auto weapon does not have listed rarity");
@@ -510,6 +510,10 @@ public class MenuManager : MonoBehaviour
                 // Set button to OfflineFirst
                 EventSystem.current.SetSelectedGameObject(trainingReturnButton);
             }
+            else if (currentMenu == SelectionMenu)
+            {
+                Loadout();
+            }
 
         }
 
@@ -615,6 +619,20 @@ public class MenuManager : MonoBehaviour
             }
         }
 
+        if (LoadoutMenu.activeSelf)
+        {
+            if (Gamepad.current[GamepadButton.Select].isPressed) { ReturnToMain(); }
+
+            if (Gamepad.current[GamepadButton.DpadUp].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BA"); }
+            if (Gamepad.current[GamepadButton.DpadRight].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BB"); }
+            if (Gamepad.current[GamepadButton.DpadDown].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BC"); }
+            if (Gamepad.current[GamepadButton.DpadLeft].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BD"); }
+            if (Gamepad.current[GamepadButton.Y].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FA"); }
+            if (Gamepad.current[GamepadButton.B].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FB"); }
+            if (Gamepad.current[GamepadButton.A].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FC"); }
+            if (Gamepad.current[GamepadButton.X].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FD"); }
+        }
+
     }
 
     /// <summary>
@@ -715,7 +733,9 @@ public class MenuManager : MonoBehaviour
         // Set Loadout Images
         Transform back = LoadoutMenu.transform.Find("Back Arm Loadout");
         Transform front = LoadoutMenu.transform.Find("Front Arm Loadout");
-        
+
+        WeaponManager.Instance().LoadLoadout();
+
         // Loadouts
         for (int i = 0; i < WeaponManager.Instance().playerLoadouts[0][0].Length; i++)
 		{
@@ -731,6 +751,8 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to LoadoutFirst
         EventSystem.current.SetSelectedGameObject(loadoutFirstButton);
+
+        
     }
 
     /// <summary>
