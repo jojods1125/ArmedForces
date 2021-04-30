@@ -512,6 +512,8 @@ public class MenuManager : MonoBehaviour
             }
             else if (currentMenu == SelectionMenu)
             {
+                // Un-highlight
+                loadoutDisplay.transform.Find("Weapon " + currentWeapon).Find("Highlight").gameObject.SetActive(false);
                 Loadout();
             }
 
@@ -617,21 +619,23 @@ public class MenuManager : MonoBehaviour
                     }
                 }
             }
+
+            if (LoadoutMenu.activeSelf)
+            {
+                if (Gamepad.current[GamepadButton.Select].isPressed) { ReturnToMain(); }
+
+                if (Gamepad.current[GamepadButton.DpadUp].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BA"); }
+                if (Gamepad.current[GamepadButton.DpadRight].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BB"); }
+                if (Gamepad.current[GamepadButton.DpadDown].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BC"); }
+                if (Gamepad.current[GamepadButton.DpadLeft].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BD"); }
+                if (Gamepad.current[GamepadButton.Y].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FA"); }
+                if (Gamepad.current[GamepadButton.B].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FB"); }
+                if (Gamepad.current[GamepadButton.A].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FC"); }
+                if (Gamepad.current[GamepadButton.X].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FD"); }
+            }
         }
 
-        if (LoadoutMenu.activeSelf)
-        {
-            if (Gamepad.current[GamepadButton.Select].isPressed) { ReturnToMain(); }
-
-            if (Gamepad.current[GamepadButton.DpadUp].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BA"); }
-            if (Gamepad.current[GamepadButton.DpadRight].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BB"); }
-            if (Gamepad.current[GamepadButton.DpadDown].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BC"); }
-            if (Gamepad.current[GamepadButton.DpadLeft].isPressed && Gamepad.current[GamepadButton.LeftTrigger].isPressed) { DisplayWeapons("BD"); }
-            if (Gamepad.current[GamepadButton.Y].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FA"); }
-            if (Gamepad.current[GamepadButton.B].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FB"); }
-            if (Gamepad.current[GamepadButton.A].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FC"); }
-            if (Gamepad.current[GamepadButton.X].isPressed && Gamepad.current[GamepadButton.RightTrigger].isPressed) { DisplayWeapons("FD"); }
-        }
+        
 
     }
 
@@ -793,6 +797,43 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         // Set button to LoadoutFirst
         EventSystem.current.SetSelectedGameObject(selectionFirstButton);
+
+        // Update the display
+        foreach (GameObject weaponButton in weaponButtons)
+        {
+            // If button not interactable
+            if (!weaponButton.GetComponent<Button>().interactable)
+            {
+                // Check weapon for unlocked
+                if (weaponButton.GetComponent<WeaponButtonContatiner>().weapon.unlocked)
+                {
+                    // Make interactable
+                    weaponButton.GetComponent<Button>().interactable = true;
+                }
+            }
+
+            // Disable buttons for weapons that you have equiped
+            Weapon w = weaponButton.GetComponent<WeaponButtonContatiner>().weapon;
+            int armIndex = -1;
+            switch (currentArm)
+            {
+                case "Back":
+                    armIndex = 0;
+                    break;
+                case "Front":
+                    armIndex = 1;
+                    break;
+            }
+            int weaponIndex = currentWeapon - 65;
+            string currName = WeaponManager.Instance().playerLoadouts[0][armIndex][weaponIndex].weaponName;
+            foreach (Weapon wload in WeaponManager.Instance().playerLoadouts[0][armIndex])
+            {
+                if (!w.weaponName.Equals(currName) && wload.weaponName.Equals(w.weaponName))
+                {
+                    weaponButton.GetComponent<Button>().interactable = false;
+                }
+            }            
+        }
     }
 
     /// <summary>

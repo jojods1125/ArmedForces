@@ -200,7 +200,7 @@ public class LoadingLoadout : MonoBehaviour
 
         // Display Selection
         Transform current = transform.Find("Player Loadout " + playerId);
-        current.Find("Loadouts").gameObject.SetActive(false);       // NPE 4/10/21 3:36
+        current.Find("Loadouts").gameObject.SetActive(false);
         current.Find("Selection").gameObject.SetActive(true);
 
         // Set selected to scrollbar
@@ -212,6 +212,43 @@ public class LoadingLoadout : MonoBehaviour
         else
         {
             EventSystem.current.SetSelectedGameObject(current.Find("Selection").Find("Scroll View").Find("Scrollbar Vertical").gameObject);
+        }
+
+        // Update the display
+        foreach (GameObject weaponButton in weaponButtons[playerId])
+        {
+            // If button not interactable
+            if (!weaponButton.GetComponent<Button>().interactable)
+            {
+                // Check weapon for unlocked
+                if (weaponButton.GetComponent<WeaponButtonContatiner>().weapon.unlocked)
+                {
+                    // Make interactable
+                    weaponButton.GetComponent<Button>().interactable = true;
+                }
+            }
+
+            // Disable buttons for weapons that you have equiped
+            Weapon w = weaponButton.GetComponent<WeaponButtonContatiner>().weapon;
+            int armIndex = -1;
+            switch (currentArm[playerId])
+            {
+                case "Back":
+                    armIndex = 0;
+                    break;
+                case "Front":
+                    armIndex = 1;
+                    break;
+            }
+            int weaponIndex = currentWeapon[playerId] - 65;
+            string currName = WeaponManager.Instance().playerLoadouts[playerId][armIndex][weaponIndex].weaponName;
+            foreach (Weapon wload in WeaponManager.Instance().playerLoadouts[playerId][armIndex])
+            {
+                if (!w.weaponName.Equals(currName) && wload.weaponName.Equals(w.weaponName))
+                {
+                    weaponButton.GetComponent<Button>().interactable = false;
+                }
+            }
         }
 
     }
